@@ -13,17 +13,22 @@
 *  21-06-2022       |  rakesh.nayak@absyz.com       |  1.1          |  Changed variable and function names
 *  27-06-2022       |  rakesh.nayak@absyz.com       |  1.2          |  Added test class
 *******************************************************************************************************/
-public class DEL_CommentsPageController{
-    public class DEL_DMLHandler{
+public class DEL_CommentsPageController {
+    public class DEL_DMLHandler {
         @AuraEnabled
         public Boolean blnIsSuccess;
         @AuraEnabled 
-        public String  strErrorMessage;
+        public String strErrorMessage;
     }
 
-    //fetchComments-This method queries and returns the CaseComment records related to the case with Id 'recordID'
+    /**
+    * @ author      : Rakesh Nayak
+    * @ description : This method queries and returns the CaseComment records related to the case with Id 'recordID'
+    * @ params      : 'strRecordId' - Record Id of the Case
+    * @ return      : List of DEL_CaseComment__c records
+    **/
     @AuraEnabled(cacheable = true)
-    public static List<DEL_CaseComment__c> fetchComments(String strRecordId){
+    public static List<DEL_CaseComment__c> fetchComments(String strRecordId) {
         return [SELECT
                 CreatedDate,
                 CreatedById,
@@ -35,22 +40,29 @@ public class DEL_CommentsPageController{
                 ORDER BY CreatedDate 
                 DESC];
     }
-    //insertComment- This method takes the Body of comment and case Id as parameters and inserts the comment to salesforce.
+
+    /**
+    * @ author      : Rakesh Nayak
+    * @ description : This method is used to create new Case Comment record using comment body 'strBody' and case ID 'strRecordId'
+    * @ params      : 'strRecordId' - Record Id of the Case
+    *                 'strBody'     - Body of the comment
+    * @ return      : Wrapper class object of DEL_DMLHandler
+    **/
     @AuraEnabled
-    public static DEL_DMLHandler insertComment(String strBody, String strRecordId){
+    public static DEL_DMLHandler insertComment(String strBody, String strRecordId) {
         DEL_Casecomment__c objCaseComment = new DEL_Casecomment__c(
             Body__c = strBody,
             Case__c = strRecordId
-            );
-        try{
+        );
+        try {
             insert objCaseComment;
-        }
-        catch(DmlException objException){
+        } catch(DmlException objException) {
             DEL_DMLHandler objDMLHandler = new DEL_DMLHandler();
             objDMLHandler.blnIsSuccess = false;
             objDMLHandler.strErrorMessage = objException.getMessage();
             return objDMLHandler;
         }
+
         DEL_DMLHandler objDMLHandler = new DEL_DMLHandler();
             objDMLHandler.blnIsSuccess = true;
             objDMLHandler.strErrorMessage = ' ';
