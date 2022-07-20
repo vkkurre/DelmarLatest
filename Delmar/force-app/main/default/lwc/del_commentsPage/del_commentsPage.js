@@ -24,7 +24,7 @@ export default class Del_commentsPage extends NavigationMixin(LightningElement) 
     commentResults (result) {
         this.list_WiredComments = result;
         if (result.data) {
-            this.list_Comments = JSON.parse(JSON.stringify(result.data));
+            this.list_Comments = result.data;
         } else if (result.error) {
             this.handleErrors(error);
         }

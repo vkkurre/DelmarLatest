@@ -23,6 +23,7 @@ private with sharing class DEL_EmailMessagesTriggerHandlerTest {
             Subject = 'Test Case'
         );
         insert objCase;
+
         EmailMessage objEmailMessage = new EmailMessage(
             TextBody = 'This is textbody',
             HtmlBody = '<div>this is HtmlBody</div><br><body>Test</body>',
@@ -39,7 +40,7 @@ private with sharing class DEL_EmailMessagesTriggerHandlerTest {
     * @ description : This method is used to test the 'handleEmailsOnInsert' method on DEL_EmailMessagesTriggerHandler
     **/
     @IsTest
-    private static void EmailMessageTriggerTestMethod() {
+    private static void emailMessageTriggerTestMethod() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         EmailMessage[] list_EmailMessages = [SELECT TextBody,
             HtmlBody,
@@ -48,15 +49,17 @@ private with sharing class DEL_EmailMessagesTriggerHandlerTest {
             MessageIdentifier,
             ParentId
             FROM EmailMessage
-            WHERE ParentId =:objCase.Id];
-            Test.startTest();
-            DEL_EmailMessagesTriggerHandler.handleEmailsOnInsert(list_EmailMessages);
-            Test.stopTest();
-            DEL_CaseComment__c objCaseComment = [SELECT Id,
-                Body__c,
-                Case__c
-                FROM DEL_CaseComment__c
-                LIMIT 1];
-            System.assertEquals(objCaseComment.Body__c, 'this is HtmlBody');
-        }
+            WHERE ParentId = :objCase.Id];
+
+        Test.startTest();
+        DEL_EmailMessagesTriggerHandler.handleEmailsOnInsert(list_EmailMessages);
+        Test.stopTest();
+        
+        DEL_CaseComment__c objCaseComment = [SELECT Id,
+            Body__c,
+            Case__c
+            FROM DEL_CaseComment__c
+            LIMIT 1];
+        System.assertEquals(objCaseComment.Body__c, 'this is HtmlBody');
     }
+}
