@@ -1,0 +1,61 @@
+<!--
+* 
+* @ Name    :   del_commentsPage
+* @ Purpose :   This is a component for entering new comment and view all the comments for a case.
+* @ Author  :   Rakesh Nayak
+*
+*   Date            |  Developer Name               |  Version      |  Changes
+* ======================================================================================================
+*   17-06-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
+*
+-->
+<template>
+    <!--lightning-spinner: Used during updation of comments after a comment is inserted-->
+    <div if:true={blnIsLoading}>
+            <lightning-spinner
+                alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+            </lightning-spinner>
+    </div>
+    <!--lightning-card: holds the casecomments-->
+        <lightning-card>
+            <lightning-layout>
+                <lightning-layout-item padding="horizontal-small" size="10" small-device-size="10" medium-device-size="10" large-device-size="10">
+                    <lightning-input type="text" class="nullify"  value="" placeholder="Add a comment..." variant="label-hidden"></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" small-device-size="2" medium-device-size="2" large-device-size="2">
+                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}></lightning-button-icon> 
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout>
+                <lightning-layout-item size="11" small-device-size="11" medium-device-size="11" large-device-size="11">
+                    <div class="slds-var-m-around_medium del-style-commentsection">
+                        <template if:true={list_Comments}>
+                            <template for:each={list_Comments} for:item="objCaseComment">
+                                <div key={objCaseComment.Id}>
+                                    <div class="slds-grid_vertical-align-start del-style-userphoto">
+                                        <lightning-avatar variant="circle" src={objCaseComment.CreatedBy.SmallPhotoUrl} fallback-icon-name="standard:person_account"  class="slds-var-m-right_small"></lightning-avatar>
+                                    </div>
+                                    <div class="del-style-commentdetail">
+                                        <a href="" onclick={navigateToUser} class="del-style-username" data-id={objCaseComment.CreatedById}>{objCaseComment.CreatedBy.Name}</a>
+                                        <div class="del-style-datetime">
+                                            <lightning-formatted-date-time
+                                                value ={objCaseComment.CreatedDate}
+                                                year="numeric"
+                                                day="2-digit"
+                                                month="long"
+                                                hour="2-digit"
+                                                minute="2-digit"
+                                                >
+                                            </lightning-formatted-date-time>
+                                        </div>
+                                        <div>{objCaseComment.Body__c}</div>
+                                    </div>
+                                </div>
+                                <hr key={objCaseComment.Id} class="del-style-margin">
+                            </template>
+                        </template>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>    
+        </lightning-card>
+</template>
