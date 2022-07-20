@@ -14,6 +14,18 @@
     </types>
     <types>
         <members>*</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>DEL_TriggerConfig__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>DEL_TriggerConfig__mdt-DEL_TriggerConfig Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>*</members>
         <name>LightningComponentBundle</name>
     </types>
     <version>55.0</version>
