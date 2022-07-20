@@ -16,7 +16,7 @@ private with sharing class DEL_EmailMessagesTriggerHandlerTest {
     * @ description : This method is used to setup data for testing apex class 'DEL_EmailMessagesTriggerHandler'
     **/
     @TestSetup
-    static void CreateData() {
+    static void createData() {
         Case objCase = new Case(
             Status = 'New',
             Origin = 'Email',
@@ -54,7 +54,7 @@ private with sharing class DEL_EmailMessagesTriggerHandlerTest {
         Test.startTest();
         DEL_EmailMessagesTriggerHandler.handleEmailsOnInsert(list_EmailMessages);
         Test.stopTest();
-        
+
         DEL_CaseComment__c objCaseComment = [SELECT Id,
             Body__c,
             Case__c
