@@ -11,6 +11,7 @@
 *  18-07-2022       |  rakesh.nayak@absyz.com       |  1.0          |  Initial version
 *******************************************************************************************************/
 public with sharing class DEL_EmailMessagesTriggerHandler {
+    public static Boolean blnSkipTrigger = false;
     /**
     * @ author      : Rakesh Nayak
     * @ description : This method handles the incoming email replies related to a case and creates case comment rcords for the same.
