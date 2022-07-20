@@ -10,7 +10,7 @@
 *
 *******************************************************************************************************/
 @IsTest
-private with sharing class DEL_EmailMessagesTriggerHandlerTest {
+private class DEL_EmailMessagesTriggerHandlerTest {
     /**
     * @ author      : Rakesh Nayak
     * @ description : This method is used to setup data for testing apex class 'DEL_EmailMessagesTriggerHandler'
