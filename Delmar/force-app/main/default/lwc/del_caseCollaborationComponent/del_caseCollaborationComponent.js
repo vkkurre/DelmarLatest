@@ -1,6 +1,6 @@
 import { LightningElement,api,track, wire } from 'lwc';
-import fetchComments from '@salesforce/apex/DEL_CommentsPageController.fetchComments';
-import insertComment from '@salesforce/apex/DEL_CommentsPageController.insertComment';
+import fetchComments from '@salesforce/apex/DEL_CaseCollaborationController.fetchComments';
+import insertComment from '@salesforce/apex/DEL_CaseCollaborationController.insertComment';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';	
 import { NavigationMixin } from 'lightning/navigation';

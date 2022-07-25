@@ -2,8 +2,10 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>IsActive__c</fullName>
     <defaultValue>true</defaultValue>
+    <description>If this checkbox is set as true, then trigger will run.</description>
     <externalId>false</externalId>
     <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>If set to true, trigger will be active.</inlineHelpText>
     <label>IsActive</label>
     <type>Checkbox</type>
 </CustomField>

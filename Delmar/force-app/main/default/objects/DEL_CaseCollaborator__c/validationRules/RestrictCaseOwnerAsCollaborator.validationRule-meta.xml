@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictCaseOwnerAsCollaborator</fullName>
+    <active>true</active>
+    <description>Case Owner cannot add themselves as Case Collaborators.</description>
+    <errorConditionFormula>IF(( Case__r.OwnerId  =  User__r.Id ), TRUE,FALSE)</errorConditionFormula>
+    <errorMessage>Case Owner cannot add themselves as Case Collaborators.</errorMessage>
+</ValidationRule>

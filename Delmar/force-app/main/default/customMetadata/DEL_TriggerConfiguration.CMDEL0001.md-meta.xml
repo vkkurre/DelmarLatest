@@ -7,7 +7,7 @@
         <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
-        <field>Trigger_Name__c</field>
+        <field>TriggerName__c</field>
         <value xsi:type="xsd:string">DEL_EmailMessagesTrigger</value>
     </values>
 </CustomMetadata>

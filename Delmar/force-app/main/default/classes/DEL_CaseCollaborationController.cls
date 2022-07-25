@@ -1,11 +1,11 @@
 /*******************************************************************************************************
 * 
-* @ Name            :   DEL_CommentsPageController
+* @ Name            :   DEL_CaseCollaborationController
 * @ Purpose         :   To insert new comment and fetching all the comments
 * @ Author          :   Rakesh Nayak
 * @ Usage           :   1) For inserting a new comment on click of submit button
 *                       2) For fetching all the related comments for a case
-* @ Test Class Name :   DEL_CommentsPageControllerTest
+* @ Test Class Name :   DEL_CaseCollaborationControllerTest
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
@@ -13,8 +13,13 @@
 *  21-06-2022       |  rakesh.nayak@absyz.com       |  1.1          |  Changed variable and function names
 *  27-06-2022       |  rakesh.nayak@absyz.com       |  1.2          |  Added test class
 *******************************************************************************************************/
-public class DEL_CommentsPageController {
-    public class DEL_DMLHandler {
+public class DEL_CaseCollaborationController {
+    /**
+    * @ Name            :   ResponseWrapper
+    * @ Purpose         :   Wrapper class to send response to the lwc.
+    * @ Author          :   Ankit CS
+    **/
+    public class ResponseWrapper {
         @AuraEnabled
         public Boolean blnIsSuccess;
         @AuraEnabled 
@@ -29,16 +34,18 @@ public class DEL_CommentsPageController {
     **/
     @AuraEnabled(cacheable = true)
     public static List<DEL_CaseComment__c> fetchComments(String strRecordId) {
-        return [SELECT
-                CreatedDate,
-                CreatedById,
-                CreatedBy.SmallPhotoUrl,
-                CreatedBy.Name,
-                Body__c 
-                FROM DEL_CaseComment__c 
-                WHERE Case__c = :strRecordId 
-                ORDER BY CreatedDate 
-                DESC];
+        return [
+            SELECT
+            CreatedDate,
+            CreatedById,
+            CreatedBy.SmallPhotoUrl,
+            CreatedBy.Name,
+            Body__c 
+            FROM DEL_CaseComment__c 
+            WHERE Case__c = :strRecordId 
+            ORDER BY CreatedDate 
+            DESC
+        ];
     }
 
     /**
@@ -46,26 +53,26 @@ public class DEL_CommentsPageController {
     * @ description : This method is used to create new Case Comment record using comment body 'strBody' and case ID 'strRecordId'
     * @ params      : 'strRecordId' - Record Id of the Case
     *                 'strBody'     - Body of the comment
-    * @ return      : Wrapper class object of DEL_DMLHandler
+    * @ return      : objResponseWrapper - instance of ResponseWrapper class
     **/
     @AuraEnabled
-    public static DEL_DMLHandler insertComment(String strBody, String strRecordId) {
+    public static ResponseWrapper insertComment(String strBody, String strRecordId) {
+        ResponseWrapper objDMLHandler = new ResponseWrapper();
         DEL_Casecomment__c objCaseComment = new DEL_Casecomment__c(
             Body__c = strBody,
             Case__c = strRecordId
         );
+
         try {
             insert objCaseComment;
-        } catch(DmlException objException) {
-            DEL_DMLHandler objDMLHandler = new DEL_DMLHandler();
+        } catch(Exception objException) {
             objDMLHandler.blnIsSuccess = false;
             objDMLHandler.strErrorMessage = objException.getMessage();
             return objDMLHandler;
         }
 
-        DEL_DMLHandler objDMLHandler = new DEL_DMLHandler();
-            objDMLHandler.blnIsSuccess = true;
-            objDMLHandler.strErrorMessage = ' ';
-            return objDMLHandler;
+        objDMLHandler.blnIsSuccess = true;
+        objDMLHandler.strErrorMessage = '';
+        return objDMLHandler;
     }
 }

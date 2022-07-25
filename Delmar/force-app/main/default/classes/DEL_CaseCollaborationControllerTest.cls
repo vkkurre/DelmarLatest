@@ -1,7 +1,7 @@
 /*******************************************************************************************************
 * 
-* @ Name            :   DEL_CommentsPageControllerTest
-* @ Purpose         :   Test class for DEL_CommentsPageController
+* @ Name            :   DEL_CaseCollaborationControllerTest
+* @ Purpose         :   Test class for DEL_CaseCollaborationController
 * @ Author          :   Rakesh Nayak
 *
 *   Date            |  Developer Name               |  Version      |  Changes
@@ -10,11 +10,11 @@
 *
 *******************************************************************************************************/
 @Istest
-private class DEL_CommentsPageControllerTest {
+private class DEL_CaseCollaborationControllerTest {
     @TestSetup
     /**
     * @ author      : Rakesh Nayak
-    * @ description : This method is used to setup data for testing apex class 'DEL_CommentsPageController'
+    * @ description : This method is used to setup data for testing apex class 'DEL_CaseCollaborationController'
     **/
     static void createData(){
         Case objCase = new Case(
@@ -22,6 +22,7 @@ private class DEL_CommentsPageControllerTest {
             Origin = 'Web'
         );
         insert objCase;
+
         String strCommentBody = 'Hey, Can I know the update';
         DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c(
             Case__c = objCase.Id,
@@ -32,16 +33,17 @@ private class DEL_CommentsPageControllerTest {
 
     /**
     * @ author      : Rakesh Nayak
-    * @ description : This method is used to test the methods 'insertComment' and 'fetchComments' in apex class 'DEL_CommentsPageController'
+    * @ description : This method is used to test the methods 'insertComment' and 'fetchComments' in 
+                      apex class 'DEL_CaseCollaborationController'
     **/
     @IsTest
     private static void caseCommentTestMethod() {
         String strCommentBody = 'Hi Sir';
         Test.startTest();
         Case objCase = [SELECT Id FROM Case LIMIT 1];
-        Id idCaseCommentId = DEL_CommentsPageController.insertComment(strCommentBody, objCase.Id);
-        List<DEL_CaseComment__c> list_comments = DEL_CommentsPageController.fetchComments(objCase.Id);
+        DEL_CaseCollaborationController.ResponseWrapper objWrapper = DEL_CaseCollaborationController.insertComment(strCommentBody, objCase.Id);
+        List<DEL_CaseComment__c> list_CaseComments = DEL_CaseCollaborationController.fetchComments(objCase.Id);
         Test.stopTest();
-        System.assertEquals(2, list_comments.size());
+        System.assertEquals(2, list_CaseComments.size());
     }  
 }
