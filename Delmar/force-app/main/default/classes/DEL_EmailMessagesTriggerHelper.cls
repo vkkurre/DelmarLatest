@@ -1,16 +1,16 @@
 /*******************************************************************************************************
 * 
-* @ Name            :   DEL_EmailMessagesTriggerHandler
+* @ Name            :   DEL_EmailMessagesTriggerHelper
 * @ Purpose         :   To handle the trigger events for DEL_EmailMessagesTrigger
 * @ Author          :   Rakesh Nayak
 * @ Usage           :   1) Creating case comment records for incoming mail replies related to case
-* @ Test Class Name :   DEL_EmailMessagesTriggerHandlerTest
+* @ Test Class Name :   DEL_EmailMessagesTriggerHelperTest
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
 *  18-07-2022       |  rakesh.nayak@absyz.com       |  1.0          |  Initial version
 *******************************************************************************************************/
-public with sharing class DEL_EmailMessagesTriggerHandler {
+public with sharing class DEL_EmailMessagesTriggerHelper {
     public static Boolean blnSkipTrigger = false;
     /**
     * @ author      : Rakesh Nayak
@@ -26,6 +26,8 @@ public with sharing class DEL_EmailMessagesTriggerHandler {
                 if (String.isNotBlank(objEmailMessage.ParentId)) {
                     DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c();
                     objCaseComment.Case__c = objEmailMessage.ParentId;
+                    objCaseComment.CreatedByEmail__c = objEmailMessage.FromAddress;
+                    objCaseComment.CommentCreatedName__c = objEmailMessage.FromName;
                     if (String.isNotBlank(objEmailMessage.HtmlBody)) {
                         List<String> list_SplitResults = objPattern.split(objEmailMessage.HtmlBody);
                         if (!list_SplitResults.isEmpty()) {

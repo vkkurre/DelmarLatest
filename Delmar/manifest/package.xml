@@ -3,26 +3,29 @@
     <types>
         <members>DEL_CaseCollaborationController</members>
         <members>DEL_CaseCollaborationControllerTest</members>
-        <members>DEL_EmailMessagesTriggerHandler</members>
-        <members>DEL_EmailMessagesTriggerHandlerTest</members>
+        <members>DEL_EmailMessagesTriggerHelper</members>
+        <members>DEL_EmailMessagesTriggerHelperTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>DEL_EmailMessagesTrigger</members>
-        <name>ApexTrigger</name>
+        <members>DEL_CaseComment__c</members>
+        <members>DEL_TriggerConfiguration__mdt</members>
+        <members>DEL_CaseCollaborator__c</members>
+        <members>DEL_EmailAlertConfiguration__c</members>
+        <name>CustomObject</name>
     </types>
     <types>
         <members>DEL_TriggerConfiguration.CMDEL0001</members>
         <name>CustomMetadata</name>
     </types>
     <types>
-        <members>DEL_CaseCollaborator__c</members>
-        <members>DEL_EmailAlertConfiguration__c</members>
-        <name>CustomObject</name>
+        <members>DEL_EmailMessagesTrigger</members>
+        <name>ApexTrigger</name>
     </types>
     <types>
         <members>DEL_CaseCollaborator__c-Case Collaborator Layout</members>
-        <members>DEL_TriggerConfiguration__mdt-DEL_TriggerConfiguration Layout</members>
+        <members>DEL_TriggerConfiguration__mdt-Trigger Configuration Layout</members>
+        <members>DEL_CaseComment__c-Case Comment Layout</members>
         <name>Layout</name>
     </types>
     <types>

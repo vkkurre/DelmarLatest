@@ -6,12 +6,12 @@ trigger DEL_EmailMessagesTrigger on EmailMessage (after insert) {
     if (
         (DEL_TriggerConfiguration__mdt.getInstance('CMDEL0001') != null &&
         !DEL_TriggerConfiguration__mdt.getInstance('CMDEL0001').IsActive__c) ||
-        DEL_EmailMessagesTriggerHandler.blnSkipTrigger
+        DEL_EmailMessagesTriggerHelper.blnSkipTrigger
     ) {
         return;
     }
   
     if (trigger.isAfter && trigger.isInsert) {
-        DEL_EmailMessagesTriggerHandler.handleEmailsOnInsert(trigger.new);
+        DEL_EmailMessagesTriggerHelper.handleEmailsOnInsert(trigger.new);
     }
 }
