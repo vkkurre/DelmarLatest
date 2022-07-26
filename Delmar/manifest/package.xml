@@ -5,12 +5,15 @@
         <members>DEL_CaseCollaborationControllerTest</members>
         <members>DEL_EmailMessagesTriggerHelper</members>
         <members>DEL_EmailMessagesTriggerHelperTest</members>
+        <members>DEL_Utils</members>
+        <members>DEL_UtilsTest</members>
         <name>ApexClass</name>
     </types>
     <types>
         <members>DEL_CaseComment__c</members>
         <members>DEL_TriggerConfiguration__mdt</members>
         <members>DEL_CaseCollaborator__c</members>
+        <members>DEL_ExceptionLog__c</members>
         <members>DEL_EmailAlertConfiguration__c</members>
         <name>CustomObject</name>
     </types>
@@ -26,11 +29,20 @@
         <members>DEL_CaseCollaborator__c-Case Collaborator Layout</members>
         <members>DEL_TriggerConfiguration__mdt-Trigger Configuration Layout</members>
         <members>DEL_CaseComment__c-Case Comment Layout</members>
+        <members>DEL_ExceptionLog__c-Exception Log Layout</members>
         <name>Layout</name>
+    </types>
+    <types>
+        <members>DEL_ExceptionLog__c</members>
+        <name>CustomTab</name>
     </types>
     <types>
         <members>del_caseCollaborationComponent</members>
         <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Admin</members>
+        <name>Profile</name>
     </types>
     <version>55.0</version>
 </Package>

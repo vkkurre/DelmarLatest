@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ClassName__c</fullName>
+    <description>Name of the class in which exception has occurred.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Name of the class in which exception has occurred.</inlineHelpText>
+    <label>Class Name</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>
