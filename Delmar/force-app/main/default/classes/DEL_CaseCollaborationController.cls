@@ -12,6 +12,8 @@
 *  17-06-2022       |  rakesh.nayak@absyz.com       |  1.0          |  Initial version
 *  21-06-2022       |  rakesh.nayak@absyz.com       |  1.1          |  Changed variable and function names
 *  27-06-2022       |  rakesh.nayak@absyz.com       |  1.2          |  Added test class
+*  22-07-2022       |  vinaykant.kurre@absyz.com    |  1.3          |  Added method to get CustomSetting & Update/Delete 
+                                                                       CaseComments
 *******************************************************************************************************/
 public class DEL_CaseCollaborationController {
     /**
@@ -24,6 +26,24 @@ public class DEL_CaseCollaborationController {
         public Boolean blnIsSuccess;
         @AuraEnabled 
         public String strErrorMessage;
+        @AuraEnabled
+        public List<DEL_CaseComment__c> list_CaseComments;
+
+        public ResponseWrapper() {
+            this.blnIsSuccess = true;
+            this.strErrorMessage = '';
+            this.list_CaseComments = new List<DEL_CaseComment__c>();
+        }
+    }
+
+    /**
+        * @ author      : Vinaykant
+        * @ description : Apex Method to fetch Case Configuration Custom Setting.
+        * @ return      : DEL_CaseCommentConfiguration__c
+    **/
+    @AuraEnabled(cacheable=true) 
+    public static DEL_CaseCommentConfiguration__c getCaseCommentConfigurations() {
+        return DEL_CaseCommentConfiguration__c.getOrgDefaults();
     }
 
     /**
@@ -33,19 +53,32 @@ public class DEL_CaseCollaborationController {
     * @ return      : List of DEL_CaseComment__c records
     **/
     @AuraEnabled(cacheable = true)
-    public static List<DEL_CaseComment__c> fetchComments(String strRecordId) {
-        return [
-            SELECT
-            CreatedDate,
-            CreatedById,
-            CreatedBy.SmallPhotoUrl,
-            CreatedBy.Name,
-            Body__c 
-            FROM DEL_CaseComment__c 
-            WHERE Case__c = :strRecordId 
-            ORDER BY CreatedDate 
-            DESC
-        ];
+    public static ResponseWrapper fetchComments(String strRecordId) {
+        ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        try {
+            objResponseWrapper.list_CaseComments = [SELECT
+                                                    CreatedDate,
+                                                    LastModifiedDate,
+                                                    CreatedById,
+                                                    CreatedBy.SmallPhotoUrl,
+                                                    CreatedBy.Name,
+                                                    Body__c,
+                                                    CommentCreatedName__c,
+                                                    CreatedByEmail__c
+                                                    FROM DEL_CaseComment__c 
+                                                    WHERE Case__c = :strRecordId 
+                                                    ORDER BY CreatedDate 
+                                                    DESC];
+            // Throw an exception from test class                                        
+            if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
+                throwException();
+            }
+        } catch (Exception objException) {
+            objResponseWrapper.blnIsSuccess = false;
+            objResponseWrapper.strErrorMessage = objException.getMessage();
+        }
+
+        return objResponseWrapper;
     }
 
     /**
@@ -57,22 +90,91 @@ public class DEL_CaseCollaborationController {
     **/
     @AuraEnabled
     public static ResponseWrapper insertComment(String strBody, String strRecordId) {
-        ResponseWrapper objDMLHandler = new ResponseWrapper();
-        DEL_Casecomment__c objCaseComment = new DEL_Casecomment__c(
+        ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c(
             Body__c = strBody,
             Case__c = strRecordId
         );
 
         try {
             insert objCaseComment;
+            // Throw an exception from test class                                        
+            if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
+                throwException();
+            }
         } catch(Exception objException) {
-            objDMLHandler.blnIsSuccess = false;
-            objDMLHandler.strErrorMessage = objException.getMessage();
-            return objDMLHandler;
+            objResponseWrapper.blnIsSuccess = false;
+            objResponseWrapper.strErrorMessage = objException.getMessage();
         }
 
-        objDMLHandler.blnIsSuccess = true;
-        objDMLHandler.strErrorMessage = '';
-        return objDMLHandler;
+        return objResponseWrapper;
+    }
+
+    /**
+        * @ author      : Vinaykant
+        * @ description : Apex Method to delete a particular case comment from a case.
+        * @ params      : 'idCommentId' - Case Comment Id which be fetched.
+        * @ return      : 'objResponseWrapper' - Wrapper Class Object.
+    **/
+    @AuraEnabled
+    public static ResponseWrapper deleteCaseComment(Id idCommentId) {
+        ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        DEL_CaseComment__c objCaseComment = [SELECT
+                                            Id 
+                                            FROM DEL_CaseComment__c 
+                                            WHERE Id = :idCommentId];
+
+        try {
+            delete objCaseComment;
+            // Throw an exception from test class                                        
+            if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
+                throwException();
+            }
+        } catch (Exception objException) {
+            objResponseWrapper.blnIsSuccess = false;
+            objResponseWrapper.strErrorMessage = objException.getMessage();
+        }
+
+        return objResponseWrapper;
+    }
+
+    /**
+        * @ author      : Vinaykant
+        * @ description : Apex Method to update a particular case comment with new edited comment.
+        * @ params      : 'idCommentId' - Case Comment Id of which will be fetched.
+        *                 'strComment' - New Edited Comment Body String for Case Comment Record.
+        * @ return      : 'objResponseWrapper' - Wrapper Class Object.
+    **/
+    @AuraEnabled
+    public static ResponseWrapper updateCaseComment(Id idCommentId, String strComment) {
+        ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        DEL_CaseComment__c objCaseComment = [SELECT 
+                                            Id,
+                                            Body__c
+                                            FROM DEL_CaseComment__c 
+                                            WHERE Id = :idCommentId];
+        objCaseComment.Body__c = strComment;
+
+        try {
+            update objCaseComment;
+            // Throw an exception from test class                                        
+            if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
+                throwException();
+            }
+        } catch (Exception objException) {
+            objResponseWrapper.blnIsSuccess = false;
+            objResponseWrapper.strErrorMessage = objException.getMessage();
+        }
+
+        return objResponseWrapper;
+    }
+
+    /**
+    * @ author      : Ankit
+    * @ description : This method should be called to force an exception which 
+                      will cover catch blocks when running test methods.
+    **/
+    public static void throwException() {
+        throw new DMLException();
     }
 }

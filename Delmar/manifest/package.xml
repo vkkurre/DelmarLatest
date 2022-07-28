@@ -7,6 +7,7 @@
         <members>DEL_EmailMessagesTriggerHelperTest</members>
         <members>DEL_Utils</members>
         <members>DEL_UtilsTest</members>
+        <members>DEL_TestUtility</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -15,6 +16,7 @@
         <members>DEL_CaseCollaborator__c</members>
         <members>DEL_ExceptionLog__c</members>
         <members>DEL_EmailAlertConfiguration__c</members>
+        <members>DEL_CaseCommentConfiguration__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -33,11 +35,17 @@
         <name>Layout</name>
     </types>
     <types>
+        <members>DEL_ChatTranscriptToCaseCommentFlow</members>
+        <name>Flow</name>
+    </types>
+    <types>
         <members>DEL_ExceptionLog__c</members>
         <name>CustomTab</name>
     </types>
     <types>
         <members>del_caseCollaborationComponent</members>
+        <members>del_editCommentComponent</members>
+        <members>del_deleteCommentComponent</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>

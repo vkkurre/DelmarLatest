@@ -1,61 +1,115 @@
 <!--
 * 
-* @ Name    :   del_commentsPage
-* @ Purpose :   This is a component for entering new comment and view all the comments for a case.
-* @ Author  :   Rakesh Nayak
+* @ Name            :   del_commentsCollaborationComponent
+* @ Purpose         :   This is a component for entering new comment and view all the comments for a case.
+* @ Author          :   Rakesh Nayak
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
 *   17-06-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
+*   22-07-2022      |  vinaykant.kurre@absyz.com    |  1.1          |  Updated Styling & Edit/Delete Option.
 *
 -->
 <template>
-    <!--lightning-spinner: Used during updation of comments after a comment is inserted-->
+    <!-- lightning-spinner: Used during updation of comments after a comment is inserted -->
     <div if:true={blnIsLoading}>
-            <lightning-spinner
-                alternative-text="Loading..." variant="brand" class="slds-is-fixed">
-            </lightning-spinner>
+        <lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+        </lightning-spinner>
     </div>
-    <!--lightning-card: holds the casecomments-->
-        <lightning-card>
+    <!-- lightning-card: holds the casecomments -->
+    <lightning-card>
+        <div class="c-container slds-p-vertical_small slds-p-horizontal_small">
             <lightning-layout>
-                <lightning-layout-item padding="horizontal-small" size="10" small-device-size="10" medium-device-size="10" large-device-size="10">
-                    <lightning-input type="text" class="nullify"  value="" placeholder="Add a comment..." variant="label-hidden"></lightning-input>
+                <lightning-layout-item size="1" small-device-size="4" medium-device-size="2" large-device-size="1"
+                    class="slds-p-left_medium">
+                    <lightning-avatar variant="circle" src="/bad/image/url.jpg" initials="" fallback-icon-name="standard:avatar"
+                        alternative-text="">
+                    </lightning-avatar>
                 </lightning-layout-item>
-                <lightning-layout-item size="2" small-device-size="2" medium-device-size="2" large-device-size="2">
-                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}></lightning-button-icon> 
+                <lightning-layout-item size="8" small-device-size="6" medium-device-size="8" large-device-size="10">
+                    <lightning-input type="text" class="nullify" value="" placeholder="Add a comment..." variant="label-hidden">
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item alignment-bump="right" class="slds-p-left_none" size="1" small-device-size="2" medium-device-size="2" large-device-size="1">
+                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}>
+                    </lightning-button-icon>
                 </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>
-                <lightning-layout-item size="11" small-device-size="11" medium-device-size="11" large-device-size="11">
-                    <div class="slds-var-m-around_medium del-style-commentsection">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                    <div class="slds-var-m-around_medium">
                         <template if:true={list_Comments}>
-                            <template for:each={list_Comments} for:item="objCaseComment">
-                                <div key={objCaseComment.Id}>
-                                    <div class="slds-grid_vertical-align-start del-style-userphoto">
-                                        <lightning-avatar variant="circle" src={objCaseComment.CreatedBy.SmallPhotoUrl} fallback-icon-name="standard:person_account"  class="slds-var-m-right_small"></lightning-avatar>
-                                    </div>
-                                    <div class="del-style-commentdetail">
-                                        <a href="" onclick={navigateToUser} class="del-style-username" data-id={objCaseComment.CreatedById}>{objCaseComment.CreatedBy.Name}</a>
-                                        <div class="del-style-datetime">
-                                            <lightning-formatted-date-time
-                                                value ={objCaseComment.CreatedDate}
-                                                year="numeric"
-                                                day="2-digit"
-                                                month="long"
-                                                hour="2-digit"
-                                                minute="2-digit"
-                                                >
-                                            </lightning-formatted-date-time>
+                            <div class="del-style-commentsection">
+                                <template for:each={list_Comments} for:item="objCaseComment">
+                                    <div key={objCaseComment.Id}
+                                        class="slds-p-bottom_xxx-small slds-p-top_xx-small slds-grid slds-border_bottom">
+                                        <div class="slds-col slds-grow-none slds-p-top_xx-small">
+                                            <span>
+                                                <lightning-avatar variant="circle" src="/bad/image/url.jpg" initials=""
+                                                    fallback-icon-name="standard:avatar" alternative-text=""
+                                                    class="slds-p-right_x-small">
+                                                </lightning-avatar>
+                                            </span>
                                         </div>
-                                        <div>{objCaseComment.Body__c}</div>
+                                        <div class="slds-col slds-medium-size_8-of-12 slds-small-size_6-of-12 slds-large-size_11-of-12 slds-p-around_x-small slds-col_bump-right">
+                                            <span>
+                                                <div>
+                                                    <div class="slds-p-bottom_none">
+                                                        <a href=""
+                                                            class="del-style-username">{objCaseComment.CommentCreatedName__c}
+                                                        </a>
+                                                    </div>
+                                                    <div class="slds-p-top_none slds-text-body_small">
+                                                        <lightning-formatted-date-time value={objCaseComment.CreatedDate}
+                                                            year="numeric" day="2-digit" month="long" hour="2-digit"
+                                                            minute="2-digit">
+                                                        </lightning-formatted-date-time>
+                                                    </div>
+                                                    <div class="slds-p-top_xxx-small">
+                                                        <lightning-formatted-rich-text value={objCaseComment.Body__c}>
+                                                        </lightning-formatted-rich-text>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="slds-col slds-large-size_1-of-12 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-col_bump-left">
+                                            <span>
+                                                <template if:true={objCaseComment.blnEdit}>
+                                                    <template if:true={objCaseComment.blnCurrentUser}>
+                                                        <lightning-button-menu variant="border-filled" icon-size="x-small"
+                                                            alternative-text="Edit Options">
+                                                            <lightning-menu-item value={objCaseComment.Id} label="Edit"
+                                                                onclick={editComment} data-comment={objCaseComment.Body__c}>
+                                                            </lightning-menu-item>
+                                                            <lightning-menu-item value={objCaseComment.Id} label="Delete"
+                                                                onclick={deleteComment}>
+                                                            </lightning-menu-item>
+                                                        </lightning-button-menu>
+                                                    </template>
+                                                </template>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr key={objCaseComment.Id} class="del-style-margin">
-                            </template>
+                                </template>
+                            </div>
                         </template>
                     </div>
                 </lightning-layout-item>
-            </lightning-layout>    
-        </lightning-card>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+    <!-- Calling child components for edit & delete functionalities -->
+    <c-del_delete-comment-component 
+        bln-show-delete-modal={blnShowDeleteModal} 
+        onclose={closeDeleteModal}
+        onsave={saveDeleteChanges} 
+        str-comment-id={strSelectedCommentId}>
+    </c-del_delete-comment-component>
+    <c-del_edit-comment-component 
+        bln-show-edit-modal={blnShowEditModal} 
+        onclose={closeEditModal} 
+        onsave={saveEditChanges}
+        str-comment-id={strSelectedCommentId} 
+        str-comment={strSelectedComment}>
+    </c-del_edit-comment-component>
 </template>
