@@ -36,9 +36,62 @@ public class DEL_Utils {
         );
 
         if (blnIsInsertMode) {
-            insert objExceptionLog;
+            Database.insert(objExceptionLog, false);
         }
 
         return objExceptionLog;
     }
+
+    /**
+    * @ author      : Rakesh Nayak
+    * @ description : This method is used to create exception logs from a list of error messages
+                      from a DML operation.
+    * @ params      : strClassName - Class name where DML exception has occurred
+                      strMethodName - Method name where DML exception has occurred
+                      list_ErrorMessages - List of rror message from the DML operation
+    **/
+    public static void logDMLException(
+        String strClassName, 
+        String strMethodName, 
+        List<String> list_ErrorMessages
+    ) {
+        List<DEL_ExceptionLog__c> list_ExceptionLogs = new List<DEL_ExceptionLog__c>();
+        for (String strErrorMessage : list_ErrorMessages) {
+            DEL_ExceptionLog__c objExceptionLog = new DEL_ExceptionLog__c(
+                ClassName__c = strClassName,
+                MethodName__c = strMethodName,
+                ErrorMessage__c = strErrorMessage,
+                ExceptionType__c = 'DMLException'
+            );
+            list_ExceptionLogs.add(objExceptionLog);
+        }
+
+        Database.insert(list_ExceptionLogs, false);
+    }
+
+    /**
+    * @ author      : Rakesh Nayak
+    * @ description : This method is used to process the errors occured in DML operations.
+    * @ params      : list_SaveResults - List of Database.SaveResult records from DML operation
+                      strOperationType - Type of DML operation
+    * @ return      : list_Errors - List of Error messages from the failed DML operations.
+    **/
+    public static List<String> processDMLErrors(
+        List<Database.SaveResult> list_SaveResults,
+        String strOperationType
+    ) {
+        List<String> list_Errors = new List<String>();
+        for (Database.SaveResult objSaveResult : list_SaveResults) {
+            if (!objSaveResult.isSuccess()) {
+                for (Database.Error objError : objSaveResult.getErrors()) {
+                    String strErrorMessage = strOperationType + ' failed for ' + 
+                        objSaveResult.getId() + '. Error: ' + objError.getMessage() + 
+                        '. Status Code: ' + objError.getStatusCode();
+                    list_Errors.add(strErrorMessage);
+                }
+            }
+        }
+
+        return list_Errors;
+    } 
 }

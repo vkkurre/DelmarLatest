@@ -36,4 +36,31 @@ private class DEL_UtilsTest {
         System.assert(objExceptionLog.Id != null);
         System.assertEquals('System.DmlException', objExceptionLog.ExceptionType__c, 'Record was not created.');
     }
+
+    /**
+     * @ author      : Ankit C
+     * @ description : Test method for logDMLException() and processDMLErrors() method in DEL_Utils class
+    **/
+    @IsTest
+    private static void testLogDMLException() {
+        List<Account> list_Accounts = new List<Account>();
+        list_Accounts.add(new Account());
+        DEL_ExceptionLog__c objExceptionLog = new DEL_ExceptionLog__c();
+        Test.startTest();
+        List<Database.SaveResult> list_SaveResults = Database.insert(list_Accounts, false);
+        List<String> list_Errors = DEL_Utils.processDMLErrors(list_SaveResults, 'Insert');
+        DEL_Utils.logDMLException(
+            'DEL_UtilsTest',
+            'testLogDMLException',
+            list_Errors
+        );
+        Test.stopTest();
+
+        List<DEL_ExceptionLog__c> list_ExceptionLogs = [SELECT
+                                                        Id, 
+                                                        MethodName__c
+                                                        FROM DEL_ExceptionLog__c
+                                                        WHERE MethodName__c = 'testLogDMLException'];
+        System.assert(!list_ExceptionLogs.isEmpty());
+    }   
 }

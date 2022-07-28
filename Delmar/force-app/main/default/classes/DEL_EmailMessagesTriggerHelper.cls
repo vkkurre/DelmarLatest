@@ -18,6 +18,7 @@ public class DEL_EmailMessagesTriggerHelper {
      * @ params      : list_EmailMessages - list of EmailMessage records passed from trigger
     **/
     public static void handleEmailsOnInsert(List<EmailMessage> list_EmailMessages) {
+        List<String> list_ConsolidatedDMLErrors = new List<String>();
         String strPattern = '(<br>){1}';
         Pattern objPattern = Pattern.compile(strPattern);
         List<DEL_CaseComment__c> list_CaseComments = new List<DEL_CaseComment__c>();
@@ -41,7 +42,20 @@ public class DEL_EmailMessagesTriggerHelper {
             }
             
             if (!list_CaseComments.isEmpty()) {
-                insert list_CaseComments;
+                if (Test.isRunningTest() && DEL_EmailMessagesTriggerHelperTest.blnThrowException) {
+                    throw new DMLException();
+                }
+
+                List<Database.SaveResult> list_InsertResults = Database.insert(list_CaseComments, false);
+                list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_InsertResults, 'Insert'));
+            }
+
+            if (!list_ConsolidatedDMLErrors.isEmpty()) {
+                DEL_Utils.logDMLException(
+                    'DEL_EmailMessagesTriggerHelper',
+                    'handleEmailsOnInsert',
+                    list_ConsolidatedDMLErrors
+                );
             }
         } catch(Exception objException) {
             DEL_Utils.logException(

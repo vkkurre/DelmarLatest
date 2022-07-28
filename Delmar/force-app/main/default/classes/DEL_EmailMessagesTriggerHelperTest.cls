@@ -10,60 +10,87 @@
 *
 *******************************************************************************************************/
 @IsTest
-private class DEL_EmailMessagesTriggerHelperTest {
+public class DEL_EmailMessagesTriggerHelperTest {
+    public static Boolean blnThrowException = false;
+
+
     /**
     * @ author      : Rakesh Nayak
     * @ description : This method is used to setup data for testing apex class 'DEL_EmailMessagesTriggerHelper'
     **/
     @TestSetup
     static void createData() {
-        Case objCase = new Case(
-            Status = 'New',
-            Origin = 'Email',
-            Subject = 'Test Case'
-        );
+        Case objCase = new DEL_TestUtility.CaseBuilder()
+            .setSubject('Case with Power Failure')
+            .setDescription('Power failure happens after 4 hour work')
+            .setStatus('New')
+            .setOrigin('Email')
+            .createCase();
         insert objCase;
-
-        EmailMessage objEmailMessage = new EmailMessage(
-            TextBody = 'This is textbody',
-            HtmlBody = '<div>this is HtmlBody</div><br><body>Test</body>',
-            Incoming = true,
-            FromAddress = 'abc@xyz.com',
-            FromName = 'Test User',
-            ThreadIdentifier = 'qwerty',
-            MessageIdentifier = '1cwicjn',
-            ParentId = objCase.Id
-        );
-        insert objEmailMessage;
     }
 
     /**
     * @ author      : Rakesh Nayak
     * @ description : This method is used to test the 'handleEmailsOnInsert' method on DEL_EmailMessagesTriggerHelper
     **/
-    @IsTest
-    private static void emailMessageTriggerTestMethod() {
+    @isTest
+    private static void testEmailMessageCreation() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
-        List<EmailMessage> list_EmailMessages = [
-            SELECT TextBody,
-            HtmlBody,
-            Incoming,
-            ThreadIdentifier,
-            MessageIdentifier,
-            FromAddress,
-            FromName,
-            ParentId
-            FROM EmailMessage
-            WHERE ParentId = :objCase.Id
-        ];
-
+        EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
+            .setTextBody('This is textbody')
+            .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
+            .setIncoming(true)
+            .setFromAddress('abc@xyz.com')
+            .setFromName('Test User')
+            .setThreadIdentifier('qwerty')
+            .setMessageIdentifier('1cwicjn')
+            .setParentId(objCase.Id)
+            .createEmailMessage();
         Test.startTest();
-        DEL_EmailMessagesTriggerHelper.handleEmailsOnInsert(list_EmailMessages);
+        insert objEmailMessage;
         Test.stopTest();
 
-        DEL_CaseComment__c objCaseComment = [SELECT Id, Body__c, Case__c
+        DEL_CaseComment__c objCaseComment = [SELECT 
+                                             Id, 
+                                             Body__c, 
+                                             Case__c
                                              FROM DEL_CaseComment__c
                                              LIMIT 1];
+        // Assert if a case comment was created successfully from the email message.                                     
         System.assertEquals(objCaseComment.Body__c, 'this is HtmlBody');
+    }
+
+    /**
+    * @ author      : Rakesh Nayak
+    * @ description : This method is used to test to cover the catch blocks in
+                      'handleEmailsOnInsert' method in DEL_EmailMessagesTriggerHelper
+    **/
+    @IsTest
+    private static void handleExceptions() {
+        Case objCase = [SELECT Id FROM Case LIMIT 1];
+
+        EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
+            .setTextBody('This is textbody')
+            .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
+            .setIncoming(true)
+            .setFromAddress('abc@xyz.com')
+            .setFromName('Test User')
+            .setThreadIdentifier('qwerty')
+            .setMessageIdentifier('1cwicjn')
+            .setParentId(objCase.Id)
+            .createEmailMessage();
+
+        Test.startTest();
+        blnThrowException = true;
+        insert objEmailMessage;
+        Test.stopTest();
+
+        List<DEL_ExceptionLog__c> list_ExceptionLogs = [SELECT 
+                                                        Id, 
+                                                        ClassName__c, 
+                                                        MethodName__c
+                                                        FROM DEL_ExceptionLog__c
+                                                        WHERE MethodName__c = 'handleEmailsOnInsert'];
+        System.assert(!list_ExceptionLogs.isEmpty());
     }
 }

@@ -260,4 +260,83 @@ public class DEL_TestUtility {
             return objCaseComment;
         }
     }
+
+    /**
+    * @ Name            :   EmailMessagetBuilder
+    * @ Purpose         :   To create Email Message record
+    * @ Author          :   Rakesh Nayak
+    **/
+    public class EmailMessageBuilder {
+        private String strTextBody;
+        private String strHtmlBody;
+        private Id idParentId;
+        private String strFromAddress;
+        private String strFromName;
+        private String strMessageIdentifier;
+        private String strThreadIdentifier;
+        private Boolean blnIncoming;
+
+        public EmailMessageBuilder() {
+            this.strTextBody = '';
+            this.strHtmlBody = '';
+            this.strFromAddress = '';
+            this.strFromName = '';
+            this.strMessageIdentifier = '';
+            this.strThreadIdentifier = '';
+        }
+
+        public EmailMessageBuilder setTextBody(String strValue) {
+            this.strTextBody = strValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setHtmlBody(String strValue) {
+            this.strHtmlBody = strValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setMessageIdentifier(String strValue) {
+            this.strMessageIdentifier = strValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setThreadIdentifier(String strValue) {
+            this.strThreadIdentifier = strValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setFromName(String strValue) {
+            this.strFromName = strValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setParentId(Id idValue) {
+            this.idParentId = idValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setFromAddress(String strValue) {
+            this.strFromAddress = strValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setIncoming(Boolean blnValue) {
+            this.blnIncoming = blnValue;
+            return this;
+        }
+
+        public EmailMessage createEmailMessage() {
+            EmailMessage objEmailMessage = new EmailMessage();
+            objEmailMessage.TextBody = this.strTextBody;
+            objEmailMessage.HtmlBody = this.strHtmlBody;
+            objEmailMessage.ThreadIdentifier = this.strThreadIdentifier;
+            objEmailMessage.MessageIdentifier = this.strMessageIdentifier;
+            objEmailMessage.FromName = this.strFromName;
+            objEmailMessage.FromAddress = this.strFromAddress;
+            objEmailMessage.ParentId = this.idParentId;
+            objEmailMessage.Incoming = this.blnIncoming;
+
+            return objEmailMessage;
+        }
+    }
 }
