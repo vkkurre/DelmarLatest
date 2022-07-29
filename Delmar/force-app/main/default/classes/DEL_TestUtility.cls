@@ -339,4 +339,134 @@ public class DEL_TestUtility {
             return objEmailMessage;
         }
     }
+
+    /**
+    * @ Name            :   EmailAlertConfigurationBuilder
+    * @ Purpose         :   To create DEL_EmailAlertConfiguration__c record
+    * @ Author          :   Ankit C
+    **/
+    public class EmailAlertConfigurationBuilder {
+        private String strMergeFields;
+        private String strCaseQueryFields;
+        private String strCaseCommentFields;
+        private String strSiteName;
+        private String strEmailTemplateName;
+        private String strOrgWideAddress;
+        private Id idSetupOwnerId;
+
+        public EmailAlertConfigurationBuilder() {
+            this.strMergeFields = '';
+            this.strCaseQueryFields = '';
+            this.strCaseCommentFields = '';
+            this.strSiteName = '';
+            this.strEmailTemplateName = '';
+            this.strOrgWideAddress = '';
+        }
+
+        public EmailAlertConfigurationBuilder setMergeFields(String strValue) {
+            this.strMergeFields = strValue;
+            return this;
+        }
+
+        public EmailAlertConfigurationBuilder setCaseQueryFields(String strValue) {
+            this.strCaseQueryFields = strValue;
+            return this;
+        }
+
+        public EmailAlertConfigurationBuilder setCaseCommentFields(String strValue) {
+            this.strCaseCommentFields = strValue;
+            return this;
+        }
+
+        public EmailAlertConfigurationBuilder setSiteName(String strValue) {
+            this.strSiteName = strValue;
+            return this;
+        }
+
+        public EmailAlertConfigurationBuilder setEmailTemplateName(String strValue) {
+            this.strEmailTemplateName = strValue;
+            return this;
+        }
+
+        public EmailAlertConfigurationBuilder setOrgWideAddress(String strValue) {
+            this.strOrgWideAddress = strValue;
+            return this;
+        }
+
+        public EmailAlertConfigurationBuilder setOwnerId(Id idValue) {
+            this.idSetupOwnerId = idValue;
+            return this;
+        }
+
+        public DEL_EmailAlertConfiguration__c createConfiguration() {
+            DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c(
+                MergeFields__c = this.strMergeFields,
+                CaseQueryFields__c = this.strCaseQueryFields,
+                CaseCommentFields__c = this.strCaseCommentFields,
+                SiteName__c = this.strSiteName,
+                CaseCommentEmailTemplate__c = this.strEmailTemplateName,
+                SetupOwnerId = this.idSetupOwnerId,
+                OrgWideAddress__c = this.strOrgWideAddress
+            );
+
+            return objEmailAlertConfiguration;
+        }
+    }
+
+    /**
+    * @ Name            :   EmailTemplateBuilder
+    * @ Purpose         :   To create EmailTemplate record
+    * @ Author          :   Ankit C
+    **/
+    public class EmailTemplateBuilder {
+        private String strName;
+        private String strDeveloperName;
+        private String strHtmlValue;
+        private Id idFolderId;
+        private String strTemplateType;
+
+        public EmailTemplateBuilder() {
+            this.strName = '';
+            this.strDeveloperName = '';
+            this.strHtmlValue = '';
+            this.strTemplateType = '';
+        }
+
+        public EmailTemplateBuilder setName(String strValue) {
+            this.strName = strValue;
+            return this;
+        }
+
+        public EmailTemplateBuilder setDeveloperName(String strValue) {
+            this.strDeveloperName = strValue;
+            return this;
+        }
+
+        public EmailTemplateBuilder setHtmlValue(String strValue) {
+            this.strHtmlValue = strValue;
+            return this;
+        }
+
+        public EmailTemplateBuilder setFolderId(Id idValue) {
+            this.idFolderId = idValue;
+            return this;
+        }
+
+        public EmailTemplateBuilder setTemlateType(String strValue) {
+            this.strTemplateType = strValue;
+            return this;
+        }
+
+        public EmailTemplate createEmailTemplate() {
+            EmailTemplate objEmailTemplate = new EmailTemplate(
+        	    Name = this.strName,
+                DeveloperName = this.strDeveloperName,
+                HtmlValue = this.strHtmlValue,
+                FolderId = this.idFolderId,
+                TemplateType = this.strTemplateType
+            );
+
+            return objEmailTemplate;
+        }
+    }
 }

@@ -3,6 +3,6 @@
     <customSettingsType>Hierarchy</customSettingsType>
     <description>This Custom Setting is used to store information about case comment setting.</description>
     <enableFeeds>false</enableFeeds>
-    <label>DEL Case Comment Configuration</label>
+    <label>Case Comment Configuration</label>
     <visibility>Public</visibility>
 </CustomObject>

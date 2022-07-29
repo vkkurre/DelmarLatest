@@ -1,22 +1,19 @@
-/*********************************************************************************************************************
+/*******************************************************************************************************
 * 
-* @ Name            :   DEL_CaseCollaborationControllerTest
-* @ Purpose         :   Test class for DEL_CaseCollaborationController
-* @ Author          :   Rakesh Nayak
+* @ Name            :   DEL_FlowHandlerTest
+* @ Purpose         :   Test class for DEL_FlowHandler
+* @ Author          :   Deeksha
 *
 *   Date            |  Developer Name               |  Version      |  Changes
-* =====================================================================================================================
-*   27-06-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
-*   22-07-2022      |  vinaykant.kurre@absyz.com    |  1.0          |  Include all other methods of DEL_CaseCollaborationController
+* ======================================================================================================
+*   25-07-2022      |  deekshasuvarna@absyz.com       |  1.0          |  Initial Version
 *
-***********************************************************************************************************************/
-@Istest
-public class DEL_CaseCollaborationControllerTest {
-    public static Boolean blnThrowException = false;
-    
+*******************************************************************************************************/
+@IsTest
+public class DEL_FlowHandlerTest {   
     /**
-    * @ author      : Rakesh Nayak & Vinaykant
-    * @ description : This method is used to setup data for testing apex class 'DEL_CaseCollaborationController'
+    * @ author      : Deeksha
+    * @ description : This method is used to setup data for testing apex class 'DEL_FlowHandler'
     **/
     @TestSetup
     static void createData(){
@@ -79,12 +76,12 @@ public class DEL_CaseCollaborationControllerTest {
             .createCaseComment();
         insert objCaseComment;
     }
-
+    
     /**
-    * @ author      : Vinaykant
-    * @ description : This method is used to test all the methods in apex class 'DEL_CaseCollaborationController'
+    * @ author      : Deeksha 
+    * @ description : This method is used to test the method in apex class 'DEL_FlowHandler'
     **/
-    @IsTest
+    @Istest
     private static void caseCommentTestMethod() {
         Case objCase = [SELECT 
                         Id,
@@ -94,57 +91,30 @@ public class DEL_CaseCollaborationControllerTest {
 
         Id idCaseId = objCase.Id;
         String strComment = 'Power failure happened';
-
-        DEL_CaseCollaborationController.ResponseWrapper objResultFetch = new DEL_CaseCollaborationController.ResponseWrapper();
-
+        List<DEL_CaseComment__c> list_CaseComments = new List<DEL_CaseComment__c>();
+        
         //Test the Class Methods.
         Test.startTest();
-        DEL_CaseCollaborationController.insertComment(strComment, idCaseId);
         DEL_CaseComment__c objCaseComment = [SELECT 
-                                            Id 
+                                            Id,
+                                            Case__c
                                             FROM DEL_CaseComment__c 
                                             WHERE Case__c = : idCaseId 
                                             LIMIT 1];
-
-        objResultFetch = DEL_CaseCollaborationController.fetchComments(idCaseId);
-        DEL_CaseCollaborationController.updateCaseComment(objCaseComment.Id, 'Hello');
-        DEL_CaseCollaborationController.deleteCaseComment(objCaseComment.Id);
+        
+		list_CaseComments.add(objCaseComment);
+        DEL_FlowHandler.formHTMLValue(list_CaseComments);
         Test.stopTest();
 
         //Check the Result.
-        System.assertEquals(2, objResultFetch.list_CaseComments.size(), 'ERROR: Atleast one case comment record should be created.');
+        System.assertEquals(1, list_CaseComments.size());
     }
 
     /**
-    * @ author      : Ankit
-    * @ description : This method is used to cover all the catch blocks
+    * @ author      : Ankit C 
+    * @ description : This method returns a dummy site link while running test class
     **/
-    @IsTest
-    private static void handleExceptions() {
-        Case objCase = [SELECT 
-                        Id,
-                        Subject
-                        FROM Case
-                        LIMIT 1];
-
-        Id idCaseId = objCase.Id;
-        String strComment = 'Power failure happened';
-        DEL_CaseCollaborationController.ResponseWrapper objResponse = new DEL_CaseCollaborationController.ResponseWrapper();
-        Test.startTest();
-        blnThrowException = true;
-        objResponse = DEL_CaseCollaborationController.insertComment(strComment, idCaseId);
-        objResponse = DEL_CaseCollaborationController.fetchComments(idCaseId);
-
-        DEL_CaseComment__c objCaseComment = [SELECT 
-                                            Body__c, 
-                                            Case__c 
-                                            FROM DEL_CaseComment__c 
-                                            LIMIT 1];
-
-        objResponse = DEL_CaseCollaborationController.updateCaseComment(objCaseComment.Id, 'Hello');
-        objResponse = DEL_CaseCollaborationController.deleteCaseComment(objCaseComment.Id);
-        Test.stopTest();
-
-        System.assert(!objResponse.blnIsSuccess);
+    public static String getSiteLink() {
+        return 'https://absyzdev-developer-edition.ap15.force.com';
     }
 }

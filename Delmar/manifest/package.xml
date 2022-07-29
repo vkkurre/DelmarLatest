@@ -3,6 +3,8 @@
     <types>
         <members>DEL_CaseCollaborationController</members>
         <members>DEL_CaseCollaborationControllerTest</members>
+        <members>DEL_FlowHandler</members>
+        <members>DEL_FlowHandlerTest</members>
         <members>DEL_EmailMessagesTriggerHelper</members>
         <members>DEL_EmailMessagesTriggerHelperTest</members>
         <members>DEL_Utils</members>
@@ -10,6 +12,10 @@
         <members>DEL_TestUtility</members>
         <name>ApexClass</name>
     </types>
+    <types>
+    <members>DEL_CaseCommentEmailTemplate</members>
+    <name>EmailTemplate</name>
+</types>
     <types>
         <members>DEL_CaseComment__c</members>
         <members>DEL_TriggerConfiguration__mdt</members>
@@ -36,6 +42,7 @@
     </types>
     <types>
         <members>DEL_ChatTranscriptToCaseCommentFlow</members>
+        <members>DEL_CaseCommentNotification</members>
         <name>Flow</name>
     </types>
     <types>

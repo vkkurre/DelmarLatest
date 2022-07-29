@@ -27,6 +27,35 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setOrigin('Email')
             .createCase();
         insert objCase;
+
+        String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
+            +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
+            + '{!CaseComment.CreatedDate},SiteLink';
+
+        OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
+        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
+            .setMergeFields(strMergeFields)
+            .setCaseQueryFields('Subject,CaseNumber,Description')
+            .setCaseCommentFields('CommentCreatedName__c,Body__c,CreatedDate')
+            .setSiteName('CaseComments')
+            .setEmailTemplateName('DEL_CaseCommentAlert')
+            .setOwnerId(UserInfo.getOrganizationId())
+            .setOrgWideAddress(objOrgWideAddress.Address)
+            .createConfiguration();
+        insert objEmailAlertConfiguration;
+
+        EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
+            .setName('Case Comment Email Alert')
+            .setDeveloperName('DEL_CaseCommentAlert')
+            .setHtmlValue('{!Case.Subject} SiteLink {!CaseComment.CommentCreatedName__c} {!CaseComment.CreatedDate}')
+            .setFolderId(UserInfo.getOrganizationId())
+            .setTemlateType('Custom')
+            .createEmailTemplate();
+
+        User objUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        System.runAs(objUser) {
+            insert objEmailTemplate;
+        }
     }
 
     /**
