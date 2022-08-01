@@ -27,7 +27,7 @@
         <description>Send emails to users when a comment is added to a case.</description>
         <name>Send_email_alert_to_users</name>
         <label>Send email alert to users</label>
-        <locationX>417</locationX>
+        <locationX>419</locationX>
         <locationY>1330</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
@@ -74,8 +74,8 @@
         <description>Assign the email of Case Owner(Agent), Creator(Customer), Case Comment Record Creator.</description>
         <name>Assign_Case_Owner_And_Creator_Email</name>
         <label>Assign Case Owner And Creator Email</label>
-        <locationX>425</locationX>
-        <locationY>948</locationY>
+        <locationX>430</locationX>
+        <locationY>971</locationY>
         <assignmentItems>
             <assignToReference>emaillist</assignToReference>
             <operator>Add</operator>
@@ -95,6 +95,13 @@
             <operator>Add</operator>
             <value>
                 <elementReference>$Record.CreatedByEmail__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emaillist</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>get_case.SuppliedEmail</elementReference>
             </value>
         </assignmentItems>
         <connector>

@@ -79,10 +79,10 @@ public class DEL_FlowHandlerTest {
     
     /**
     * @ author      : Deeksha 
-    * @ description : This method is used to test the method in apex class 'DEL_FlowHandler'
+    * @ description : This method is used to test the formHTMLValue() method in apex class 'DEL_FlowHandler'
     **/
-    @Istest
-    private static void caseCommentTestMethod() {
+    @IsTest
+    private static void testFormHTMLValue() {
         Case objCase = [SELECT 
                         Id,
                         Subject
@@ -96,18 +96,18 @@ public class DEL_FlowHandlerTest {
         //Test the Class Methods.
         Test.startTest();
         DEL_CaseComment__c objCaseComment = [SELECT 
-                                            Id,
-                                            Case__c
-                                            FROM DEL_CaseComment__c 
-                                            WHERE Case__c = : idCaseId 
-                                            LIMIT 1];
+                                             Id,
+                                             Case__c
+                                             FROM DEL_CaseComment__c 
+                                             WHERE Case__c = :idCaseId 
+                                             LIMIT 1];
         
-		list_CaseComments.add(objCaseComment);
-        DEL_FlowHandler.formHTMLValue(list_CaseComments);
+        list_CaseComments.add(objCaseComment);
+        String strHtmlBody = DEL_FlowHandler.formHTMLValue(list_CaseComments).get(0);
         Test.stopTest();
 
-        //Check the Result.
-        System.assertEquals(1, list_CaseComments.size());
+        // Assert if the html content was returned.
+        System.assert(String.isNotBlank(strHtmlBody));
     }
 
     /**
