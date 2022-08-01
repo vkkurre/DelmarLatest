@@ -3,7 +3,7 @@ import getUserData from '@salesforce/apex/DEL_ContactCollaborationController.get
 import addContactCollaborator from '@salesforce/apex/DEL_ContactCollaborationController.addContactCollaborator';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
-export default class customRecordSearch extends LightningElement {
+export default class Del_addCaseCollaboratorComponent extends LightningElement {
     @api recordId;
     @api strCardTitle;
     strSearchKey = '';

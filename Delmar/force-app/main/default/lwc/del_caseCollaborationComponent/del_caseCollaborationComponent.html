@@ -20,30 +20,29 @@
     <lightning-card>
         <div class="c-container slds-p-vertical_small slds-p-horizontal_small">
             <lightning-layout>
-                <lightning-layout-item size="1" small-device-size="4" medium-device-size="2" large-device-size="1"
-                    class="slds-p-left_medium">
+                <lightning-layout-item size="2" small-device-size="2" medium-device-size="2" large-device-size="1">
                     <lightning-avatar variant="circle" src="/bad/image/url.jpg" initials="" fallback-icon-name="standard:avatar"
                         alternative-text="">
                     </lightning-avatar>
                 </lightning-layout-item>
-                <lightning-layout-item size="8" small-device-size="6" medium-device-size="8" large-device-size="10">
+                <lightning-layout-item size="9" small-device-size="9" medium-device-size="9" large-device-size="10">
                     <lightning-input type="text" class="nullify" value="" placeholder="Add a comment..." variant="label-hidden">
                     </lightning-input>
                 </lightning-layout-item>
-                <lightning-layout-item alignment-bump="right" class="slds-p-left_none" size="1" small-device-size="2" medium-device-size="2" large-device-size="1">
-                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}>
+                <lightning-layout-item alignment-bump="right" class="slds-p-left_none" size="1" small-device-size="1" medium-device-size="1" large-device-size="1">
+                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick} class="del-style-button-left-margin">
                     </lightning-button-icon>
                 </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>
                 <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
-                    <div class="slds-var-m-around_medium">
+                    <div class="slds-m-top_large">
                         <template if:true={list_Comments}>
                             <div class="del-style-commentsection">
                                 <template for:each={list_Comments} for:item="objCaseComment">
                                     <div key={objCaseComment.Id}
                                         class="slds-p-bottom_xxx-small slds-p-top_xx-small slds-grid slds-border_bottom">
-                                        <div class="slds-col slds-grow-none slds-p-top_xx-small">
+                                        <div class="slds-col slds-grow-none slds-p-top_x-small slds-p-right_x-small">
                                             <span>
                                                 <lightning-avatar variant="circle" src="/bad/image/url.jpg" initials=""
                                                     fallback-icon-name="standard:avatar" alternative-text=""
@@ -65,7 +64,7 @@
                                                             minute="2-digit">
                                                         </lightning-formatted-date-time>
                                                     </div>
-                                                    <div class="slds-p-top_xxx-small">
+                                                    <div class="slds-p-top_small">
                                                         <lightning-formatted-rich-text value={objCaseComment.Body__c}>
                                                         </lightning-formatted-rich-text>
                                                     </div>

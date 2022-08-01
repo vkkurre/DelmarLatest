@@ -109,10 +109,8 @@ private class DEL_ContactCollaborationControllerTest {
         DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper2 = new DEL_ContactCollaborationController.ResponseWrapper();
         //Test Methods
         Test.startTest();
-        System.runAs(objUser) {
-            objResponseWrapper = DEL_ContactCollaborationController.addContactCollaborator(list_UserIds, objCase.Id);
-            objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(objCase.Id, strUserNameSearchKey);
-        }
+        objResponseWrapper = DEL_ContactCollaborationController.addContactCollaborator(list_UserIds, objCase.Id);
+        objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(objCase.Id, strUserNameSearchKey);
         Test.stopTest();
         
         //  Assert results

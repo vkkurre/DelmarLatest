@@ -10,7 +10,7 @@
         <filterItems>
             <field>$Profile.Name</field>
             <operation>equals</operation>
-            <value>Customer Community Plus User, Customer Community User, CustomerPlus</value>
+            <value>Customer Community Plus User, Customer Community User, CustomerPlus, System Administrator</value>
         </filterItems>
         <filterItems>
             <field>User.Profile.Name</field>
@@ -20,12 +20,12 @@
         <filterItems>
             <field>$Profile.Name</field>
             <operation>equals</operation>
-            <value>AgentProfile, Standard User, System Administrator</value>
+            <value>Standard User, System Administrator</value>
         </filterItems>
         <filterItems>
             <field>User.Profile.Name</field>
             <operation>equals</operation>
-            <value>AgentProfile, Standard User, System Administrator</value>
+            <value>Standard User, System Administrator</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>

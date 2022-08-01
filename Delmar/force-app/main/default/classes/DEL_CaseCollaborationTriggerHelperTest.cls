@@ -106,30 +106,23 @@ public class DEL_CaseCollaborationTriggerHelperTest {
             .setUserId(objUser.Id)
             .createCaseCollaborator();
         Test.startTest();
-        User objCustomerUser = [SELECT 
-                                Id
-                                FROM User
-                                WHERE Username = 'customer@delmar.com'];
-        // Create a case collaborator as a Customer user.
-        System.runAs(objCustomerUser) {
-            insert objCaseCollaborator;
+        insert objCaseCollaborator;
 
-            // Inserting the same case collaborator again to check the handleDuplicates() method
-            objCaseCollaborator2 = new DEL_TestUtility.CaseCollaborationBuilder()
-                .setCaseId(objCase.Id)
-                .setUserId(objUser.Id)
-                .createCaseCollaborator();
-            try {
-                insert objCaseCollaborator2;
-            } catch (DmlException objException) {
-                DEL_Utils.logException(
-                    'DEL_CaseCollaborationTriggerHelperTest',
-                    'testCaseCollaboratorCreation',
-                    objException,
-                    true
-                );
-            } 
-        }
+        // Inserting the same case collaborator again to check the handleDuplicates() method
+        objCaseCollaborator2 = new DEL_TestUtility.CaseCollaborationBuilder()
+            .setCaseId(objCase.Id)
+            .setUserId(objUser.Id)
+            .createCaseCollaborator();
+        try {
+            insert objCaseCollaborator2;
+        } catch (DmlException objException) {
+            DEL_Utils.logException(
+                'DEL_CaseCollaborationTriggerHelperTest',
+                'testCaseCollaboratorCreation',
+                objException,
+                true
+            );
+        } 
         Test.stopTest();
 
         List<CaseShare> list_CaseShares = [SELECT 
