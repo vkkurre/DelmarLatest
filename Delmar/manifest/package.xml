@@ -10,6 +10,10 @@
         <members>DEL_Utils</members>
         <members>DEL_UtilsTest</members>
         <members>DEL_TestUtility</members>
+        <members>DEL_CaseCollaborationTriggerHelperTest</members>
+        <members>DEL_CaseCollaborationTriggerHelper</members>
+        <members>DEL_ContactCollaborationControllerTest</members>
+        <members>DEL_ContactCollaborationController</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -27,10 +31,12 @@
     </types>
     <types>
         <members>DEL_TriggerConfiguration.CMDEL0001</members>
+        <members>DEL_TriggerConfiguration.CMDEL0002</members>
         <name>CustomMetadata</name>
     </types>
     <types>
         <members>DEL_EmailMessagesTrigger</members>
+        <members>DEL_CaseCollaborationTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -42,6 +48,7 @@
     </types>
     <types>
         <members>DEL_ChatTranscriptToCaseCommentFlow</members>
+        <members>DEL_CaseCollaborationFlow</members>
         <members>DEL_CaseCommentNotification</members>
         <name>Flow</name>
     </types>
@@ -51,9 +58,14 @@
     </types>
     <types>
         <members>del_caseCollaborationComponent</members>
+        <members>del_addCaseCollaboratorComponent</members>
         <members>del_editCommentComponent</members>
         <members>del_deleteCommentComponent</members>
         <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborationNotification</members>
+        <name>CustomNotificationType</name>
     </types>
     <types>
         <members>Admin</members>

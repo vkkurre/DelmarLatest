@@ -1,0 +1,42 @@
+<!--
+* 
+* @ Name            :   del_addCaseCollaboratorComponent
+* @ Purpose         :   This lwc is used for adding collaborators to a Case.
+* @ Author          :   Dinesh Chandra
+*
+*   Date            |  Developer Name               |  Version      |  Changes
+* ======================================================================================================
+*   17-06-2022      |  dinesh.chandra@absyz.com       |  1.0          |  Initial Version
+*
+--> 
+<template>
+	<lightning-card title={strCardTitle}>
+		<div if:true={blnIsLoading} class="slds-align_absolute-center">
+			<lightning-spinner alternative-text="Loading..." class="slds-is-fixed">
+			</lightning-spinner>
+		</div>
+		<lightning-layout multiple-rows="true" vertical-align="end">
+			<lightning-layout-item size="4" padding="around-small">
+				<!--Input text to Search Contact-->
+				<lightning-input type="text" label="Enter Contact Name To Search" value={searchKey}
+					onchange={handelSearchKey}>
+				</lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="8" padding="around-small">
+				<!--Search Button-->
+				<lightning-button label="Add Collaborator" variant="brand" 
+					onclick={collaborateContactHandler}> 
+				</lightning-button>
+			</lightning-layout-item>
+		</lightning-layout>
+			<lightning-layout multiple-rows="true" vertical-align="end">
+				<lightning-layout-item size="12" padding="around-small">
+					<!--List Of Contact Using data Tabel-->
+					<lightning-datatable key-field="Id" data={list_Users} 
+						columns={list_Columns}>
+					</lightning-datatable>
+				</lightning-layout-item>
+			</lightning-layout>
+			
+	</lightning-card>
+</template>

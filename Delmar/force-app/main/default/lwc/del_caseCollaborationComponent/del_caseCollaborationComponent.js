@@ -9,8 +9,7 @@ import updateCaseComment from '@salesforce/apex/DEL_CaseCollaborationController.
 import getCaseCommentConfigurations from '@salesforce/apex/DEL_CaseCollaborationController.getCaseCommentConfigurations';
 import UserId from '@salesforce/user/Id';
 
-
-export default class Del_commentsPage extends NavigationMixin(LightningElement) {
+export default class Del_caseCollaborationComponent extends NavigationMixin(LightningElement) {
     strBody = "";
     @api recordId;
     @track list_Comments = [];

@@ -262,6 +262,34 @@ public class DEL_TestUtility {
     }
 
     /**
+    * @ Name            :   CaseCollaborationBuilder
+    * @ Purpose         :   To create DEL_CaseCollaborator__c record
+    * @ Author          :   Dinesh Chandra
+    **/
+    public class CaseCollaborationBuilder {
+        private Id idCaseId;
+        private Id idUserId;
+
+        public CaseCollaborationBuilder setCaseId(Id idValue) {
+            this.idCaseId = idValue;
+            return this;
+        }
+
+        public CaseCollaborationBuilder setUserId(Id idValue) {
+            this.idUserId = idValue;
+            return this;
+        }
+
+        public DEL_CaseCollaborator__c createCaseCollaborator() {
+            DEL_CaseCollaborator__c objCaseCollaborator = new DEL_CaseCollaborator__c();
+            objCaseCollaborator.User__c = this.idUserId;
+            objCaseCollaborator.Case__c = this.idCaseId;
+
+            return objCaseCollaborator;
+        }
+    }
+
+    /**
     * @ Name            :   EmailMessagetBuilder
     * @ Purpose         :   To create Email Message record
     * @ Author          :   Rakesh Nayak
