@@ -1,22 +1,28 @@
-.del-style-username{
-    font-weight : bold;
+.del-style-username {
+    font-weight: bold;
 }
-.del-style-commentsection{
-    position : relative;
+
+.del-style-commentsection {
+    position: relative;
 }
-lightning-button-icon{
+
+lightning-button-icon {
     --slds-c-button-radius-border: 50%;
     --slds-c-button-left-margin: 1.25rem;
 }
-lightning-input{
+
+lightning-input {
     --slds-c-input-radius-border: 1.25rem;
 }
-lightning-avatar{
+
+lightning-avatar {
     --slds-c-avatar-color-background: #7F8CED;
 }
-.del-style-button-left-margin{
+
+.del-style-button-left-margin {
     margin-left: -2.0rem;
 }
-.avatar-background-color{
+
+.avatar-background-color {
     background-color: #7F8CED;
 }

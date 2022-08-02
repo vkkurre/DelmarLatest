@@ -21,16 +21,19 @@
         <div class="c-container slds-p-vertical_small slds-p-horizontal_small">
             <lightning-layout>
                 <lightning-layout-item size="2" small-device-size="2" medium-device-size="2" large-device-size="1">
-                    <lightning-avatar variant="circle" src="/bad/image/url.jpg" initials="" fallback-icon-name="standard:avatar"
-                        alternative-text="">
+                    <lightning-avatar variant="circle" src="/bad/image/url.jpg" initials=""
+                        fallback-icon-name="standard:avatar" alternative-text="">
                     </lightning-avatar>
                 </lightning-layout-item>
                 <lightning-layout-item size="9" small-device-size="9" medium-device-size="9" large-device-size="10">
-                    <lightning-input type="text" class="nullify" value="" placeholder="Add a comment..." variant="label-hidden">
+                    <lightning-input type="text" class="nullify" value="" placeholder="Add a comment..."
+                        variant="label-hidden">
                     </lightning-input>
                 </lightning-layout-item>
-                <lightning-layout-item alignment-bump="right" class="slds-p-left_none" size="1" small-device-size="1" medium-device-size="1" large-device-size="1">
-                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick} class="del-style-button-left-margin">
+                <lightning-layout-item alignment-bump="right" class="slds-p-left_none" size="1" small-device-size="1"
+                    medium-device-size="1" large-device-size="1">
+                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}
+                        class="del-style-button-left-margin">
                     </lightning-button-icon>
                 </lightning-layout-item>
             </lightning-layout>
@@ -50,7 +53,8 @@
                                                 </lightning-avatar>
                                             </span>
                                         </div>
-                                        <div class="slds-col slds-medium-size_8-of-12 slds-small-size_6-of-12 slds-large-size_11-of-12 slds-p-around_x-small slds-col_bump-right">
+                                        <div
+                                            class="slds-col slds-medium-size_8-of-12 slds-small-size_6-of-12 slds-large-size_11-of-12 slds-p-around_x-small slds-col_bump-right">
                                             <span>
                                                 <div>
                                                     <div class="slds-p-bottom_none">
@@ -59,9 +63,9 @@
                                                         </a>
                                                     </div>
                                                     <div class="slds-p-top_none slds-text-body_small">
-                                                        <lightning-formatted-date-time value={objCaseComment.CreatedDate}
-                                                            year="numeric" day="2-digit" month="long" hour="2-digit"
-                                                            minute="2-digit">
+                                                        <lightning-formatted-date-time
+                                                            value={objCaseComment.CreatedDate} year="numeric"
+                                                            day="2-digit" month="long" hour="2-digit" minute="2-digit">
                                                         </lightning-formatted-date-time>
                                                     </div>
                                                     <div class="slds-p-top_small">
@@ -71,17 +75,19 @@
                                                 </div>
                                             </span>
                                         </div>
-                                        <div class="slds-col slds-large-size_1-of-12 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-col_bump-left">
+                                        <div
+                                            class="slds-col slds-large-size_1-of-12 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-col_bump-left">
                                             <span>
                                                 <template if:true={objCaseComment.blnEdit}>
                                                     <template if:true={objCaseComment.blnCurrentUser}>
-                                                        <lightning-button-menu variant="border-filled" icon-size="x-small"
-                                                            alternative-text="Edit Options">
+                                                        <lightning-button-menu variant="border-filled"
+                                                            icon-size="x-small" alternative-text="Edit Options">
                                                             <lightning-menu-item value={objCaseComment.Id} label="Edit"
-                                                                onclick={editComment} data-comment={objCaseComment.Body__c}>
+                                                                onclick={editComment}
+                                                                data-comment={objCaseComment.Body__c}>
                                                             </lightning-menu-item>
-                                                            <lightning-menu-item value={objCaseComment.Id} label="Delete"
-                                                                onclick={deleteComment}>
+                                                            <lightning-menu-item value={objCaseComment.Id}
+                                                                label="Delete" onclick={deleteComment}>
                                                             </lightning-menu-item>
                                                         </lightning-button-menu>
                                                     </template>
@@ -98,17 +104,10 @@
         </div>
     </lightning-card>
     <!-- Calling child components for edit & delete functionalities -->
-    <c-del_delete-comment-component 
-        bln-show-delete-modal={blnShowDeleteModal} 
-        onclose={closeDeleteModal}
-        onsave={saveDeleteChanges} 
-        str-comment-id={strSelectedCommentId}>
+    <c-del_delete-comment-component bln-show-delete-modal={blnShowDeleteModal} onclose={closeDeleteModal}
+        onsave={saveDeleteChanges} str-comment-id={strSelectedCommentId}>
     </c-del_delete-comment-component>
-    <c-del_edit-comment-component 
-        bln-show-edit-modal={blnShowEditModal} 
-        onclose={closeEditModal} 
-        onsave={saveEditChanges}
-        str-comment-id={strSelectedCommentId} 
-        str-comment={strSelectedComment}>
+    <c-del_edit-comment-component bln-show-edit-modal={blnShowEditModal} onclose={closeEditModal}
+        onsave={saveEditChanges} str-comment-id={strSelectedCommentId} str-comment={strSelectedComment}>
     </c-del_edit-comment-component>
 </template>

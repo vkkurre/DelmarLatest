@@ -11,12 +11,12 @@
 *******************************************************************************************************/
 @IsTest
 public class DEL_EmailMessagesTriggerHelperTest {
+    
     public static Boolean blnThrowException = false;
-
-
+    
     /**
-    * @ author      : Rakesh Nayak
-    * @ description : This method is used to setup data for testing apex class 'DEL_EmailMessagesTriggerHelper'
+    * @ author       :  Rakesh Nayak
+    * @ description  :  This method is used to setup data for testing apex class 'DEL_EmailMessagesTriggerHelper'
     **/
     @TestSetup
     static void createData() {
@@ -27,11 +27,11 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setOrigin('Email')
             .createCase();
         insert objCase;
-
+        
         String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
             +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
             + '{!CaseComment.CreatedDate},SiteLink';
-
+        
         OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
         DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
             .setMergeFields(strMergeFields)
@@ -43,7 +43,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setOrgWideAddress(objOrgWideAddress.Address)
             .createConfiguration();
         insert objEmailAlertConfiguration;
-
+        
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
             .setName('Case Comment Email Alert')
             .setDeveloperName('DEL_CaseCommentAlert')
@@ -51,16 +51,16 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setFolderId(UserInfo.getOrganizationId())
             .setTemlateType('Custom')
             .createEmailTemplate();
-
+        
         User objUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         System.runAs(objUser) {
             insert objEmailTemplate;
         }
     }
-
+    
     /**
-    * @ author      : Rakesh Nayak
-    * @ description : This method is used to test the 'handleEmailsOnInsert' method on DEL_EmailMessagesTriggerHelper
+    * @ author       :  Rakesh Nayak
+    * @ description  :  This method is used to test the 'handleEmailsOnInsert' method on DEL_EmailMessagesTriggerHelper
     **/
     @isTest
     private static void testEmailMessageCreation() {
@@ -78,7 +78,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
         Test.startTest();
         insert objEmailMessage;
         Test.stopTest();
-
+        
         DEL_CaseComment__c objCaseComment = [SELECT 
                                              Id, 
                                              Body__c, 
@@ -88,16 +88,16 @@ public class DEL_EmailMessagesTriggerHelperTest {
         // Assert if a case comment was created successfully from the email message.                                     
         System.assertEquals(objCaseComment.Body__c, 'this is HtmlBody');
     }
-
+    
     /**
-    * @ author      : Rakesh Nayak
-    * @ description : This method is used to test to cover the catch blocks in
-                      'handleEmailsOnInsert' method in DEL_EmailMessagesTriggerHelper
+    * @ author       :  Rakesh Nayak
+    * @ description  :  This method is used to test to cover the catch blocks in
+    *                   'handleEmailsOnInsert' method in DEL_EmailMessagesTriggerHelper
     **/
     @IsTest
     private static void handleExceptions() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
-
+        
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
             .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
@@ -108,12 +108,12 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setMessageIdentifier('1cwicjn')
             .setParentId(objCase.Id)
             .createEmailMessage();
-
+        
         Test.startTest();
         blnThrowException = true;
         insert objEmailMessage;
         Test.stopTest();
-
+        
         List<DEL_ExceptionLog__c> list_ExceptionLogs = [SELECT 
                                                         Id, 
                                                         ClassName__c, 

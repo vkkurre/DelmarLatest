@@ -12,8 +12,8 @@
 @IsTest
 public class DEL_FlowHandlerTest {   
     /**
-    * @ author      : Deeksha
-    * @ description : This method is used to setup data for testing apex class 'DEL_FlowHandler'
+    * @ author       :  Deeksha
+    * @ description  :  This method is used to setup data for testing apex class 'DEL_FlowHandler'
     **/
     @TestSetup
     static void createData(){
@@ -21,14 +21,14 @@ public class DEL_FlowHandlerTest {
             .setName('Test Account Delmar')
             .createAccount();
         insert objAccount;
-
+        
         Contact objContact = new DEL_TestUtility.ContactBuilder()
             .setFirstName('First')
             .setLastName('User')
             .setAccountId(objAccount.Id)
             .createContact();
         insert objContact;
-
+        
         Case objCase = new DEL_TestUtility.CaseBuilder()
             .setSubject('Case with Power Failure')
             .setDescription('Power failure happens after 4 hour work')
@@ -40,11 +40,11 @@ public class DEL_FlowHandlerTest {
             .setContactId(objContact.Id)
             .createCase();
         insert objCase;
-
+        
         String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
             +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
             + '{!CaseComment.CreatedDate},SiteLink';
-
+        
         OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
         DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
             .setMergeFields(strMergeFields)
@@ -56,7 +56,7 @@ public class DEL_FlowHandlerTest {
             .setOrgWideAddress(objOrgWideAddress.Address)
             .createConfiguration();
         insert objEmailAlertConfiguration;
-
+        
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
             .setName('Case Comment Email Alert')
             .setDeveloperName('DEL_CaseCommentAlert')
@@ -64,12 +64,12 @@ public class DEL_FlowHandlerTest {
             .setFolderId(UserInfo.getOrganizationId())
             .setTemlateType('Custom')
             .createEmailTemplate();
-
+        
         User objUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         System.runAs(objUser) {
             insert objEmailTemplate;
         }
-
+        
         DEL_CaseComment__c objCaseComment = new DEL_TestUtility.CaseCommentBuilder()
             .setBody('Hi, can I get an update?')
             .setCaseId(objCase.Id)
@@ -78,8 +78,8 @@ public class DEL_FlowHandlerTest {
     }
     
     /**
-    * @ author      : Deeksha 
-    * @ description : This method is used to test the formHTMLValue() method in apex class 'DEL_FlowHandler'
+    * @ author       :  Deeksha 
+    * @ description  :  This method is used to test the formHTMLValue() method in apex class 'DEL_FlowHandler'
     **/
     @IsTest
     private static void testFormHTMLValue() {
@@ -88,7 +88,7 @@ public class DEL_FlowHandlerTest {
                         Subject
                         FROM Case
                         LIMIT 1];
-
+        
         Id idCaseId = objCase.Id;
         String strComment = 'Power failure happened';
         List<DEL_CaseComment__c> list_CaseComments = new List<DEL_CaseComment__c>();
@@ -105,14 +105,14 @@ public class DEL_FlowHandlerTest {
         list_CaseComments.add(objCaseComment);
         String strHtmlBody = DEL_FlowHandler.formHTMLValue(list_CaseComments).get(0);
         Test.stopTest();
-
+        
         // Assert if the html content was returned.
         System.assert(String.isNotBlank(strHtmlBody));
     }
-
+    
     /**
-    * @ author      : Ankit C 
-    * @ description : This method returns a dummy site link while running test class
+    * @ author       :  Ankit C 
+    * @ description  :  This method returns a dummy site link while running test class
     **/
     public static String getSiteLink() {
         return 'https://absyzdev-developer-edition.ap15.force.com';

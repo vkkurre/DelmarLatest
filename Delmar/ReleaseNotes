@@ -1,0 +1,37 @@
+--- RELEASE NOTES - 01-August-2022 ---
+
+-- PRE-DEPLOYMENT STEPS --
+
+1. Take backup.
+2. Turn off the Email Deliverability.
+3. Enable Chat
+    a. Go to Setup
+    b. Quick find Chat Settings
+    c. Enable Chat
+    d. Save
+4. Check if there's atleast one Organization-Wide Addresses created in the org.
+
+
+-- DEPLOYMENT --
+
+1. For WINDOWS
+    a. sfdx force:source:convert --rootdir force-app --outputdir delmarpackage
+    b. jar -cfM zippackage.zip delmarpackage
+    c. rmdir /s delmarpackage
+    d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_EmailMessagesTriggerHelperTest,
+       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_FlowHandlerTest
+2. For MAC
+    a. sfdx force:source:convert --rootdir force-app --outputdir delmarpackage
+    b. zip -r zippackage.zip delmarpackage
+    c. rm -r delmarpackage
+    d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_EmailMessagesTriggerHelperTest,
+       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_FlowHandlerTest
+    e. rm -r zippackage.zip
+
+
+-- POST-DEPLOYMENT STEPS --
+
+1. Place the component del_commentsCollaborationComponent under Community and Service Cloud Case Record Page
+2. Place the component del_addCaseCollaboratorComponent under the Communnity page.
+3. Create a Default Organization Level Value in the Email Alert Configuration custom setting.
+4. Turn on the Email Deliverability.

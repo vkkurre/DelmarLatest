@@ -6,9 +6,9 @@
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
-*   17-06-2022      |  dinesh.chandra@absyz.com       |  1.0          |  Initial Version
+*   17-06-2022      |  dinesh.chandra@absyz.com     |  1.0          |  Initial Version
 *
---> 
+-->
 <template>
 	<div if:true={blnIsLoading} class="slds-align_absolute-center">
 		<lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
@@ -24,19 +24,17 @@
 			</lightning-layout-item>
 			<lightning-layout-item size="8" padding="around-small">
 				<!--Search Button-->
-				<lightning-button label="Add Collaborator" variant="brand" 
-					onclick={collaborateContactHandler}> 
+				<lightning-button label="Add Collaborator" variant="brand" onclick={collaborateContactHandler}>
 				</lightning-button>
 			</lightning-layout-item>
 		</lightning-layout>
-			<lightning-layout multiple-rows="true" vertical-align="end">
-				<lightning-layout-item size="12" padding="around-small">
-					<!--List Of Contact Using data Tabel-->
-					<lightning-datatable key-field="Id" data={list_Users} 
-						columns={list_Columns}>
-					</lightning-datatable>
-				</lightning-layout-item>
-			</lightning-layout>
-			
+		<lightning-layout multiple-rows="true" vertical-align="end">
+			<lightning-layout-item size="12" padding="around-small">
+				<!--List Of Contact Using data Tabel-->
+				<lightning-datatable key-field="Id" data={list_Users} columns={list_Columns}>
+				</lightning-datatable>
+			</lightning-layout-item>
+		</lightning-layout>
+
 	</lightning-card>
 </template>

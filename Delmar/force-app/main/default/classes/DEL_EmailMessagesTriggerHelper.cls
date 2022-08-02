@@ -11,11 +11,13 @@
 *  18-07-2022       |  rakesh.nayak@absyz.com       |  1.0          |  Initial version
 *******************************************************************************************************/
 public class DEL_EmailMessagesTriggerHelper {
+    
     public static Boolean blnSkipTrigger = false;
+    
     /**
-     * @ author      : Rakesh Nayak
-     * @ description : This method handles the incoming email replies related to a case and creates case comment rcords for the same.
-     * @ params      : list_EmailMessages - list of EmailMessage records passed from trigger
+    * @ author       :  Rakesh Nayak
+    * @ description  :  This method handles the incoming email replies related to a case and creates case comment rcords for the same.
+    * @ params       :  list_EmailMessages - list of EmailMessage records passed from trigger
     **/
     public static void handleEmailsOnInsert(List<EmailMessage> list_EmailMessages) {
         List<String> list_ConsolidatedDMLErrors = new List<String>();
@@ -45,11 +47,11 @@ public class DEL_EmailMessagesTriggerHelper {
                 if (Test.isRunningTest() && DEL_EmailMessagesTriggerHelperTest.blnThrowException) {
                     throw new DMLException();
                 }
-
+                
                 List<Database.SaveResult> list_InsertResults = Database.insert(list_CaseComments, false);
                 list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_InsertResults, 'Insert'));
             }
-
+            
             if (!list_ConsolidatedDMLErrors.isEmpty()) {
                 DEL_Utils.logDMLException(
                     'DEL_EmailMessagesTriggerHelper',

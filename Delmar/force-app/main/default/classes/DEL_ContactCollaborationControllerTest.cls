@@ -12,8 +12,8 @@
 @IsTest
 private class DEL_ContactCollaborationControllerTest {
     /**
-    * @ author      : Dinesh Chandra
-    * @ description : This method is used to setup data for testing apex class 'DEL_ContactCollaborationController'
+    * @ author       :  Dinesh Chandra
+    * @ description  :  This method is used to setup data for testing apex class 'DEL_ContactCollaborationController'
     **/
     @TestSetup
     static void setupData() {
@@ -84,11 +84,10 @@ private class DEL_ContactCollaborationControllerTest {
         );
         insert objCaseShare;
     }
-
+    
     /**
-    * @ author      : Dinesh Chandra
-    * @ description : This method is used to test the 'getUserData' and 'addContactCollaborator'methods on 
-                      DEL_ContactCollaborationController
+    * @ author       :  Dinesh Chandra
+    * @ description  :  This method is used to test the 'getUserData' and 'addContactCollaborator'methods on DEL_ContactCollaborationController
     **/
     @isTest
     private static void testCaseCollaboration() {  
@@ -117,10 +116,10 @@ private class DEL_ContactCollaborationControllerTest {
         System.assertEquals(true, objResponseWrapper.blnIsSuccess, objResponseWrapper.strErrorMessage);
         System.assertEquals(1, objResponseWrapper2.list_Users.size(), 'Atleast: One User should be fetched.');
     } 
-
+    
     /**
-    * @ author      : Ankit C
-    * @ description : This method is used to test the catch blocks in the DEL_ContactCollaborationController class
+    * @ author       :  Ankit C
+    * @ description  :  This method is used to test the catch blocks in the DEL_ContactCollaborationController class
     **/
     @isTest
     private static void testExceptions() {
@@ -133,12 +132,12 @@ private class DEL_ContactCollaborationControllerTest {
                               LIMIT 1];
         List<Id> list_UserIds = new List<Id>();
         list_UserIds.add(objUser.get(0).Id);
-
+        
         Test.startTest();
         objResponseWrapper = DEL_ContactCollaborationController.addContactCollaborator(list_UserIds, null);
         objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(null, 'ram');
         Test.stopTest();
-
+        
         // Assert if the methods encountered exceptions in them
         System.assert(!objResponseWrapper.blnIsSuccess);
         System.assert(!objResponseWrapper2.blnIsSuccess);

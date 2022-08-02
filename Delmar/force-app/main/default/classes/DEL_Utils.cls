@@ -2,7 +2,7 @@
 * 
 * @ Name            :   DEL_Utils
 * @ Purpose         :   Common functionalities can be created as methods in this class 
-                        and used across various classes
+*                       and used across various classes
 * @ Author          :   Ankit C
 * @ Test Class Name :   DEL_UtilsTest
 *
@@ -12,14 +12,14 @@
 *******************************************************************************************************/
 public class DEL_Utils {
     /**
-    * @ author      : Ankit C
-    * @ description : This method is used to initialize/insert a DEL_ExceptionLog__c record
-                      based on the input parameters.
-    * @ params      : strClassName - Class name where exception has occurred
-                      strMethodName - Method name where exception has occurred
-                      objException - Exception object
-                      blnIsInsertMode - if set as true, then the record will be inserted else it won't
-    * @ return      : DEL_ExceptionLog__c - new record which is inserted/initialized.
+    * @ author       :  Ankit C
+    * @ description  :  This method is used to initialize/insert a DEL_ExceptionLog__c record
+    *                   based on the input parameters.
+    * @ params       :  strClassName - Class name where exception has occurred
+    *                   strMethodName - Method name where exception has occurred
+    *                   objException - Exception object
+    *                   blnIsInsertMode - if set as true, then the record will be inserted else it won't
+    * @ return       :  DEL_ExceptionLog__c - new record which is inserted/initialized.
     **/
     public static DEL_ExceptionLog__c logException(
         String strClassName, 
@@ -34,21 +34,21 @@ public class DEL_Utils {
             StackTrace__c = objException.getStackTraceString(),
             ExceptionType__c = objException.getTypeName()
         );
-
+        
         if (blnIsInsertMode) {
             Database.insert(objExceptionLog, false);
         }
-
+        
         return objExceptionLog;
     }
-
+    
     /**
-    * @ author      : Rakesh Nayak
-    * @ description : This method is used to create exception logs from a list of error messages
-                      from a DML operation.
-    * @ params      : strClassName - Class name where DML exception has occurred
-                      strMethodName - Method name where DML exception has occurred
-                      list_ErrorMessages - List of rror message from the DML operation
+    * @ author       :  Rakesh Nayak
+    * @ description  :  This method is used to create exception logs from a list of error messages
+    *                   from a DML operation.
+    * @ params       :  strClassName - Class name where DML exception has occurred
+    *                   strMethodName - Method name where DML exception has occurred
+    *                   list_ErrorMessages - List of rror message from the DML operation
     **/
     public static void logDMLException(
         String strClassName, 
@@ -65,16 +65,16 @@ public class DEL_Utils {
             );
             list_ExceptionLogs.add(objExceptionLog);
         }
-
+        
         Database.insert(list_ExceptionLogs, false);
     }
-
+    
     /**
-    * @ author      : Rakesh Nayak
-    * @ description : This method is used to process the errors occured in DML operations.
-    * @ params      : list_SaveResults - List of Database.SaveResult records from DML operation
-                      strOperationType - Type of DML operation
-    * @ return      : list_Errors - List of Error messages from the failed DML operations.
+    * @ author       :  Rakesh Nayak
+    * @ description  :  This method is used to process the errors occured in DML operations.
+    * @ params       :  list_SaveResults - List of Database.SaveResult records from DML operation
+    *                   strOperationType - Type of DML operation
+    * @ return       :  list_Errors - List of Error messages from the failed DML operations.
     **/
     public static List<String> processDMLErrors(
         List<Database.SaveResult> list_SaveResults,
@@ -91,7 +91,7 @@ public class DEL_Utils {
                 }
             }
         }
-
+        
         return list_Errors;
     } 
 }

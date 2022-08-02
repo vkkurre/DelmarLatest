@@ -11,8 +11,8 @@
 @IsTest
 private class DEL_UtilsTest {
     /**
-     * @ author      : Ankit C
-     * @ description : Test method for logException() method in DEL_Utils class
+    * @ author       :  Ankit C
+    * @ description  :  Test method for logException() method in DEL_Utils class
     **/
     @IsTest
     private static void testLogException() {
@@ -31,15 +31,15 @@ private class DEL_UtilsTest {
             );
         }
         Test.stopTest();
-
+        
         // Assert if an DEL_ExceptionLog__c record was created of DML Type
         System.assert(objExceptionLog.Id != null);
         System.assertEquals('System.DmlException', objExceptionLog.ExceptionType__c, 'Record was not created.');
     }
-
+    
     /**
-     * @ author      : Ankit C
-     * @ description : Test method for logDMLException() and processDMLErrors() method in DEL_Utils class
+    * @ author       :  Ankit C
+    * @ description  :  Test method for logDMLException() and processDMLErrors() method in DEL_Utils class
     **/
     @IsTest
     private static void testLogDMLException() {
@@ -55,7 +55,7 @@ private class DEL_UtilsTest {
             list_Errors
         );
         Test.stopTest();
-
+        
         List<DEL_ExceptionLog__c> list_ExceptionLogs = [SELECT
                                                         Id, 
                                                         MethodName__c

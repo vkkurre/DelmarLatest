@@ -10,11 +10,12 @@
 *   21-07-2022      |  deekshasuvarna@absyz.com     |  1.0          |  Initial Version
 *******************************************************************************************************/
 public class DEL_FlowHandler {
+    
     /**
-    * @ author      : Deeksha
-    * @ description : This method handles the fetching and replacing the merge field 
-    *                 values in the HTMLValue of the Email Template.
-    * @ params      : list_CaseComments - list of CaseComment records
+    * @ author       :  Deeksha
+    * @ description  :  This method handles the fetching and replacing the merge field 
+    *                   values in the HTMLValue of the Email Template.
+    * @ params       :  list_CaseComments - list of CaseComment records
     **/
     @InvocableMethod(label = 'Get HTML body of the case comment email template')
     public static List<String> formHTMLValue(List<DEL_CaseComment__c> list_CaseComments) {
@@ -28,7 +29,7 @@ public class DEL_FlowHandler {
             list_QueryFields = objConfiguration.CaseQueryFields__c.split(',');
             list_CaseCommentFields = objConfiguration.CaseCommentFields__c.split(',');
             String strSiteURL = '';
-
+            
             if (Test.isRunningTest()) {
                 strSiteURL = DEL_FlowHandlerTest.getSiteLink();
             } else {
@@ -36,7 +37,7 @@ public class DEL_FlowHandler {
                 SiteDetail objSiteDetail = [SELECT SecureURL FROM SiteDetail WHERE DurableId = :objSite.Id];
                 strSiteURL = objSiteDetail.SecureURL;
             }
-
+            
             EmailTemplate objTemplate = [SELECT 
                                          Id,
                                          HtmlValue
@@ -47,7 +48,7 @@ public class DEL_FlowHandler {
             if (!list_CaseComments.isEmpty()) {
                 idCaseId = list_CaseComments[0].Case__c;
             }
-
+            
             String strCaseQuery = 'SELECT Id, ' + objConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id = :idCaseId';
             Id idCaseCommentId; 
             if (!list_CaseComments.isEmpty()) {
@@ -87,7 +88,7 @@ public class DEL_FlowHandler {
                     }
                 }
             } 
-
+            
             return new List<String>{ strHTML };
         } catch(Exception objException) {
             DEL_Utils.logException(
@@ -99,5 +100,5 @@ public class DEL_FlowHandler {
             
             return new List<String>();
         }
-	} 
+    }
 }

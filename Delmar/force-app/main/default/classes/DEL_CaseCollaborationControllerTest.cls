@@ -15,8 +15,8 @@ public class DEL_CaseCollaborationControllerTest {
     public static Boolean blnThrowException = false;
     
     /**
-    * @ author      : Rakesh Nayak & Vinaykant
-    * @ description : This method is used to setup data for testing apex class 'DEL_CaseCollaborationController'
+    * @ author       :  Rakesh Nayak & Vinaykant
+    * @ description  :  This method is used to setup data for testing apex class 'DEL_CaseCollaborationController'
     **/
     @TestSetup
     static void createData(){
@@ -24,14 +24,14 @@ public class DEL_CaseCollaborationControllerTest {
             .setName('Test Account Delmar')
             .createAccount();
         insert objAccount;
-
+        
         Contact objContact = new DEL_TestUtility.ContactBuilder()
             .setFirstName('First')
             .setLastName('User')
             .setAccountId(objAccount.Id)
             .createContact();
         insert objContact;
-
+        
         Case objCase = new DEL_TestUtility.CaseBuilder()
             .setSubject('Case with Power Failure')
             .setDescription('Power failure happens after 4 hour work')
@@ -43,11 +43,11 @@ public class DEL_CaseCollaborationControllerTest {
             .setContactId(objContact.Id)
             .createCase();
         insert objCase;
-
+        
         String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
             +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
             + '{!CaseComment.CreatedDate},SiteLink';
-
+        
         OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
         DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
             .setMergeFields(strMergeFields)
@@ -59,7 +59,7 @@ public class DEL_CaseCollaborationControllerTest {
             .setOrgWideAddress(objOrgWideAddress.Address)
             .createConfiguration();
         insert objEmailAlertConfiguration;
-
+        
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
             .setName('Case Comment Email Alert')
             .setDeveloperName('DEL_CaseCommentAlert')
@@ -67,22 +67,22 @@ public class DEL_CaseCollaborationControllerTest {
             .setFolderId(UserInfo.getOrganizationId())
             .setTemlateType('Custom')
             .createEmailTemplate();
-
+        
         User objUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         System.runAs(objUser) {
             insert objEmailTemplate;
         }
-
+        
         DEL_CaseComment__c objCaseComment = new DEL_TestUtility.CaseCommentBuilder()
             .setBody('Hi, can I get an update?')
             .setCaseId(objCase.Id)
             .createCaseComment();
         insert objCaseComment;
     }
-
+    
     /**
-    * @ author      : Vinaykant
-    * @ description : This method is used to test all the methods in apex class 'DEL_CaseCollaborationController'
+    * @ author       :  Vinaykant
+    * @ description  :  This method is used to test all the methods in apex class 'DEL_CaseCollaborationController'
     **/
     @IsTest
     private static void caseCommentTestMethod() {
@@ -91,33 +91,33 @@ public class DEL_CaseCollaborationControllerTest {
                         Subject
                         FROM Case
                         LIMIT 1];
-
+        
         Id idCaseId = objCase.Id;
         String strComment = 'Power failure happened';
-
+        
         DEL_CaseCollaborationController.ResponseWrapper objResultFetch = new DEL_CaseCollaborationController.ResponseWrapper();
-
+        
         //Test the Class Methods.
         Test.startTest();
         DEL_CaseCollaborationController.insertComment(strComment, idCaseId);
         DEL_CaseComment__c objCaseComment = [SELECT 
-                                            Id 
-                                            FROM DEL_CaseComment__c 
-                                            WHERE Case__c = : idCaseId 
-                                            LIMIT 1];
-
+                                             Id 
+                                             FROM DEL_CaseComment__c 
+                                             WHERE Case__c = : idCaseId 
+                                             LIMIT 1];
+        
         objResultFetch = DEL_CaseCollaborationController.fetchComments(idCaseId);
         DEL_CaseCollaborationController.updateCaseComment(objCaseComment.Id, 'Hello');
         DEL_CaseCollaborationController.deleteCaseComment(objCaseComment.Id);
         Test.stopTest();
-
+        
         //Check the Result.
         System.assertEquals(2, objResultFetch.list_CaseComments.size(), 'ERROR: Atleast one case comment record should be created.');
     }
-
+    
     /**
-    * @ author      : Ankit
-    * @ description : This method is used to cover all the catch blocks
+    * @ author       :  Ankit
+    * @ description  :  This method is used to cover all the catch blocks
     **/
     @IsTest
     private static void handleExceptions() {
@@ -126,7 +126,7 @@ public class DEL_CaseCollaborationControllerTest {
                         Subject
                         FROM Case
                         LIMIT 1];
-
+        
         Id idCaseId = objCase.Id;
         String strComment = 'Power failure happened';
         DEL_CaseCollaborationController.ResponseWrapper objResponse = new DEL_CaseCollaborationController.ResponseWrapper();
@@ -134,17 +134,17 @@ public class DEL_CaseCollaborationControllerTest {
         blnThrowException = true;
         objResponse = DEL_CaseCollaborationController.insertComment(strComment, idCaseId);
         objResponse = DEL_CaseCollaborationController.fetchComments(idCaseId);
-
+        
         DEL_CaseComment__c objCaseComment = [SELECT 
-                                            Body__c, 
-                                            Case__c 
-                                            FROM DEL_CaseComment__c 
-                                            LIMIT 1];
-
+                                             Body__c, 
+                                             Case__c 
+                                             FROM DEL_CaseComment__c 
+                                             LIMIT 1];
+        
         objResponse = DEL_CaseCollaborationController.updateCaseComment(objCaseComment.Id, 'Hello');
         objResponse = DEL_CaseCollaborationController.deleteCaseComment(objCaseComment.Id);
         Test.stopTest();
-
+        
         System.assert(!objResponse.blnIsSuccess);
     }
 }

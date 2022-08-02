@@ -6,15 +6,17 @@
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
-*   19-07-2022      |  dinesh.chandra@absyz.com       |  1.0          |  Initial Version
+*   19-07-2022      |  dinesh.chandra@absyz.com     |  1.0          |  Initial Version
 *
 *******************************************************************************************************/
 @IsTest
 public class DEL_CaseCollaborationTriggerHelperTest {
+    
     public static Boolean blnThrowException = false;
+    
     /**
-    * @ author      : Dinesh Chandra
-    * @ description : This method is used to setup data for testing apex class 'DEL_CaseCollaborationTriggerHelper'
+    * @ author       :  Dinesh Chandra
+    * @ description  :  This method is used to setup data for testing apex class 'DEL_CaseCollaborationTriggerHelper'
     **/
     @TestSetup
     static void setupData() {
@@ -30,7 +32,7 @@ public class DEL_CaseCollaborationTriggerHelperTest {
             .setAccountId(objAccount.Id)
             .createContact();
         list_Contacts.add(objContact);
-
+        
         Contact objContact2 = new DEL_TestUtility.ContactBuilder()
             .setFirstName('Second')
             .setLastName('User')
@@ -50,11 +52,11 @@ public class DEL_CaseCollaborationTriggerHelperTest {
             .setContactId(objContact.Id)
             .createCase();
         insert objCase;
-
+        
         User objCurrentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         Profile objProfile = [SELECT Id FROM Profile WHERE Name = 'Customer Community Plus User'];
         User objUser2;
-
+        
         System.runAs(objCurrentUser) {
             List<User> list_Users = new List<User>();
             User objUser = new DEL_TestUtility.UserBuilder()
@@ -67,7 +69,7 @@ public class DEL_CaseCollaborationTriggerHelperTest {
                 .setAlias('rkeer')
                 .createUser();
             list_Users.add(objUser);
-
+            
             objUser2 = new DEL_TestUtility.UserBuilder()
                 .setFirstName('Test')
                 .setLastName('Customer User')
@@ -78,10 +80,10 @@ public class DEL_CaseCollaborationTriggerHelperTest {
                 .setAlias('rkeer')
                 .createUser();
             list_Users.add(objUser2);
-
+            
             insert list_Users;
         }
-
+        
         CaseShare objCaseShare = new CaseShare(
             UserOrGroupId = objUser2.Id,
             CaseId = objCase.Id,
@@ -90,24 +92,24 @@ public class DEL_CaseCollaborationTriggerHelperTest {
         );
         insert objCaseShare;
     }
-
+    
     /**
-    * @ author      : Dinesh Chandra
-    * @ description : This method is used to test the creation of DEL_CaseCollaborator__c
+    * @ author       :  Dinesh Chandra
+    * @ description  :  This method is used to test the creation of DEL_CaseCollaborator__c
     **/
     @IsTest
     private static void testCaseCollaboratorCreation() {
         Case objCase = [SELECT Id, ContactId FROM Case LIMIT 1];
         User objUser = [SELECT Id, ContactId FROM User WHERE ContactId = :objCase.ContactId];
         DEL_CaseCollaborator__c objCaseCollaborator2;
-
+        
         DEL_CaseCollaborator__c objCaseCollaborator = new DEL_TestUtility.CaseCollaborationBuilder()
             .setCaseId(objCase.Id)
             .setUserId(objUser.Id)
             .createCaseCollaborator();
         Test.startTest();
         insert objCaseCollaborator;
-
+        
         // Inserting the same case collaborator again to check the handleDuplicates() method
         objCaseCollaborator2 = new DEL_TestUtility.CaseCollaborationBuilder()
             .setCaseId(objCase.Id)
@@ -124,7 +126,7 @@ public class DEL_CaseCollaborationTriggerHelperTest {
             );
         } 
         Test.stopTest();
-
+        
         List<CaseShare> list_CaseShares = [SELECT 
                                            Id, 
                                            CaseId,
@@ -137,10 +139,10 @@ public class DEL_CaseCollaborationTriggerHelperTest {
         //Assert if the duplicate case collaborator was not created.
         System.assert(objCaseCollaborator2.Id == null);
     } 
-
+    
     /**
-    * @ author      : Ankit
-    * @ description : This method forces and exception to cover the catch blocks
+    * @ author       :  Ankit
+    * @ description  :  This method forces and exception to cover the catch blocks
     **/
     @isTest
     private static void handleException() {

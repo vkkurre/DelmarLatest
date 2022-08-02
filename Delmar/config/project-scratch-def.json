@@ -1,13 +1,21 @@
 {
-  "orgName": "pradeepchary company",
-  "edition": "Developer",
-  "features": ["EnableSetPasswordInApi"],
-  "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
-    },
-    "mobileSettings": {
-      "enableS1EncryptedStoragePref2": false
+    "orgName": "pradeepchary company",
+    "edition": "Developer",
+    "features": [
+        "EnableSetPasswordInApi",
+        "LiveAgent",
+        "ServiceCloud",
+        "Communities"
+    ],
+    "settings": {
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
+        },
+        "mobileSettings": {
+            "enableS1EncryptedStoragePref2": false
+        },
+        "orgPreferenceSettings": {
+            "networksEnabled": true
+        }
     }
-  }
 }
