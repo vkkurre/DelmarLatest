@@ -1,3 +1,14 @@
+/*******************************************************************************************************
+* 
+* @ Name            :   DEL_CaseCommentTrigger
+* @ Purpose         :   Trigger on DEL_CaseComment__c object
+* @ Author          :   Ankit C
+* @ Test Class Name :   DEL_CaseCommentTriggerHelperTest
+*
+*   Date            |  Developer Name                |  Version      |  Changes
+* ======================================================================================================
+*  05-08-2022       |  ankit.c@absyz.com             |  1.0          |  Initial version
+*******************************************************************************************************/
 trigger DEL_CaseCommentTrigger on DEL_CaseComment__c (after insert) {
     /* Skip this trigger when DEL_CaseCommentTriggerHelper.blnSkipTrigger is true
        or the IsActive__c is false in the DEL_TriggerConfiguration__mdt metadata for this trigger.

@@ -15,10 +15,10 @@ public class DEL_CaseCommentTriggerHelper {
     // Map of Users by Id
     public static Map<Id, User> map_UserById;
     // Map of Case Collaborators by Case Id
-    public static Map<Id, List<DEL_CaseCollaborator__c>> map_CollaboratorsByCaseId;
+    public static Map<Id, List<DEL_CaseCollaborator__c>> map_CaseCollaboratorsByCaseId;
     // Map of Cases by Id
-    public static Map<Id, Case> map_CasesById;
-    public static DEL_EmailAlertConfiguration__c objConfiguration;
+    public static Map<Id, Case> map_CaseById;
+    public static DEL_EmailAlertConfiguration__c objEmailAlertConfiguration;
     // Map of EmailMessages records by Case Id
     public static Map<Id, EmailMessage> map_EmailMessageByCaseId;
     // List of DEL_CaseComment__c records to update
@@ -31,15 +31,16 @@ public class DEL_CaseCommentTriggerHelper {
     **/
     public static void processAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
         list_CaseCommentsToUpdate = new List<DEL_CaseComment__c>();
-        objConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+        objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
         List<String> list_ConsolidatedDMLErrors = new List<String>();
         createCollectionsAfterInsert(list_CaseComments);
         sendCommentNotificationEmail(list_CaseComments);
-        for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
-            populateFields(objCaseComment);
-        }
 
         if (!list_CaseCommentsToUpdate.isEmpty()) {
+            for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
+                populateFields(objCaseComment);
+            }
+
             blnSkipTrigger = true;
             List<Database.SaveResult> list_UpdateResults = Database.update(list_CaseCommentsToUpdate, false);
             list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_UpdateResults, 'Update'));
@@ -61,16 +62,19 @@ public class DEL_CaseCommentTriggerHelper {
     * @ params       :  objCaseComment - DEL_CaseComment__c record to be updated.
     **/
     public static void populateFields(DEL_CaseComment__c objCaseComment) {
-        if (map_UserById.containsKey(objCaseComment.CreatedById)) {
-            if (String.isBlank(objCaseComment.CommentCreatedName__c)) {
-                objCaseComment.CommentCreatedName__c = map_UserById.get(objCaseComment.CreatedById).Name;
-            }
-            
-            if (String.isBlank(objCaseComment.CreatedByEmail__c)) {
-                objCaseComment.CreatedByEmail__c = map_UserById.get(objCaseComment.CreatedById).Email;
-            }
+        if (!map_UserById.containsKey(objCaseComment.CreatedById)) {
+            return;
+        }
+
+        if (String.isBlank(objCaseComment.CommentCreatedName__c)) {
+            objCaseComment.CommentCreatedName__c = map_UserById.get(objCaseComment.CreatedById).Name;
+        }
+
+        if (String.isBlank(objCaseComment.CreatedByEmail__c)) {   
+            objCaseComment.CreatedByEmail__c = map_UserById.get(objCaseComment.CreatedById).Email;
         }
     }
+
     
     /**
     * @ author       :  Ankit C
@@ -78,11 +82,11 @@ public class DEL_CaseCommentTriggerHelper {
     * @ params       :  list_CaseComments - list of DEL_CaseComment__c records from trigger.new
     **/
     public static void createCollectionsAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
-        map_CollaboratorsByCaseId = new Map<Id, List<DEL_CaseCollaborator__c>>();
+        map_CaseCollaboratorsByCaseId = new Map<Id, List<DEL_CaseCollaborator__c>>();
         Set<Id> set_CaseIds = new Set<Id>();
         Set<Id> set_UserIds = new Set<Id>();
         map_UserById = new Map<Id, User>();
-        map_CasesById = new Map<Id, Case>();
+        map_CaseById = new Map<Id, Case>();
         map_EmailMessageByCaseId = new Map<Id, EmailMessage>();
 
         // Query to get the list of case comments that will be updated
@@ -114,20 +118,21 @@ public class DEL_CaseCommentTriggerHelper {
             WHERE
             Case__c IN :set_CaseIds
         ]) {
-            if (map_CollaboratorsByCaseId.containsKey(objCollaborator.Case__c)) {
-                map_CollaboratorsByCaseId.get(objCollaborator.Case__c).add(objCollaborator);
+            if (map_CaseCollaboratorsByCaseId.containsKey(objCollaborator.Case__c)) {
+                map_CaseCollaboratorsByCaseId.get(objCollaborator.Case__c).add(objCollaborator);
             } else { 
-                map_CollaboratorsByCaseId.put(objCollaborator.Case__c, new List<DEL_CaseCollaborator__c> { objCollaborator });
+                map_CaseCollaboratorsByCaseId.put(objCollaborator.Case__c, new List<DEL_CaseCollaborator__c> { objCollaborator });
             }
             
             set_UserIds.add(objCollaborator.User__c);
         }
         
         // Query Cases
-        String strCaseQuery = 'SELECT Id, OwnerId, SuppliedEmail, ' + objConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
+        String strCaseQuery = 'SELECT Id, OwnerId, SuppliedEmail, ' + objEmailAlertConfiguration.CaseQueryFields__c 
+            + ' FROM Case WHERE Id IN :set_CaseIds';
         List<Case> list_Cases = Database.query(strCaseQuery);
-        map_CasesById = new Map<Id, Case>(list_Cases);
-        for (Case objCase : map_CasesById.values()) {
+        map_CaseById = new Map<Id, Case>(list_Cases);
+        for (Case objCase : map_CaseById.values()) {
             set_UserIds.add(objCase.OwnerId);
         }
         
@@ -170,14 +175,14 @@ public class DEL_CaseCommentTriggerHelper {
     **/
     public static void sendCommentNotificationEmail(List<DEL_CaseComment__c> list_CaseComments) {
         List<Messaging.SingleEmailMessage> list_EmailMessages = new List<Messaging.SingleEmailMessage>();
-        OrgWideEmailAddress objOrgWideAddress = [
+        List<OrgWideEmailAddress> list_OrgWideEmailAddresses = [
             SELECT 
             Id, 
             Address, 
             DisplayName 
             FROM 
             OrgWideEmailAddress 
-            WHERE Address = :objConfiguration.OrgWideAddress__c
+            WHERE Address = :objEmailAlertConfiguration.OrgWideAddress__c
         ];
         EmailTemplate objTemplate = [
             SELECT 
@@ -185,19 +190,19 @@ public class DEL_CaseCommentTriggerHelper {
             HtmlValue,
             Subject
             FROM EmailTemplate
-            WHERE DeveloperName = :objConfiguration.CaseCommentEmailTemplate__c
+            WHERE DeveloperName = :objEmailAlertConfiguration.CaseCommentEmailTemplate__c
         ];
         
         String strSiteURL;
         if (Test.isRunningTest()) {
             strSiteURL = DEL_CaseCommentTriggerHelperTest.getSiteLink();
         } else {
-            Site objSite = [SELECT Id FROM Site WHERE Name = :objConfiguration.SiteName__c];
+            Site objSite = [SELECT Id FROM Site WHERE Name = :objEmailAlertConfiguration.SiteName__c];
             SiteDetail objSiteDetail = [SELECT SecureURL FROM SiteDetail WHERE DurableId = :objSite.Id];
             strSiteURL = objSiteDetail.SecureURL;
         }
         
-        List<String> list_MergeFields = objConfiguration.MergeFields__c.split(',');
+        List<String> list_MergeFields = objEmailAlertConfiguration.MergeFields__c.split(',');
         for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
             Messaging.SingleEmailMessage objSingleMessage = new Messaging.SingleEmailMessage();
             List<String> list_ToAddresses = new List<String>();
@@ -206,18 +211,17 @@ public class DEL_CaseCommentTriggerHelper {
                 list_ToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
             }
 
-            if (map_CollaboratorsByCaseId.containsKey(objCaseComment.Case__c)) {
+            if (map_CaseCollaboratorsByCaseId.containsKey(objCaseComment.Case__c)) {
                 // Adding the Case Collabortors Emails
-                for (DEL_CaseCollaborator__c objCollaborator : map_CollaboratorsByCaseId.get(objCaseComment.Case__c)) {
+                for (DEL_CaseCollaborator__c objCollaborator : map_CaseCollaboratorsByCaseId.get(objCaseComment.Case__c)) {
                     if (map_UserById.containsKey(objCollaborator.User__c)) {
                         list_ToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
                     }
                 }
             }
             
-            Case objCase;
-            if (map_CasesById.containsKey(objCaseComment.Case__c)) {
-                objCase = map_CasesById.get(objCaseComment.Case__c);
+            if (map_CaseById.containsKey(objCaseComment.Case__c)) {
+                Case objCase = map_CaseById.get(objCaseComment.Case__c);
                 String strSubject = objTemplate.Subject;
                 if (strSubject.contains('{!Case.Subject}')) {
                     strSubject = strSubject.replace('{!Case.Subject}', objCase.Subject);
@@ -251,14 +255,18 @@ public class DEL_CaseCommentTriggerHelper {
             String strHtmlBody = objTemplate.HtmlValue;
             strHtmlBody = getHtmlBody(
                 objCaseComment, 
-                map_CasesById.get(objCaseComment.Case__c), 
+                map_CaseById.get(objCaseComment.Case__c), 
                 list_MergeFields, 
                 strHtmlBody, 
                 strSiteURL
             );
 
             objSingleMessage.setToAddresses(list_ToAddresses);
-            objSingleMessage.setOrgWideEmailAddressId(objOrgWideAddress.Id);
+            
+            if (!list_OrgWideEmailAddresses.isEmpty()) {
+                objSingleMessage.setOrgWideEmailAddressId(list_OrgWideEmailAddresses[0].Id);
+            }
+
             objSingleMessage.setHtmlBody(strHtmlBody); 
             list_EmailMessages.add(objSingleMessage);
         }
