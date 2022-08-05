@@ -14,6 +14,8 @@
         <members>DEL_CaseCollaborationTriggerHelper</members>
         <members>DEL_ContactCollaborationControllerTest</members>
         <members>DEL_ContactCollaborationController</members>
+        <members>DEL_CaseCommentTriggerHelper</members>
+        <members>DEL_CaseCommentTriggerHelperTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -37,6 +39,7 @@
     <types>
         <members>DEL_EmailMessagesTrigger</members>
         <members>DEL_CaseCollaborationTrigger</members>
+        <members>DEL_CaseCommentTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -49,7 +52,6 @@
     <types>
         <members>DEL_ChatTranscriptToCaseCommentFlow</members>
         <members>DEL_CaseCollaborationFlow</members>
-        <members>DEL_CaseCommentNotification</members>
         <name>Flow</name>
     </types>
     <types>

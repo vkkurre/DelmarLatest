@@ -165,6 +165,7 @@ public class DEL_TestUtility {
         private String strType;
         private String strStatus;
         private String strPriority;
+        private String strSuppliedEmail;
         
         public CaseBuilder() {
             this.strSubject = '';
@@ -173,6 +174,7 @@ public class DEL_TestUtility {
             this.strType = '';
             this.strStatus = '';
             this.strPriority = '';
+            this.strSuppliedEmail = '';
         }
         
         public CaseBuilder setSubject(String strValue) {
@@ -214,6 +216,11 @@ public class DEL_TestUtility {
             this.idAccountId = idValue;
             return this;
         }
+
+        public CaseBuilder setSuppliedEmail(String strValue) {
+            this.strSuppliedEmail = strValue;
+            return this;
+        }
         
         public Case createCase() {
             Case objCase = new Case();
@@ -224,6 +231,7 @@ public class DEL_TestUtility {
             objCase.Priority = this.strPriority;
             objCase.AccountId = this.idAccountId;
             objCase.ContactId = this.idContactId;
+            objCase.SuppliedEmail = this.strSuppliedEmail;
             
             return objCase;
         }
@@ -303,6 +311,7 @@ public class DEL_TestUtility {
         private String strMessageIdentifier;
         private String strThreadIdentifier;
         private Boolean blnIncoming;
+        private String strHeaders;
         
         public EmailMessageBuilder() {
             this.strTextBody = '';
@@ -311,6 +320,7 @@ public class DEL_TestUtility {
             this.strFromName = '';
             this.strMessageIdentifier = '';
             this.strThreadIdentifier = '';
+            this.strHeaders = '';
         }
         
         public EmailMessageBuilder setTextBody(String strValue) {
@@ -352,6 +362,11 @@ public class DEL_TestUtility {
             this.blnIncoming = blnValue;
             return this;
         }
+
+        public EmailMessageBuilder setHeaders(String strValue) {
+            this.strHeaders = strValue;
+            return this;
+        }
         
         public EmailMessage createEmailMessage() {
             EmailMessage objEmailMessage = new EmailMessage();
@@ -363,6 +378,7 @@ public class DEL_TestUtility {
             objEmailMessage.FromAddress = this.strFromAddress;
             objEmailMessage.ParentId = this.idParentId;
             objEmailMessage.Incoming = this.blnIncoming;
+            objEmailMessage.Headers = this.strHeaders;
             
             return objEmailMessage;
         }
@@ -452,12 +468,14 @@ public class DEL_TestUtility {
         private String strHtmlValue;
         private Id idFolderId;
         private String strTemplateType;
+        private String strSubject;
         
         public EmailTemplateBuilder() {
             this.strName = '';
             this.strDeveloperName = '';
             this.strHtmlValue = '';
             this.strTemplateType = '';
+            this.strSubject = '';
         }
         
         public EmailTemplateBuilder setName(String strValue) {
@@ -484,6 +502,11 @@ public class DEL_TestUtility {
             this.strTemplateType = strValue;
             return this;
         }
+
+        public EmailTemplateBuilder setSubject(String strValue) {
+            this.strSubject = strValue;
+            return this;
+        }
         
         public EmailTemplate createEmailTemplate() {
             EmailTemplate objEmailTemplate = new EmailTemplate(
@@ -491,7 +514,8 @@ public class DEL_TestUtility {
                 DeveloperName = this.strDeveloperName,
                 HtmlValue = this.strHtmlValue,
                 FolderId = this.idFolderId,
-                TemplateType = this.strTemplateType
+                TemplateType = this.strTemplateType,
+                Subject = this.strSubject
             );
             
             return objEmailTemplate;
