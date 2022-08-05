@@ -41,6 +41,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setEmailTemplateName('DEL_CaseCommentAlert')
             .setOwnerId(UserInfo.getOrganizationId())
             .setOrgWideAddress(objOrgWideAddress.Address)
+            .setEmailBreakPattern('(<br><div class="gmail_quote">){1}')
             .createConfiguration();
         insert objEmailAlertConfiguration;
         
@@ -62,12 +63,12 @@ public class DEL_EmailMessagesTriggerHelperTest {
     * @ author       :  Rakesh Nayak
     * @ description  :  This method is used to test the 'handleEmailsOnInsert' method on DEL_EmailMessagesTriggerHelper
     **/
-    @isTest
+    @IsTest
     private static void testEmailMessageCreation() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
-            .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
+            .setHtmlBody('<div>this is HtmlBody</div><br><div class="gmail_quote"><body>Test</body>')
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
@@ -86,7 +87,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
                                              FROM DEL_CaseComment__c
                                              LIMIT 1];
         // Assert if a case comment was created successfully from the email message.                                     
-        System.assertEquals(objCaseComment.Body__c, 'this is HtmlBody');
+        System.assertEquals(objCaseComment.Body__c, '<div>this is HtmlBody</div>');
     }
     
     /**
@@ -100,7 +101,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
         
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
-            .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
+            .setHtmlBody('<div>this is HtmlBody</div><br><div class="gmail_quote"><body>Test</body>')
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')

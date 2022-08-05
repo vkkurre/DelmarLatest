@@ -2,6 +2,8 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>DEL_CaseCollaborationController</members>
+        <members>DEL_ContentDocumentLinkTriggerHelper</members>
+        <members>DEL_ContentDocumentLinkTriggerTest</members>
         <members>DEL_CaseCollaborationControllerTest</members>
         <members>DEL_FlowHandler</members>
         <members>DEL_FlowHandlerTest</members>
@@ -34,11 +36,13 @@
     <types>
         <members>DEL_TriggerConfiguration.CMDEL0001</members>
         <members>DEL_TriggerConfiguration.CMDEL0002</members>
+        <members>DEL_TriggerConfiguration.CMDEL0003</members>
         <members>DEL_TriggerConfiguration.CMDEL0004</members>
         <name>CustomMetadata</name>
     </types>
     <types>
         <members>DEL_EmailMessagesTrigger</members>
+        <members>DEL_ContentDocumentLinkTrigger</members>
         <members>DEL_CaseCollaborationTrigger</members>
         <members>DEL_CaseCommentTrigger</members>
         <name>ApexTrigger</name>
