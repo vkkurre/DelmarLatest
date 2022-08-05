@@ -34,6 +34,7 @@
     <types>
         <members>DEL_TriggerConfiguration.CMDEL0001</members>
         <members>DEL_TriggerConfiguration.CMDEL0002</members>
+        <members>DEL_TriggerConfiguration.CMDEL0004</members>
         <name>CustomMetadata</name>
     </types>
     <types>
