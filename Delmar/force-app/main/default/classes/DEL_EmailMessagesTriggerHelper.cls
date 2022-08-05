@@ -15,14 +15,14 @@ public class DEL_EmailMessagesTriggerHelper {
     public static Boolean blnSkipTrigger = false;
     
     /**
-    * @ author       :  Rakesh Nayak
-    * @ description  :  This method handles the incoming email replies related to a case and creates case comment rcords for the same.
-    * @ params       :  list_EmailMessages - list of EmailMessage records passed from trigger
+     * @ author      : Rakesh Nayak
+     * @ description : This method handles the incoming email replies related to a case and creates case comment records for the same.
+     * @ params      : list_EmailMessages - list of EmailMessage records passed from trigger
     **/
     public static void handleEmailsOnInsert(List<EmailMessage> list_EmailMessages) {
         List<String> list_ConsolidatedDMLErrors = new List<String>();
-        String strPattern = '(<br>){1}';
-        Pattern objPattern = Pattern.compile(strPattern);
+        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+        Pattern objPattern = Pattern.compile(objEmailAlertConfiguration.EmailReplyBreakPattern__c);
         List<DEL_CaseComment__c> list_CaseComments = new List<DEL_CaseComment__c>();
         try {
             for (EmailMessage objEmailMessage : list_EmailMessages) {
@@ -30,12 +30,13 @@ public class DEL_EmailMessagesTriggerHelper {
                     if (String.isNotBlank(objEmailMessage.ParentId)) {
                         DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c();
                         objCaseComment.Case__c = objEmailMessage.ParentId;
+                        objCaseComment.EmailMessageId__c = objEmailMessage.Id;
                         objCaseComment.CreatedByEmail__c = objEmailMessage.FromAddress;
                         objCaseComment.CommentCreatedName__c = objEmailMessage.FromName;
                         if (String.isNotBlank(objEmailMessage.HtmlBody)) {
                             List<String> list_SplitResults = objPattern.split(objEmailMessage.HtmlBody);
                             if (!list_SplitResults.isEmpty()) {
-                                objCaseComment.Body__c = list_SplitResults.get(0).stripHtmlTags();
+                                objCaseComment.Body__c = list_SplitResults.get(0);
                                 list_CaseComments.add(objCaseComment);
                             }
                         }
@@ -51,7 +52,7 @@ public class DEL_EmailMessagesTriggerHelper {
                 List<Database.SaveResult> list_InsertResults = Database.insert(list_CaseComments, false);
                 list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_InsertResults, 'Insert'));
             }
-            
+
             if (!list_ConsolidatedDMLErrors.isEmpty()) {
                 DEL_Utils.logDMLException(
                     'DEL_EmailMessagesTriggerHelper',

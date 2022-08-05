@@ -237,13 +237,20 @@ public class DEL_TestUtility {
     public class CaseCommentBuilder {
         private String strBody;
         private String idCaseId;
+        private String strEmailMessageId;
         
         public CaseCommentBuilder() {
             this.strBody = '';
+            this.strEmailMessageId = '';
         }
         
         public CaseCommentBuilder setBody(String strValue) {
             this.strBody = strValue;
+            return this;
+        }
+
+        public CaseCommentBuilder setEmailMessageId(String strValue) {
+            this.strEmailMessageId = strValue;
             return this;
         }
         
@@ -251,11 +258,12 @@ public class DEL_TestUtility {
             this.idCaseId = idValue;
             return this;
         }
-        
+
         public DEL_CaseComment__c createCaseComment() {
             DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c();
             objCaseComment.Body__c = this.strBody;
             objCaseComment.Case__c = this.idCaseId;
+            objCaseComment.EmailMessageId__c = this.strEmailMessageId;
             
             return objCaseComment;
         }
@@ -381,6 +389,7 @@ public class DEL_TestUtility {
         private String strEmailTemplateName;
         private String strOrgWideAddress;
         private Id idSetupOwnerId;
+        private String strEmailBreakPattern;
         
         public EmailAlertConfigurationBuilder() {
             this.strMergeFields = '';
@@ -389,6 +398,7 @@ public class DEL_TestUtility {
             this.strSiteName = '';
             this.strEmailTemplateName = '';
             this.strOrgWideAddress = '';
+            this.strEmailBreakPattern = '';
         }
         
         public EmailAlertConfigurationBuilder setMergeFields(String strValue) {
@@ -420,6 +430,11 @@ public class DEL_TestUtility {
             this.strOrgWideAddress = strValue;
             return this;
         }
+
+        public EmailAlertConfigurationBuilder setEmailBreakPattern(String strValue) {
+            this.strEmailBreakPattern = strValue;
+            return this;
+        }
         
         public EmailAlertConfigurationBuilder setOwnerId(Id idValue) {
             this.idSetupOwnerId = idValue;
@@ -434,7 +449,8 @@ public class DEL_TestUtility {
                 SiteName__c = this.strSiteName,
                 CaseCommentEmailTemplate__c = this.strEmailTemplateName,
                 SetupOwnerId = this.idSetupOwnerId,
-                OrgWideAddress__c = this.strOrgWideAddress
+                OrgWideAddress__c = this.strOrgWideAddress,
+                EmailReplyBreakPattern__c = this.strEmailBreakPattern
             );
             
             return objEmailAlertConfiguration;
@@ -495,6 +511,100 @@ public class DEL_TestUtility {
             );
             
             return objEmailTemplate;
+        }
+    }
+
+    /**
+    * @ Name     :  ContentVersionBuilder
+    * @ Purpose  :  To create ContentVersion record
+    * @ Author   :  Rakesh Nayak
+    **/
+    public class ContentVersionBuilder {
+        private String strTitle;
+        private String strPathOnClient;
+        private Blob blobVersionData;
+        private  Boolean blnIsMajorVersion;
+
+        public ContentVersionBuilder() {
+            this.strTitle= '';
+            this.strPathOnClient = '';
+        }
+        
+        public ContentVersionBuilder setTitle(String strValue) {
+            this.strTitle = strValue;
+            return this;
+        }
+        
+        public ContentVersionBuilder setPathOnClient(String strValue) {
+            this.strPathOnClient = strValue;
+            return this;
+        }
+
+        public ContentVersionBuilder setVersionData(String strValue) {
+            this.blobVersionData = EncodingUtil.base64Decode(strValue);
+            return this;
+        }
+
+        public ContentVersionBuilder setIsMajorVersion(Boolean blnValue) {
+            this.blnIsMajorVersion = blnValue;
+            return this;
+        }
+        
+        public ContentVersion createContentVersion() {
+            ContentVersion objContentVersion = new ContentVersion();
+            objContentVersion.Title = this.strTitle;
+            objContentVersion.PathOnClient = this.strPathOnclient;
+            objContentVersion.VersionData = this.blobVersionData;
+            objContentVersion.IsMajorVersion =this.blnIsMajorVersion;
+            
+            return objContentVersion;
+        }
+    }
+
+    /**
+    * @ Name     :  ContentDocumentLinkBuilder
+    * @ Purpose  :  To create ContentDocumentLink record
+    * @ Author   :  Rakesh Nayak
+    **/
+    public class ContentDocumentLinkBuilder {
+        private Id idContentDocumentId;
+        private String strVisibility;
+        private String strShareType;
+        private Id idLinkedEntityId;
+        
+        public ContentDocumentLinkBuilder() {
+            this.strVisibility = '';
+            this.strShareType = '';
+        }
+        
+        public ContentDocumentLinkBuilder setContentDocumentId(Id idValue) {
+            this.idContentDocumentId = idValue;
+            return this;
+        }
+        
+        public ContentDocumentLinkBuilder setLinkedEntityId(Id idValue) {
+            this.idLinkedEntityId = idValue;
+            return this;
+        }
+
+        public ContentDocumentLinkBuilder setShareType(String strValue) {
+            this.strShareType = strValue;
+            return this;
+        }
+        
+        public ContentDocumentLinkBuilder setVisibility(String strValue) {
+            this.strVisibility = strValue;
+            return this;
+        }
+        
+        public ContentDocumentLink createContentDocumentLink() {
+            ContentDocumentLink objContentDocumentLink = new ContentDocumentLink();
+            objContentDocumentLink.ContentDocumentId = this.idContentDocumentId;
+            objContentDocumentLink.LinkedEntityId = this.idLinkedEntityId;
+            objContentDocumentLink.ShareType = this.strShareType;
+            objContentDocumentLink.Visibility = this.strVisibility;
+            
+            return objContentDocumentLink;
         }
     }
 }
