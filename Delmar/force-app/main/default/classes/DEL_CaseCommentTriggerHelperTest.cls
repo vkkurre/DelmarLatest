@@ -53,6 +53,7 @@ public class DEL_CaseCommentTriggerHelperTest {
             .setEmailTemplateName('DEL_CaseCommentAlert')
             .setOwnerId(UserInfo.getOrganizationId())
             .setOrgWideAddress(objOrgWideAddress.Address)
+            .setEmailBreakPattern('(<br><div class="gmail_quote">){1}')
             .createConfiguration();
         insert objEmailAlertConfiguration;
         
