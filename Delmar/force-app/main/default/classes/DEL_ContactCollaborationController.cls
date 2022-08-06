@@ -36,37 +36,9 @@ public with sharing class DEL_ContactCollaborationController {
     *                   'strUserName' - string of user name in the searchbar.
     **/
     @AuraEnabled(cacheable = true)
-    public static ResponseWrapper getUserData(Id idCaseId, String strUserName) {
+    public static ResponseWrapper getUserData(Id idCaseId, String strUserName, Id currentId) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
-        try {
-            Case objCase = [SELECT 
-                            Id,
-                            AccountId,
-                            ContactId 
-                            FROM Case
-                            WHERE Id = :idCaseId];
-            String strPattern = '%' + strUserName + '%';
-            objResponseWrapper.list_Users = [SELECT 
-                                             AccountId, 
-                                             ContactId, 
-                                             Id, 
-                                             Name, 
-                                             Username, 
-                                             Email 
-                                             FROM User 
-                                             WHERE Name LIKE :strpattern 
-                                             AND AccountId = :objCase.AccountId];
-        } catch (Exception objException) {
-            objResponseWrapper.blnIsSuccess = false;
-            objResponseWrapper.strErrorMessage = objException.getMessage();
-            DEL_Utils.logException(
-                'DEL_ContactCollaborationController',
-                'getUserData',
-                objException,
-                true
-            );
-        }
-        
+        objResponseWrapper.list_Users = DEL_ContactCollaborationTwoController.getUser(idCaseId, strUserName, currentId);
         return objResponseWrapper;
     }
     
@@ -79,30 +51,22 @@ public with sharing class DEL_ContactCollaborationController {
     @AuraEnabled
     public static ResponseWrapper addContactCollaborator(List<Id> list_UserIds, Id idCaseId) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
-        List<DEL_CaseCollaborator__c> list_objCaseCollaborators = new List<DEL_CaseCollaborator__c>();
-        try {
-            for (Id idUser : list_UserIds) {
-                DEL_CaseCollaborator__c objCaseCollaborator = new DEL_CaseCollaborator__c (
-                    User__c = idUser,
-                    Case__c = idCaseId
-                );
-                list_objCaseCollaborators.add(objCaseCollaborator);
-            }
-            
-            if (!list_objCaseCollaborators.isEmpty()) {
-                insert list_objCaseCollaborators;
-            }
-        } catch(Exception objException) {
-            objResponseWrapper.blnIsSuccess = false;
-            objResponseWrapper.strErrorMessage = objException.getMessage();
-            DEL_Utils.logException(
-                'DEL_ContactCollaborationController',
-                'addContactCollaborator',
-                objException,
-                true
-            );
-        }
-        
+      try{
+        List <DEL_CaseCollaborator__c> list_Collaborators= DEL_ContactCollaborationTwoController.addUser(list_UserIds,idCaseId);
+      }
+       catch(Exception objException)
+       {
+        objResponseWrapper.blnIsSuccess = false;
+        objResponseWrapper.strErrorMessage = objException.getMessage();
+        DEL_Utils.logException(
+            'DEL_ContactCollaborationTwoController',
+            'addContactCollaborator',
+            objException,
+            true
+        ); 
+       }
         return objResponseWrapper;
+        
     }
+
 }

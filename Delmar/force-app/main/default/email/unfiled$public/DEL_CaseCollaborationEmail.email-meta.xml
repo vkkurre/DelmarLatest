@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>When an agent receives an collaborate invite .</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>DEL_CaseCollaborationEmail</name>
+    <style>none</style>
+    <subject>New Case Assignment : {!DEL_CaseCollaborator__c.Case__c}</subject>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

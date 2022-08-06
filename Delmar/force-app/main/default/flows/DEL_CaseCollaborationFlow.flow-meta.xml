@@ -4,8 +4,8 @@
         <description>Here we are setting up the notification. Goes on invite.</description>
         <name>CustomNotificationForInvite</name>
         <label>CustomNotificationForInvite</label>
-        <locationX>176</locationX>
-        <locationY>935</locationY>
+        <locationX>446</locationX>
+        <locationY>1151</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -41,33 +41,56 @@
         </inputParameters>
     </actionCalls>
     <actionCalls>
-        <description>Sending email alerts to Collaborators.</description>
-        <name>Send_Email</name>
-        <label>Send Email</label>
-        <locationX>176</locationX>
-        <locationY>695</locationY>
-        <actionName>emailSimple</actionName>
-        <actionType>emailSimple</actionType>
+        <name>EnglishAction</name>
+        <label>EnglishAction</label>
+        <locationX>578</locationX>
+        <locationY>815</locationY>
+        <actionName>DEL_CaseCollaborator__c.DEL_CaseCollab</actionName>
+        <actionType>emailAlert</actionType>
         <connector>
             <targetReference>Get_Custom_Notification_ID</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>emailBody</name>
+            <name>SObjectRowId</name>
             <value>
-                <stringValue>You have received an Collaboration Invite on this Case &quot;{!Get_Case.CaseNumber}&quot;</stringValue>
+                <elementReference>$Record.Id</elementReference>
             </value>
         </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>FrenchEmailAction</name>
+        <label>FrenchEmailAction</label>
+        <locationX>50</locationX>
+        <locationY>815</locationY>
+        <actionName>DEL_CaseCollaborator__c.DEL_CaseCollabFrench</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Get_Custom_Notification_ID</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>emailAddresses</name>
+            <name>SObjectRowId</name>
             <value>
-                <elementReference>Get_User_Details.Email</elementReference>
+                <elementReference>$Record.Id</elementReference>
             </value>
         </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>SpanishEmailAction</name>
+        <label>SpanishEmailAction</label>
+        <locationX>314</locationX>
+        <locationY>815</locationY>
+        <actionName>DEL_CaseCollaborator__c.DEL_CaseCollabSpanish</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Get_Custom_Notification_ID</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>emailSubject</name>
+            <name>SObjectRowId</name>
             <value>
-                <stringValue>New Case Assignment</stringValue>
+                <elementReference>$Record.Id</elementReference>
             </value>
         </inputParameters>
     </actionCalls>
@@ -76,7 +99,7 @@
         <description>Assigning all the UserIds of the User and storing in the variable. For send email alerts and custom notifications</description>
         <name>AssigningUser</name>
         <label>Assigning User</label>
-        <locationX>176</locationX>
+        <locationX>446</locationX>
         <locationY>575</locationY>
         <assignmentItems>
             <assignToReference>alluser</assignToReference>
@@ -86,9 +109,64 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Send_Email</targetReference>
+            <targetReference>PreferredLanguagesEmailAlerts</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>PreferredLanguagesEmailAlerts</name>
+        <label>PreferredLanguagesEmailAlerts</label>
+        <locationX>446</locationX>
+        <locationY>695</locationY>
+        <defaultConnector>
+            <targetReference>Get_Custom_Notification_ID</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>French</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User_Details.Contact.DEL_PrefferedLanguage__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>French</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>FrenchEmailAction</targetReference>
+            </connector>
+            <label>French</label>
+        </rules>
+        <rules>
+            <name>Spanish</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User_Details.Contact.DEL_PrefferedLanguage__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Spanish</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SpanishEmailAction</targetReference>
+            </connector>
+            <label>Spanish</label>
+        </rules>
+        <rules>
+            <name>English</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User_Details.Contact.DEL_PrefferedLanguage__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>English</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>EnglishAction</targetReference>
+            </connector>
+            <label>English</label>
+        </rules>
+    </decisions>
     <description>Send custom notifications and email alerts to collaborators</description>
     <formulas>
         <name>casenotilink</name>
@@ -120,7 +198,7 @@
         <description>This step is for getting all the CaseIds</description>
         <name>Get_Case</name>
         <label>Get Case</label>
-        <locationX>176</locationX>
+        <locationX>446</locationX>
         <locationY>335</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -142,8 +220,8 @@
         <description>This step is to send the custom notifications to the collaborators</description>
         <name>Get_Custom_Notification_ID</name>
         <label>Get Custom Notification ID</label>
-        <locationX>176</locationX>
-        <locationY>815</locationY>
+        <locationX>446</locationX>
+        <locationY>1031</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>CustomNotificationForInvite</targetReference>
@@ -164,7 +242,7 @@
         <description>This step where we get all the User details and Ids</description>
         <name>Get_User_Details</name>
         <label>Get User Details</label>
-        <locationX>176</locationX>
+        <locationX>446</locationX>
         <locationY>455</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -183,7 +261,7 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>50</locationX>
+        <locationX>320</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Case</targetReference>
@@ -210,5 +288,12 @@
         <isCollection>true</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>prefferedLanguageVariable</name>
+        <dataType>Picklist</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
 </Flow>

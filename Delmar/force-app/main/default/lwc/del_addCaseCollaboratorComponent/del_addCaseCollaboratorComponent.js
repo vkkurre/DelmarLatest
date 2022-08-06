@@ -2,9 +2,10 @@ import { api, LightningElement, track, wire } from "lwc";
 import getUserData from "@salesforce/apex/DEL_ContactCollaborationController.getUserData";
 import addContactCollaborator from "@salesforce/apex/DEL_ContactCollaborationController.addContactCollaborator";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-
+import uId from '@salesforce/user/Id';
 export default class Del_addCaseCollaboratorComponent extends LightningElement {
     @api recordId;
+    @api userId;
     @api strCardTitle;
     strSearchKey = "";
     @track list_Users;
@@ -32,9 +33,13 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
      * @ author      : Dinesh Chandra
      * @ description : This method queries and returns the CaseComment records related to the case with Id 'recordID'
      **/
+     connectedCallback(){
+        this.userId = uId;
+   }   
     @wire(getUserData, {
         idCaseId: "$recordId",
-        strUserName: "$strSearchKey"
+        strUserName: "$strSearchKey",
+        currentId:'$userId'
     })
     wiredUserList(result) {
         this.blnIsLoading = true;
@@ -76,7 +81,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         });
 
         list_SelectedUserIds = [...new Set(list_SelectedUserIds)];
-        if (list_SelectedUserIds) {
+        if (list_SelectedUserIds.length > 0) {
             /**
              * @ author      : Dinesh Chandra
              * @ description : This method queries and returns the CaseComment records related to the case with Id 'recordID'
@@ -94,6 +99,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
                             "The selected contacts have been added as collaborators for this Case.",
                             "success"
                         );
+                        
                     } else {
                         this.blnIsLoading = false;
                         this.showToastMessage("Error", result.strErrorMessage, "error");
@@ -106,6 +112,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         } else {
             this.showToastMessage("Error", "Please Select a User", "error");
         }
+       
     }
 
     /**

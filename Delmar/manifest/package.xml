@@ -14,10 +14,15 @@
         <members>DEL_CaseCollaborationTriggerHelper</members>
         <members>DEL_ContactCollaborationControllerTest</members>
         <members>DEL_ContactCollaborationController</members>
+        <members>DEL_ContactCollaborationTwoController</members>
         <name>ApexClass</name>
     </types>
     <types>
     <members>DEL_CaseCommentEmailTemplate</members>
+    <members>DEL_CaseCollaborationEmail</members>
+    <members>DEL_CaseCollaborationEmailFrench</members>
+    <members>DEL_CaseCollaborationEmailSpanish</members>
+
     <name>EmailTemplate</name>
 </types>
     <types>
