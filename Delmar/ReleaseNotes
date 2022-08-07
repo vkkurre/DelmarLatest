@@ -58,3 +58,5 @@ objEmailAlertConfiguration.CaseCommentEmailTemplate__c = 'DEL_CaseCommentEmailTe
 objEmailAlertConfiguration.OrgWideAddress__c = '';
 objEmailAlertConfiguration.EmailReplyBreakPattern__c = '(<br><div class="gmail_quote">){1}';
 insert objEmailAlertConfiguration;
+
+*********************************************************************/
