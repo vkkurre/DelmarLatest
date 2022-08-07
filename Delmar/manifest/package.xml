@@ -5,8 +5,6 @@
         <members>DEL_ContentDocumentLinkTriggerHelper</members>
         <members>DEL_ContentDocumentLinkTriggerTest</members>
         <members>DEL_CaseCollaborationControllerTest</members>
-        <members>DEL_FlowHandler</members>
-        <members>DEL_FlowHandlerTest</members>
         <members>DEL_EmailMessagesTriggerHelper</members>
         <members>DEL_EmailMessagesTriggerHelperTest</members>
         <members>DEL_Utils</members>
