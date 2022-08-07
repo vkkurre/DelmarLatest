@@ -107,8 +107,6 @@ public class DEL_CaseCollaborationControllerTest {
                                              LIMIT 1];
         
         objResultFetch = DEL_CaseCollaborationController.fetchComments(idCaseId);
-        DEL_CaseCollaborationController.updateCaseComment(objCaseComment.Id, 'Hello');
-        DEL_CaseCollaborationController.deleteCaseComment(objCaseComment.Id);
         Test.stopTest();
         
         //Check the Result.
@@ -140,9 +138,6 @@ public class DEL_CaseCollaborationControllerTest {
                                              Case__c 
                                              FROM DEL_CaseComment__c 
                                              LIMIT 1];
-        
-        objResponse = DEL_CaseCollaborationController.updateCaseComment(objCaseComment.Id, 'Hello');
-        objResponse = DEL_CaseCollaborationController.deleteCaseComment(objCaseComment.Id);
         Test.stopTest();
         
         System.assert(!objResponse.blnIsSuccess);

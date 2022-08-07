@@ -25,26 +25,18 @@ public class DEL_CaseCollaborationController {
         @AuraEnabled public Boolean blnIsSuccess;
         @AuraEnabled public String strErrorMessage;
         @AuraEnabled public List<DEL_CaseComment__c> list_CaseComments;
-        
+        @AuraEnabled public Map<Id, List<ContentVersion>> map_AttachmentsByCaseCommentId;
+
         public ResponseWrapper() {
             this.blnIsSuccess = true;
             this.strErrorMessage = '';
             this.list_CaseComments = new List<DEL_CaseComment__c>();
+            this.map_AttachmentsByCaseCommentId = new Map<Id, List<ContentVersion>>();
         }
     }
     
     /**
-    * @ author       :  Vinaykant
-    * @ description  :  Apex Method to fetch Case Configuration Custom Setting.
-    * @ return       :  DEL_CaseCommentConfiguration__c
-    **/
-    @AuraEnabled(cacheable=true) 
-    public static DEL_CaseCommentConfiguration__c getCaseCommentConfigurations() {
-        return DEL_CaseCommentConfiguration__c.getOrgDefaults();
-    }
-    
-    /**
-    * @ author       :  Rakesh Nayak
+    * @ author       :  Rakesh Nayak & Vinaykant
     * @ description  :  This method queries and returns the CaseComment records related to the case with Id 'recordID'
     * @ params       :  'strRecordId' - Record Id of the Case
     * @ return       :  List of DEL_CaseComment__c records
@@ -52,6 +44,10 @@ public class DEL_CaseCollaborationController {
     @AuraEnabled(cacheable = true)
     public static ResponseWrapper fetchComments(String strRecordId) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        Map<Id, ContentDocumentLink> map_ContentDocumentLinkByContentDocumentId = new Map<Id, ContentDocumentLink>();
+        Map<Id, List<ContentVersion>> map_ContentVersionsByCaseCommentId = new Map<Id, List<ContentVersion>>();
+        List<Id> list_CaseCommentIds = new List<Id>();
+
         try {
             objResponseWrapper.list_CaseComments = [SELECT
                                                     CreatedDate,
@@ -66,6 +62,50 @@ public class DEL_CaseCollaborationController {
                                                     WHERE Case__c = :strRecordId 
                                                     ORDER BY CreatedDate 
                                                     DESC];
+            
+            if (!objResponseWrapper.list_CaseComments.isEmpty()) {
+                for (DEL_CaseComment__c objCaseComment : objResponseWrapper.list_CaseComments) {
+                    list_caseCommentIds.add(objCaseComment.Id);
+                }
+                
+                List<ContentDocumentLink> list_ContentDocumentLinks = [SELECT 
+                                                                       ContentDocumentId,
+                                                                       LinkedEntityId
+                                                                       FROM ContentDocumentLink 
+                                                                       WHERE LinkedEntityId 
+                                                                       IN :list_caseCommentIds];
+                
+                if (!list_contentDocumentLinks.isEmpty()) {
+                    for (ContentDocumentLink objContentDocumentLink : list_contentDocumentLinks) {
+                        map_ContentDocumentLinkByContentDocumentId.put(objContentDocumentLink.ContentDocumentId, objContentDocumentLink);
+                    }
+                    List<ContentVersion> list_ContentVersions = [SELECT 
+                                                                 ContentDocumentId, 
+                                                                 Id, 
+                                                                 FileExtension, 
+                                                                 Title, 
+                                                                 ContentSize, 
+                                                                 CreatedDate, 
+                                                                 FileType, 
+                                                                 ContentBodyId 
+                                                                 FROM ContentVersion 
+                                                                 WHERE ContentDocumentId 
+                                                                 IN :map_ContentDocumentLinkByContentDocumentId.KeySet()
+                                                                 ORDER BY Title];
+                    
+                    for (ContentVersion objContentVersion : list_contentVersions) {
+                        String strCommentId = map_ContentDocumentLinkByContentDocumentId.get(objContentVersion.ContentDocumentId).LinkedEntityId;
+                        if (map_ContentVersionsByCaseCommentId.containsKey(strCommentId)) {
+                            map_ContentVersionsByCaseCommentId.get(strCommentId).add(objContentVersion);
+                        } else {
+                            map_ContentVersionsByCaseCommentId.put(strCommentId, new List<ContentVersion> { objContentVersion } );
+                        }
+                    }
+                }
+
+                objResponseWrapper.map_AttachmentsByCaseCommentId = map_ContentVersionsByCaseCommentId;
+            }
+
             // Throw an exception from test class                                        
             if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
                 throwException();
@@ -100,65 +140,6 @@ public class DEL_CaseCollaborationController {
                 throwException();
             }
         } catch(Exception objException) {
-            objResponseWrapper.blnIsSuccess = false;
-            objResponseWrapper.strErrorMessage = objException.getMessage();
-        }
-        
-        return objResponseWrapper;
-    }
-    
-    /**
-    * @ author       :  Vinaykant
-    * @ description  :  Apex Method to delete a particular case comment from a case.
-    * @ params       :  'idCommentId' - Case Comment Id which be fetched.
-    * @ return       :  'objResponseWrapper' - Wrapper Class Object.
-    **/
-    @AuraEnabled
-    public static ResponseWrapper deleteCaseComment(Id idCommentId) {
-        ResponseWrapper objResponseWrapper = new ResponseWrapper();
-        DEL_CaseComment__c objCaseComment = [SELECT
-                                             Id 
-                                             FROM DEL_CaseComment__c 
-                                             WHERE Id = :idCommentId];
-        
-        try {
-            delete objCaseComment;
-            // Throw an exception from test class                                        
-            if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
-                throwException();
-            }
-        } catch (Exception objException) {
-            objResponseWrapper.blnIsSuccess = false;
-            objResponseWrapper.strErrorMessage = objException.getMessage();
-        }
-        
-        return objResponseWrapper;
-    }
-    
-    /**
-    * @ author       :  Vinaykant
-    * @ description  :  Apex Method to update a particular case comment with new edited comment.
-    * @ params       :  'idCommentId' - Case Comment Id of which will be fetched.
-    *                   'strComment' - New Edited Comment Body String for Case Comment Record.
-    * @ return       :  'objResponseWrapper' - Wrapper Class Object.
-    **/
-    @AuraEnabled
-    public static ResponseWrapper updateCaseComment(Id idCommentId, String strComment) {
-        ResponseWrapper objResponseWrapper = new ResponseWrapper();
-        DEL_CaseComment__c objCaseComment = [SELECT 
-                                             Id,
-                                             Body__c
-                                             FROM DEL_CaseComment__c 
-                                             WHERE Id = :idCommentId];
-        objCaseComment.Body__c = strComment;
-        
-        try {
-            update objCaseComment;
-            // Throw an exception from test class                                        
-            if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
-                throwException();
-            }
-        } catch (Exception objException) {
             objResponseWrapper.blnIsSuccess = false;
             objResponseWrapper.strErrorMessage = objException.getMessage();
         }

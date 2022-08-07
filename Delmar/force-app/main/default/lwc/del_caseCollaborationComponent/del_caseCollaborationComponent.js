@@ -2,40 +2,33 @@ import { LightningElement, api, track, wire } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 import { NavigationMixin } from "lightning/navigation";
+//Custom label for the place holder in comment input field.
+import CLDEL00002 from '@salesforce/label/c.CLDEL00002';
+//Custom label for the message to indiciate that the comment input field is blank
+import CLDEL00003 from '@salesforce/label/c.CLDEL00003';
+//Custom label for file download url.
+import CLDEL00004 from '@salesforce/label/c.CLDEL00004';
+//Custom label for file preview url.
+import CLDEL00005 from '@salesforce/label/c.CLDEL00005';
+//Custom label for the success message when comment is added.
+import CLDEL00006 from '@salesforce/label/c.CLDEL00006';
+//Custom label error message title
+import CLDEL00001 from '@salesforce/label/c.CLDEL00001';
+//Custom label success message title
+import CLDEL00007 from '@salesforce/label/c.CLDEL00007';
 import fetchComments from "@salesforce/apex/DEL_CaseCollaborationController.fetchComments";
 import insertComment from "@salesforce/apex/DEL_CaseCollaborationController.insertComment";
-import deleteCaseComment from "@salesforce/apex/DEL_CaseCollaborationController.deleteCaseComment";
-import updateCaseComment from "@salesforce/apex/DEL_CaseCollaborationController.updateCaseComment";
-import getCaseCommentConfigurations from "@salesforce/apex/DEL_CaseCollaborationController.getCaseCommentConfigurations";
-import UserId from "@salesforce/user/Id";
 
 export default class Del_caseCollaborationComponent extends NavigationMixin(LightningElement) {
     strBody = "";
     @api recordId;
+    @api blnValid;
+    @api strErrorMessageCommentInput;
     @track list_Comments = [];
+    strPlaceHolderText = CLDEL00002;
     blnIsLoading = false;
-    blnShowDeleteModal = false;
-    blnShowEditModal = false;
-    strSelectedCommentId;
-    strSelectedComment;
-    list_WiredComments; //contains retrieved data and errors from fetchComments(). Used to refresh apex data after insertion.
-    idUserId = UserId;
-    strTimeInSeconds;
-    objCaseCommentConfiguration = {};
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : This Wire Adapter Fetches the Time Limit Custom Setting for Edit/Delete Menu Option for Case Comments.
-     **/
-    @wire(getCaseCommentConfigurations)
-    getTimeLimit({ error, data }) {
-        if (data) {
-            this.objCaseCommentConfiguration = data;
-            this.strTimeInSeconds = this.objCaseCommentConfiguration.TimeLimitInSeconds__c;
-        } else if (error) {
-            this.showToastMessage("Error", "error", error.body.message);
-        }
-    }
+    // List that contains retrieved data and errors from fetchComments(). Used to refresh apex data after insertion
+    list_WiredComments;
 
     /**
      * @ author      : Rakesh Nayak & Vinaykant
@@ -47,46 +40,61 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
+                let list_Attachments = JSON.parse(JSON.stringify(data.map_AttachmentsByCaseCommentId));
+
+                /*Adding two attributes in each attachment of every comment retreived from apex class 
+                  in Map Object 'map_AttachmentsByCaseCommentId'. */
+                for (var idCaseCommentId in list_Attachments) {
+                    let list_AttachmentsTemp = list_Attachments[idCaseCommentId];
+                    for (let objAttachment of list_AttachmentsTemp) {
+                        objAttachment["strDownloadURL"] = CLDEL00004 + objAttachment.ContentDocumentId;
+                        objAttachment["strFileURL"] = CLDEL00005.replace('{!FileId}', objAttachment.Id);
+                    }
+                    list_Attachments[idCaseCommentId] = list_AttachmentsTemp;
+                }
+
                 this.list_Comments = JSON.parse(JSON.stringify(data.list_CaseComments));
                 let list_CommentsTemp = this.list_Comments;
                 for (let objComment of list_CommentsTemp) {
-                    /* Adding one more attribute to case comment record object for  
-                    determining the current logged-in user and case comment user are same. */
-                    if (objComment["CreatedById"] == this.idUserId) {
-                        objComment["blnCurrentUser"] = true;
+                    /*Adding one attribute to each of the Case Comment with list of the attachments 
+                    file*/
+                    if (objComment["Id"] in list_Attachments) {
+                        objComment["listAttachments"] = list_Attachments[objComment["Id"]];
                     } else {
-                        objComment["blnCurrentUser"] = false;
+                        objComment["listAttachments"] = [];
                     }
-
-                    /* Adding one attribute to list_comments object to determine case comment should 
-                    be editable or not and to add readable format of date. */
-                    objComment["blnEdit"] = this.commentTime(
-                        objComment["CreatedDate"]
-                    ).blnIsEditable;
                 }
 
                 this.list_Comments = list_CommentsTemp;
             } else {
-                this.showToastMessage("Error", "error", data.strErrorMessage);
+                this.showToastMessage(CLDEL00001, "error", data.strErrorMessage);
             }
 
             this.blnIsLoading = false;
         } else if (error) {
             this.blnIsLoading = false;
-            this.handleErrors(error);
+            this.handleErrors(error, CLDEL00001);
         }
     }
 
+    /**
+    * @ author      : Deeksha Suvarna
+    * @ description : This method is invoked on the change of comment text field to store
+    *                 the value on 'strBody' variable.
+    **/
+    handleChangeComment(event){
+        this.strBody = event.target.value;
+    }
+    
     /**
     * @ author      : Rakesh Nayak
     * @ description : This method is invoked on the click of submit button and 
                       used to insert the entered comment and refresh the updated comment list
     **/
-
     handleOnClick() {
-        if (this.validateComment()) {
+        this.blnValid = this.validateComment();
+        if (this.blnValid) {
             this.handleIsLoading(true);
-            this.strBody = this.template.querySelector(".nullify").value;
             /**
             * @ author      : Rakesh Nayak
             * @ description : This method is used to create new Case Comment record using comment 
@@ -99,21 +107,21 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                 .then((result) => {
                     if (result.blnIsSuccess) {
                         // Nullifying the comment input box after comment is submitted.
-                        this.template.querySelector(".nullify").value = null;
+                        this.strBody = "";
                         // Refreshing the comment list.
                         this.updateRecordView();
                         this.showToastMessage(
-                            "Success",
+                            CLDEL00007,
                             "success",
-                            "Your comment has been added successfully."
+                            CLDEL00006
                         );
                     } else {
-                        this.showToastMessage("Error", "error", result.strErrorMessage);
+                        this.showToastMessage(CLDEL00001, "error", result.strErrorMessage);
                     }
                     this.handleIsLoading(false);
                 })
                 .catch((error) => {
-                    this.handleErrors(error, "ERROR!");
+                    this.handleErrors(error, CLDEL00001);
                 });
         }
     }
@@ -123,14 +131,11 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
      * @ description   : This method restricts the insertion of empty comment by displaying custom validation error.
      **/
     validateComment() {
-        let objCommentInputField = this.template.querySelector(".nullify");
-        if (!objCommentInputField.value) {
-            objCommentInputField.setCustomValidity("Please enter a comment");
-            objCommentInputField.reportValidity();
+        if (!this.strBody) {
+            this.strErrorMessageCommentInput = CLDEL00003;
             return false;
         } else {
-            objCommentInputField.setCustomValidity("");
-            objCommentInputField.reportValidity();
+            this.strErrorMessageCommentInput = "";
             return true;
         }
     }
@@ -149,122 +154,6 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
      **/
     updateRecordView() {
         refreshApex(this.list_WiredComments);
-    }
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : This Method is capturing Custom Event for closing Edit Modal Box for comment.
-     **/
-    closeEditModal() {
-        this.blnShowEditModal = false;
-    }
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : This Method is capturing Custom Event for closing Delete Modal Box for comment.
-     **/
-    closeDeleteModal() {
-        this.blnShowDeleteModal = false;
-    }
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : This Method is capturing Custom Event from Delete Modal Box to delete Case Comment.
-     **/
-    saveDeleteChanges(event) {
-        this.blnShowDeleteModal = false;
-        /**
-         * @ author      : Vinaykant
-         * @ description : Calling an apex method named 'deleteCaseComment' to delete case comment record.
-         **/
-        deleteCaseComment({
-            idCommentId: event.detail
-        })
-            .then((result) => {
-                if (result.blnIsSuccess) {
-                    this.showToastMessage("Success", "success", "Comment deleted successfully.");
-                    this.blnIsLoading = true;
-                    this.updateRecordView();
-                } else {
-                    this.showToastMessage("Error", "error", result.strErrorMessage);
-                }
-            })
-            .catch((error) => {
-                this.handleErrors(error, "Error Occured while deleting Comment.");
-            });
-    }
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : This Method is capturing Custom Event from Edit Modal Box to edit Case Comment.
-     **/
-    saveEditChanges(event) {
-        this.blnShowEditModal = false;
-        let strCommentMessage = "";
-        //Checking if the edited comment is blank, if it's blank it will revert back to previous saved comment.
-        if (!event.detail.commentBody) {
-            strCommentMessage = this.strSelectedComment;
-        } else {
-            strCommentMessage = event.detail.commentBody;
-        }
-
-        /**
-         * @ author      : Vinaykant
-         * @ description : This Apex Method Call is used to update or edit the changes made by edit option in the case comment.
-         **/
-        updateCaseComment({
-            idCommentId: event.detail.commentId,
-            strComment: strCommentMessage
-        })
-            .then((result) => {
-                if (result.blnIsSuccess) {
-                    this.showToastMessage("Success", "success", "Comment edited successfully.");
-                    this.blnIsLoading = true;
-                    this.updateRecordView();
-                } else {
-                    this.showToastMessage("Error", "error", result.strErrorMessage);
-                }
-            })
-            .catch((error) => {
-                this.handleErrors(error, "Error Occured while editing Comment.");
-            });
-    }
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : This Method is handling the edit menu option from each case comment side button in HTML.
-     **/
-    editComment(event) {
-        this.strSelectedCommentId = event.target.value;
-        this.strSelectedComment = event.target.dataset.comment;
-        this.blnShowEditModal = true;
-    }
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : This Method is handling the delete menu option from each case comment side button in HTML.
-     **/
-    deleteComment(event) {
-        this.strSelectedCommentId = event.target.value;
-        this.blnShowDeleteModal = true;
-    }
-
-    /**
-     * @ author      : Vinaykant
-     * @ description : Function to format the ISO Date Format from apex class to Normal Date Format.
-     **/
-    commentTime(dtDate) {
-        let dtCurrentdate = new Date();
-        let dtCommentDate = new Date(Date.parse(dtDate));
-        let intSeconds = Math.round((dtCurrentdate.getTime() - dtCommentDate.getTime()) / 1000);
-        let objTimeInfo;
-
-        objTimeInfo =
-            intSeconds >= parseInt(this.strTimeInSeconds)
-                ? (objTimeInfo = { blnIsEditable: false })
-                : (objTimeInfo = { blnIsEditable: true });
-
-        return objTimeInfo;
     }
 
     /**

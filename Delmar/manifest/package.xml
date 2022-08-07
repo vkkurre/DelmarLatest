@@ -30,7 +30,6 @@
         <members>DEL_CaseCollaborator__c</members>
         <members>DEL_ExceptionLog__c</members>
         <members>DEL_EmailAlertConfiguration__c</members>
-        <members>DEL_CaseCommentConfiguration__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -66,13 +65,20 @@
     <types>
         <members>del_caseCollaborationComponent</members>
         <members>del_addCaseCollaboratorComponent</members>
-        <members>del_editCommentComponent</members>
-        <members>del_deleteCommentComponent</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
         <members>DEL_CaseCollaborationNotification</members>
         <name>CustomNotificationType</name>
+    </types>
+    <types>
+        <members>CLDEL00001</members>
+        <members>CLDEL00002</members>
+        <members>CLDEL00003</members>
+        <members>CLDEL00004</members>
+        <members>CLDEL00005</members>
+        <members>CLDEL00006</members>
+        <members>CLDEL00007</members>
     </types>
     <types>
         <members>Admin</members>
