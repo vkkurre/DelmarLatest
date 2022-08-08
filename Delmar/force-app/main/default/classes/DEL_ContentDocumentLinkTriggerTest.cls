@@ -34,7 +34,6 @@ public class DEL_ContentDocumentLinkTriggerTest {
         DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
             .setMergeFields(strMergeFields)
             .setCaseQueryFields('Subject,CaseNumber,Description')
-            .setCaseCommentFields('CommentCreatedName__c,Body__c,CreatedDate')
             .setSiteName('CaseComments')
             .setEmailTemplateName('DEL_CaseCommentAlert')
             .setOwnerId(UserInfo.getOrganizationId())
