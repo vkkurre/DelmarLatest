@@ -52,7 +52,6 @@
 DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c();
 objEmailAlertConfiguration.MergeFields__c = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},{!CaseComment.CreatedDate},SiteLink';
 objEmailAlertConfiguration.CaseQueryFields__c = 'Subject,CaseNumber,Description';
-objEmailAlertConfiguration.CaseCommentFields__c = 'CommentCreatedName__c,Body__c,CreatedDate';
 objEmailAlertConfiguration.SiteName__c = '';
 objEmailAlertConfiguration.CaseCommentEmailTemplate__c = 'DEL_CaseCommentEmailTemplate';
 objEmailAlertConfiguration.OrgWideAddress__c = '';

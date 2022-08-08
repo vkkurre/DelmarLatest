@@ -400,7 +400,6 @@ public class DEL_TestUtility {
     public class EmailAlertConfigurationBuilder {
         private String strMergeFields;
         private String strCaseQueryFields;
-        private String strCaseCommentFields;
         private String strSiteName;
         private String strEmailTemplateName;
         private String strOrgWideAddress;
@@ -410,7 +409,6 @@ public class DEL_TestUtility {
         public EmailAlertConfigurationBuilder() {
             this.strMergeFields = '';
             this.strCaseQueryFields = '';
-            this.strCaseCommentFields = '';
             this.strSiteName = '';
             this.strEmailTemplateName = '';
             this.strOrgWideAddress = '';
@@ -424,11 +422,6 @@ public class DEL_TestUtility {
         
         public EmailAlertConfigurationBuilder setCaseQueryFields(String strValue) {
             this.strCaseQueryFields = strValue;
-            return this;
-        }
-        
-        public EmailAlertConfigurationBuilder setCaseCommentFields(String strValue) {
-            this.strCaseCommentFields = strValue;
             return this;
         }
         
@@ -461,7 +454,6 @@ public class DEL_TestUtility {
             DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c(
                 MergeFields__c = this.strMergeFields,
                 CaseQueryFields__c = this.strCaseQueryFields,
-                CaseCommentFields__c = this.strCaseCommentFields,
                 SiteName__c = this.strSiteName,
                 CaseCommentEmailTemplate__c = this.strEmailTemplateName,
                 SetupOwnerId = this.idSetupOwnerId,
