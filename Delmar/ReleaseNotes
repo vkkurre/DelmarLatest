@@ -19,13 +19,13 @@
     b. jar -cfM zippackage.zip delmarpackage
     c. rmdir /s delmarpackage
     d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_EmailMessagesTriggerHelperTest,
-       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_FlowHandlerTest
+       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_ContentDocumentLinkTriggerTest,DEL_CaseCommentTriggerHelperTest
 2. For MAC
     a. sfdx force:source:convert --rootdir force-app --outputdir delmarpackage
     b. zip -r zippackage.zip delmarpackage
     c. rm -r delmarpackage
     d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_EmailMessagesTriggerHelperTest,
-       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_FlowHandlerTest
+       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_ContentDocumentLinkTriggerTest,DEL_CaseCommentTriggerHelperTest
     e. rm -r zippackage.zip
 
 
@@ -35,12 +35,28 @@
     - Update Record Id property on the componet - {!recordId}
 2. Place the component del_addCaseCollaboratorComponent under the Communnity page.
     - Update Record Id property on the componet - {!recordId}
-3. Create a Default Organization Level Value in the Email Alert Configuration custom setting.
+3. Create a Default Organization Level Value in the Email Alert Configuration custom setting.(Run the script below in anonymous window)
 4. Check Apex Class access under the Profile Customer Community Plus Login User
     - DEL_CaseCollaborationController
     - DEL_CaseCollaborationTriggerHelper
     - DEL_ContactCollaborationController
     - DEL_EmailMessagesTriggerHelper
-    - DEL_FlowHandler
     - DEL_Utils
+    - DEL_CaseCommentTriggerHelper
+
 4. Turn on the Email Deliverability.
+
+/********************************************************************
+* Script to create Email Alert Configuration custom setting
+
+DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c();
+objEmailAlertConfiguration.MergeFields__c = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},{!CaseComment.CreatedDate},SiteLink';
+objEmailAlertConfiguration.CaseQueryFields__c = 'Subject,CaseNumber,Description';
+objEmailAlertConfiguration.CaseCommentFields__c = 'CommentCreatedName__c,Body__c,CreatedDate';
+objEmailAlertConfiguration.SiteName__c = '';
+objEmailAlertConfiguration.CaseCommentEmailTemplate__c = 'DEL_CaseCommentEmailTemplate';
+objEmailAlertConfiguration.OrgWideAddress__c = '';
+objEmailAlertConfiguration.EmailReplyBreakPattern__c = '(<br><div class="gmail_quote">){1}';
+insert objEmailAlertConfiguration;
+
+*********************************************************************/
