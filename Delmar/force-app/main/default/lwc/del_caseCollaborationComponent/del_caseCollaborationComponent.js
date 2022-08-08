@@ -3,19 +3,19 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 import { NavigationMixin } from "lightning/navigation";
 //Custom label for the place holder in comment input field.
-import CLDEL00002 from '@salesforce/label/c.CLDEL00002';
+import CLDEL00002 from "@salesforce/label/c.CLDEL00002";
 //Custom label for the message to indiciate that the comment input field is blank
-import CLDEL00003 from '@salesforce/label/c.CLDEL00003';
+import CLDEL00003 from "@salesforce/label/c.CLDEL00003";
 //Custom label for file download url.
-import CLDEL00004 from '@salesforce/label/c.CLDEL00004';
+import CLDEL00004 from "@salesforce/label/c.CLDEL00004";
 //Custom label for file preview url.
-import CLDEL00005 from '@salesforce/label/c.CLDEL00005';
+import CLDEL00005 from "@salesforce/label/c.CLDEL00005";
 //Custom label for the success message when comment is added.
-import CLDEL00006 from '@salesforce/label/c.CLDEL00006';
+import CLDEL00006 from "@salesforce/label/c.CLDEL00006";
 //Custom label error message title
-import CLDEL00001 from '@salesforce/label/c.CLDEL00001';
+import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
 //Custom label success message title
-import CLDEL00007 from '@salesforce/label/c.CLDEL00007';
+import CLDEL00007 from "@salesforce/label/c.CLDEL00007";
 import fetchComments from "@salesforce/apex/DEL_CaseCollaborationController.fetchComments";
 import insertComment from "@salesforce/apex/DEL_CaseCollaborationController.insertComment";
 
@@ -40,15 +40,21 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
-                let list_Attachments = JSON.parse(JSON.stringify(data.map_AttachmentsByCaseCommentId));
+                let list_Attachments = JSON.parse(
+                    JSON.stringify(data.map_AttachmentsByCaseCommentId)
+                );
 
                 /*Adding two attributes in each attachment of every comment retreived from apex class 
                   in Map Object 'map_AttachmentsByCaseCommentId'. */
                 for (var idCaseCommentId in list_Attachments) {
                     let list_AttachmentsTemp = list_Attachments[idCaseCommentId];
                     for (let objAttachment of list_AttachmentsTemp) {
-                        objAttachment["strDownloadURL"] = CLDEL00004 + objAttachment.ContentDocumentId;
-                        objAttachment["strFileURL"] = CLDEL00005.replace('{!FileId}', objAttachment.Id);
+                        objAttachment["strDownloadURL"] =
+                            CLDEL00004 + objAttachment.ContentDocumentId;
+                        objAttachment["strFileURL"] = CLDEL00005.replace(
+                            "{!FileId}",
+                            objAttachment.Id
+                        );
                     }
                     list_Attachments[idCaseCommentId] = list_AttachmentsTemp;
                 }
@@ -78,14 +84,14 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     }
 
     /**
-    * @ author      : Deeksha Suvarna
-    * @ description : This method is invoked on the change of comment text field to store
-    *                 the value on 'strBody' variable.
-    **/
-    handleChangeComment(event){
+     * @ author      : Deeksha Suvarna
+     * @ description : This method is invoked on the change of comment text field to store
+     *                 the value on 'strBody' variable.
+     **/
+    handleChangeComment(event) {
         this.strBody = event.target.value;
     }
-    
+
     /**
     * @ author      : Rakesh Nayak
     * @ description : This method is invoked on the click of submit button and 
@@ -110,11 +116,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                         this.strBody = "";
                         // Refreshing the comment list.
                         this.updateRecordView();
-                        this.showToastMessage(
-                            CLDEL00007,
-                            "success",
-                            CLDEL00006
-                        );
+                        this.showToastMessage(CLDEL00007, "success", CLDEL00006);
                     } else {
                         this.showToastMessage(CLDEL00001, "error", result.strErrorMessage);
                     }

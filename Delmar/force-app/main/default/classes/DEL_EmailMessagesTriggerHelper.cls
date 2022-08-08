@@ -52,7 +52,7 @@ public class DEL_EmailMessagesTriggerHelper {
                 List<Database.SaveResult> list_InsertResults = Database.insert(list_CaseComments, false);
                 list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_InsertResults, 'Insert'));
             }
-
+            
             if (!list_ConsolidatedDMLErrors.isEmpty()) {
                 DEL_Utils.logDMLException(
                     'DEL_EmailMessagesTriggerHelper',

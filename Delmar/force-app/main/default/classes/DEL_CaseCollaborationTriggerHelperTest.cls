@@ -9,7 +9,7 @@
 *   19-07-2022      |  dinesh.chandra@absyz.com     |  1.0          |  Initial Version
 *
 *******************************************************************************************************/
-@IsTest
+@isTest
 public class DEL_CaseCollaborationTriggerHelperTest {
     
     public static Boolean blnThrowException = false;
@@ -97,7 +97,7 @@ public class DEL_CaseCollaborationTriggerHelperTest {
     * @ author       :  Dinesh Chandra
     * @ description  :  This method is used to test the creation of DEL_CaseCollaborator__c
     **/
-    @IsTest
+    @isTest
     private static void testCaseCollaboratorCreation() {
         Case objCase = [SELECT Id, ContactId FROM Case LIMIT 1];
         User objUser = [SELECT Id, ContactId FROM User WHERE ContactId = :objCase.ContactId];
@@ -138,7 +138,7 @@ public class DEL_CaseCollaborationTriggerHelperTest {
         System.assert(!list_CaseShares.isEmpty());
         //Assert if the duplicate case collaborator was not created.
         System.assert(objCaseCollaborator2.Id == null);
-    } 
+    }
     
     /**
     * @ author       :  Ankit

@@ -1,5 +1,16 @@
-trigger DEL_CaseCollaborationTrigger on DEL_CaseCollaborator__c (after insert, before insert) 
-{
+/*******************************************************************************************************
+* 
+* @ Name            :   DEL_CaseCollaborationTrigger
+* @ Purpose         :   Trigger on DEL_CaseCollaborator__c object
+* @ Author          :   Ankit C
+* @ Test Class Name :   DEL_CaseCollaborationTriggerHelperTest
+*
+*   Date            |  Developer Name                |  Version      |  Changes
+* ======================================================================================================
+*  05-08-2022       |  ankit.c@absyz.com             |  1.0          |  Initial version
+*******************************************************************************************************/
+
+trigger DEL_CaseCollaborationTrigger on DEL_CaseCollaborator__c (after insert, before insert) {
     /* Skip this trigger when DEL_CaseCollaborationTriggerHelper.blnSkipTrigger is true
        or the IsActive__c is false in the DEL_TriggerConfiguration__mdt metadata for this trigger.
        CMDEL0002 is the name of the record used for this trigger.

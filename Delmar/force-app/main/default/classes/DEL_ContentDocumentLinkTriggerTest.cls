@@ -9,7 +9,7 @@
 *   04-08-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
 *
 *******************************************************************************************************/
-@IsTest
+@isTest
 public class DEL_ContentDocumentLinkTriggerTest {
     public static Boolean blnThrowException = false;
 
@@ -26,7 +26,7 @@ public class DEL_ContentDocumentLinkTriggerTest {
             .setOrigin('Email')
             .createCase();
         insert objCase;
-
+        
         OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
         String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
             +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
@@ -42,7 +42,7 @@ public class DEL_ContentDocumentLinkTriggerTest {
             .setEmailBreakPattern('(<br><div class="gmail_quote">){1}')
             .createConfiguration();
         insert objEmailAlertConfiguration;
-
+        
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
             .setName('Case Comment Email Alert')
             .setDeveloperName('DEL_CaseCommentAlert')
@@ -55,7 +55,7 @@ public class DEL_ContentDocumentLinkTriggerTest {
         System.runAs(objUser) {
             insert objEmailTemplate;
         }
-
+        
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
             .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
@@ -67,7 +67,7 @@ public class DEL_ContentDocumentLinkTriggerTest {
             .setParentId(objCase.Id)
             .createEmailMessage();
         insert objEmailMessage;
-
+        
         ContentVersion objContentVersion = new DEL_TestUtility.ContentVersionBuilder()
             .setTitle('Test')
             .setPathOnClient('image.jpg')
@@ -75,7 +75,7 @@ public class DEL_ContentDocumentLinkTriggerTest {
             .setIsMajorVersion(true)
             .createContentVersion();
         insert objContentVersion;
-
+        
         ContentDocument objContentDocument = [SELECT 
                                               Id,
                                               Title,
@@ -95,14 +95,14 @@ public class DEL_ContentDocumentLinkTriggerTest {
     * @ author       :  Rakesh Nayak
     * @ description  :  This method is used to test the method 'handleContentDocumentLinksOnInsert' in apex class 'DEL_ContentDocumentLinkTriggerHelper'
     **/
-    @IsTest
+    @isTest
     private static void testContentDocumentLinkCreation() {
         ContentDocument objContentDocument = [SELECT 
                                               Id,
                                               Title,
                                               LatestPublishedVersionId
                                               FROM ContentDocument];
-
+        
         List<ContentDocumentLink> list_ContentDocumentLinks = [SELECT 
                                                                Id,
                                                                Visibility,
@@ -111,11 +111,11 @@ public class DEL_ContentDocumentLinkTriggerTest {
                                                                ContentDocumentId
                                                                FROM ContentDocumentLink
                                                                WHERE ContentDocumentId = :objContentDocument.Id];
-    
+        
         Test.startTest();
         DEL_ContentDocumentLinkTriggerHelper.handleContentDocumentLinksOnInsert(list_ContentDocumentLinks);
         Test.stopTest();
-
+        
         DEL_CaseComment__c objCasecomment = [SELECT Id FROM DEL_CaseComment__c];
         ContentDocumentLink objContentDocumentLink = [SELECT 
                                                       Id,
@@ -125,19 +125,18 @@ public class DEL_ContentDocumentLinkTriggerTest {
                                                       LinkedEntityId
                                                       FROM ContentDocumentLink
                                                       WHERE LinkedEntityId = :objCasecomment.Id];
-
+        
         System.assertEquals(objCaseComment.Id, objContentDocumentLink.LinkedEntityId);
     }
 
-
-    @IsTest
+    @isTest
     private static void handleExceptions() {
         ContentDocument objContentDocument = [SELECT 
                                               Id,
                                               Title,
                                               LatestPublishedVersionId
                                               FROM ContentDocument];
-
+        
         List<ContentDocumentLink> list_ContentDocumentLinks = [SELECT 
                                                                Id,
                                                                Visibility,
@@ -146,12 +145,12 @@ public class DEL_ContentDocumentLinkTriggerTest {
                                                                ContentDocumentId
                                                                FROM ContentDocumentLink
                                                                WHERE ContentDocumentId = :objContentDocument.Id];
-    
+        
         Test.startTest();
         blnThrowException = true;
         DEL_ContentDocumentLinkTriggerHelper.handleContentDocumentLinksOnInsert(list_ContentDocumentLinks);
         Test.stopTest();
-
+        
         List<DEL_ExceptionLog__c> list_ExceptionLogs = [SELECT 
                                                         Id, 
                                                         ClassName__c, 

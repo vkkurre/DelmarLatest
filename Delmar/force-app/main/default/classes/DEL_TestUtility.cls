@@ -216,7 +216,7 @@ public class DEL_TestUtility {
             this.idAccountId = idValue;
             return this;
         }
-
+        
         public CaseBuilder setSuppliedEmail(String strValue) {
             this.strSuppliedEmail = strValue;
             return this;
@@ -256,7 +256,7 @@ public class DEL_TestUtility {
             this.strBody = strValue;
             return this;
         }
-
+        
         public CaseCommentBuilder setEmailMessageId(String strValue) {
             this.strEmailMessageId = strValue;
             return this;
@@ -266,7 +266,7 @@ public class DEL_TestUtility {
             this.idCaseId = idValue;
             return this;
         }
-
+        
         public DEL_CaseComment__c createCaseComment() {
             DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c();
             objCaseComment.Body__c = this.strBody;
@@ -370,7 +370,7 @@ public class DEL_TestUtility {
             this.blnIncoming = blnValue;
             return this;
         }
-
+        
         public EmailMessageBuilder setHeaders(String strValue) {
             this.strHeaders = strValue;
             return this;
@@ -446,7 +446,7 @@ public class DEL_TestUtility {
             this.strOrgWideAddress = strValue;
             return this;
         }
-
+        
         public EmailAlertConfigurationBuilder setEmailBreakPattern(String strValue) {
             this.strEmailBreakPattern = strValue;
             return this;
@@ -518,7 +518,7 @@ public class DEL_TestUtility {
             this.strTemplateType = strValue;
             return this;
         }
-
+        
         public EmailTemplateBuilder setSubject(String strValue) {
             this.strSubject = strValue;
             return this;
@@ -548,7 +548,7 @@ public class DEL_TestUtility {
         private String strPathOnClient;
         private Blob blobVersionData;
         private  Boolean blnIsMajorVersion;
-
+        
         public ContentVersionBuilder() {
             this.strTitle= '';
             this.strPathOnClient = '';
@@ -563,12 +563,12 @@ public class DEL_TestUtility {
             this.strPathOnClient = strValue;
             return this;
         }
-
+        
         public ContentVersionBuilder setVersionData(String strValue) {
             this.blobVersionData = EncodingUtil.base64Decode(strValue);
             return this;
         }
-
+        
         public ContentVersionBuilder setIsMajorVersion(Boolean blnValue) {
             this.blnIsMajorVersion = blnValue;
             return this;
@@ -610,7 +610,7 @@ public class DEL_TestUtility {
             this.idLinkedEntityId = idValue;
             return this;
         }
-
+        
         public ContentDocumentLinkBuilder setShareType(String strValue) {
             this.strShareType = strValue;
             return this;

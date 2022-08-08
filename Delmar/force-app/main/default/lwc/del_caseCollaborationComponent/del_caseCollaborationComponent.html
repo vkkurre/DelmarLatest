@@ -26,20 +26,20 @@
                     </lightning-avatar>
                 </lightning-layout-item>
                 <lightning-layout-item size="9" small-device-size="9" medium-device-size="9" large-device-size="10">
-                    <lightning-input-rich-text onchange={handleChangeComment} type="text"
-                        class="nullify" value={strBody} placeholder={strPlaceHolderText}
-                        variant="label-hidden" disabled-categories="INSERT_CONTENT"
-                        message-when-bad-input={strErrorMessageCommentInput} valid={blnValid}>
+                    <lightning-input-rich-text onchange={handleChangeComment} type="text" class="nullify"
+                        value={strBody} placeholder={strPlaceHolderText} variant="label-hidden"
+                        disabled-categories="INSERT_CONTENT" message-when-bad-input={strErrorMessageCommentInput}
+                        valid={blnValid}>
                     </lightning-input-rich-text>
                 </lightning-layout-item>
-                <lightning-layout-item alignment-bump="right" class="slds-p-left_none slds-m-top_x-small" size="1" small-device-size="1"
-                    medium-device-size="1" large-device-size="1">
+                <lightning-layout-item alignment-bump="right" class="slds-p-left_none slds-m-top_x-small" size="1"
+                    small-device-size="1" medium-device-size="1" large-device-size="1">
                     <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}
                         class="del-style-button-left-margin">
                     </lightning-button-icon>
                 </lightning-layout-item>
             </lightning-layout>
-            
+
             <lightning-layout>
                 <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
                     <div class="slds-var-p-top_small">
@@ -78,28 +78,42 @@
                                                     <div class="slds-p-top_small">
                                                         <template if:true={objCaseComment.listAttachments}>
                                                             <lightning-layout multiple-rows="true">
-                                                                <template for:each={objCaseComment.listAttachments} for:item="objFile">
-                                                                    <lightning-layout-item size="12" key={objFile.ContentDocumentId} small-device-size="6" medium-device-size="6" 
-                                                                        large-device-size="4" class="slds-p-vertical_xx-small slds-p-right_xx-small">
-                                                                        <lightning-layout class="del-style-file-pills slds-p-around_x-small">
+                                                                <template for:each={objCaseComment.listAttachments}
+                                                                    for:item="objFile">
+                                                                    <lightning-layout-item size="12"
+                                                                        key={objFile.ContentDocumentId}
+                                                                        small-device-size="6" medium-device-size="6"
+                                                                        large-device-size="4"
+                                                                        class="slds-p-vertical_xx-small slds-p-right_xx-small">
+                                                                        <lightning-layout
+                                                                            class="del-style-file-pills slds-p-around_x-small">
                                                                             <lightning-layout-item size="1">
                                                                                 <span>
-                                                                                    <lightning-icon icon-name="doctype:attachment" title={objFile.Title} 
+                                                                                    <lightning-icon
+                                                                                        icon-name="doctype:attachment"
+                                                                                        title={objFile.Title}
                                                                                         size="x-small"></lightning-icon>
                                                                                 </span>
                                                                             </lightning-layout-item>
-                                                                            <lightning-layout-item size="10" class="slds-p-horizontal_xx-small">
+                                                                            <lightning-layout-item size="10"
+                                                                                class="slds-p-horizontal_xx-small">
                                                                                 <span>
-                                                                                    <a href={objFile.strFileURL} target="_blank">
+                                                                                    <a href={objFile.strFileURL}
+                                                                                        target="_blank">
                                                                                         {objFile.Title}.{objFile.FileExtension}
                                                                                     </a>
                                                                                 </span>
                                                                             </lightning-layout-item>
                                                                             <lightning-layout-item size="1">
                                                                                 <span>
-                                                                                    <a href={objFile.strDownloadURL} class="del-style-download-icon">
-                                                                                        <lightning-icon icon-name="utility:download" alternative-text="Download" title={objFile.Title} 
-                                                                                            size="x-small"></lightning-icon>
+                                                                                    <a href={objFile.strDownloadURL}
+                                                                                        class="del-style-download-icon">
+                                                                                        <lightning-icon
+                                                                                            icon-name="utility:download"
+                                                                                            alternative-text="Download"
+                                                                                            title={objFile.Title}
+                                                                                            size="x-small">
+                                                                                        </lightning-icon>
                                                                                     </a>
                                                                                 </span>
                                                                             </lightning-layout-item>

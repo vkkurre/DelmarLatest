@@ -9,7 +9,7 @@
 *   19-07-2022      |  dinesh.chandra@absyz.com       |  1.0          |  Initial Version
 *
 *******************************************************************************************************/
-@IsTest
+@isTest
 private class DEL_ContactCollaborationControllerTest {
     /**
     * @ author       :  Dinesh Chandra
@@ -115,7 +115,7 @@ private class DEL_ContactCollaborationControllerTest {
         //  Assert results
         System.assertEquals(true, objResponseWrapper.blnIsSuccess, objResponseWrapper.strErrorMessage);
         System.assertEquals(1, objResponseWrapper2.list_Users.size(), 'Atleast: One User should be fetched.');
-    } 
+    }
     
     /**
     * @ author       :  Ankit C

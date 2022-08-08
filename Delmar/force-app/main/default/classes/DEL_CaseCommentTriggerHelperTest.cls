@@ -8,7 +8,7 @@
 * ======================================================================================================
 *  05-08-2022       |  ankit.c@absyz.com             |  1.0          |  Initial version
 *******************************************************************************************************/
-@IsTest
+@isTest
 public class DEL_CaseCommentTriggerHelperTest {
     /**
     * @ author       :  Anit C
@@ -24,7 +24,7 @@ public class DEL_CaseCommentTriggerHelperTest {
             .setSuppliedEmail('test@delmar.com')
             .createCase();
         insert objCase;
-
+        
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
             .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
@@ -76,7 +76,7 @@ public class DEL_CaseCommentTriggerHelperTest {
     * @ author       :  Anit C
     * @ description  :  test method to test the logic in processAfterInsert()
     **/
-    @IsTest
+    @isTest
     static void testCaseCommentCreation() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         DEL_CaseComment__c objCaseComment = new DEL_TestUtility.CaseCommentBuilder()
@@ -86,7 +86,7 @@ public class DEL_CaseCommentTriggerHelperTest {
         Test.startTest();
         insert objCaseComment;
         Test.stopTest();
-
+        
         objCaseComment = [
             SELECT
             Id,

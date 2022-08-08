@@ -6,11 +6,10 @@
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * =====================================================================================================================
-*   27-06-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
-*   22-07-2022      |  vinaykant.kurre@absyz.com    |  1.0          |  Include all other methods of DEL_CaseCollaborationController
+*   22-07-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
 *
 ***********************************************************************************************************************/
-@Istest
+@isTest
 public class DEL_CaseCollaborationControllerTest {
     public static Boolean blnThrowException = false;
     
@@ -84,7 +83,7 @@ public class DEL_CaseCollaborationControllerTest {
     * @ author       :  Vinaykant
     * @ description  :  This method is used to test all the methods in apex class 'DEL_CaseCollaborationController'
     **/
-    @IsTest
+    @isTest
     private static void caseCommentTestMethod() {
         Case objCase = [SELECT 
                         Id,
@@ -117,7 +116,7 @@ public class DEL_CaseCollaborationControllerTest {
     * @ author       :  Ankit
     * @ description  :  This method is used to cover all the catch blocks
     **/
-    @IsTest
+    @isTest
     private static void handleExceptions() {
         Case objCase = [SELECT 
                         Id,

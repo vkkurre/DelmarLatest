@@ -9,11 +9,7 @@
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
-*  17-06-2022       |  rakesh.nayak@absyz.com       |  1.0          |  Initial version
-*  21-06-2022       |  rakesh.nayak@absyz.com       |  1.1          |  Changed variable and function names
-*  27-06-2022       |  rakesh.nayak@absyz.com       |  1.2          |  Added test class
-*  22-07-2022       |  vinaykant.kurre@absyz.com    |  1.3          |  Added method to get CustomSetting & Update/Delete 
-                                                                       CaseComments
+*  22-07-2022       |  rakesh.nayak@absyz.com       |  1.0          |  Initial version
 *******************************************************************************************************/
 public class DEL_CaseCollaborationController {
     /**
@@ -26,7 +22,7 @@ public class DEL_CaseCollaborationController {
         @AuraEnabled public String strErrorMessage;
         @AuraEnabled public List<DEL_CaseComment__c> list_CaseComments;
         @AuraEnabled public Map<Id, List<ContentVersion>> map_AttachmentsByCaseCommentId;
-
+        
         public ResponseWrapper() {
             this.blnIsSuccess = true;
             this.strErrorMessage = '';
@@ -47,7 +43,7 @@ public class DEL_CaseCollaborationController {
         Map<Id, ContentDocumentLink> map_ContentDocumentLinkByContentDocumentId = new Map<Id, ContentDocumentLink>();
         Map<Id, List<ContentVersion>> map_ContentVersionsByCaseCommentId = new Map<Id, List<ContentVersion>>();
         List<Id> list_CaseCommentIds = new List<Id>();
-
+        
         try {
             objResponseWrapper.list_CaseComments = [SELECT
                                                     CreatedDate,
@@ -102,10 +98,10 @@ public class DEL_CaseCollaborationController {
                         }
                     }
                 }
-
+                
                 objResponseWrapper.map_AttachmentsByCaseCommentId = map_ContentVersionsByCaseCommentId;
             }
-
+            
             // Throw an exception from test class                                        
             if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
                 throwException();

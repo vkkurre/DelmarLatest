@@ -9,7 +9,7 @@
 *   19-07-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
 *
 *******************************************************************************************************/
-@IsTest
+@isTest
 public class DEL_EmailMessagesTriggerHelperTest {
     
     public static Boolean blnThrowException = false;
@@ -63,7 +63,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
     * @ author       :  Rakesh Nayak
     * @ description  :  This method is used to test the 'handleEmailsOnInsert' method on DEL_EmailMessagesTriggerHelper
     **/
-    @IsTest
+    @isTest
     private static void testEmailMessageCreation() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
@@ -95,7 +95,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
     * @ description  :  This method is used to test to cover the catch blocks in
     *                   'handleEmailsOnInsert' method in DEL_EmailMessagesTriggerHelper
     **/
-    @IsTest
+    @isTest
     private static void handleExceptions() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         

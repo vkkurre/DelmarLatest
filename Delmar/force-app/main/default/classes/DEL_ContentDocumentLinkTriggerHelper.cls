@@ -56,18 +56,18 @@ public class DEL_ContentDocumentLinkTriggerHelper {
                     }
                 }
             }
-
+            
             if (!list_ContentDocumentLinksToInsert.isEmpty()) {
                 if (Test.isRunningTest() && DEL_ContentDocumentLinkTriggerTest.blnThrowException) {
                     throw new DMLException();
                 }
-
+                
                 blnSkipTrigger = true;
                 List<Database.SaveResult> list_InsertResults = Database.insert(list_ContentDocumentLinksToInsert, false);
                 blnSkipTrigger = false;
                 list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_InsertResults, 'Insert'));
             }
-    
+            
             if (!list_ConsolidatedDMLErrors.isEmpty()) {
                 DEL_Utils.logDMLException(
                     'DEL_ContentDocuentLinkTriggerHelper',
@@ -86,4 +86,3 @@ public class DEL_ContentDocumentLinkTriggerHelper {
         }
     }
 }
-

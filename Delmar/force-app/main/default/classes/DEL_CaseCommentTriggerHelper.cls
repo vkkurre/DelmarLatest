@@ -35,18 +35,18 @@ public class DEL_CaseCommentTriggerHelper {
         List<String> list_ConsolidatedDMLErrors = new List<String>();
         createCollectionsAfterInsert(list_CaseComments);
         sendCommentNotificationEmail(list_CaseComments);
-
+        
         if (!list_CaseCommentsToUpdate.isEmpty()) {
             for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
                 populateFields(objCaseComment);
             }
-
+            
             blnSkipTrigger = true;
             List<Database.SaveResult> list_UpdateResults = Database.update(list_CaseCommentsToUpdate, false);
             list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_UpdateResults, 'Update'));
             blnSkipTrigger = false;
         }
-
+        
         if (!list_ConsolidatedDMLErrors.isEmpty()) {
             DEL_Utils.logDMLException(
                 'DEL_CaseCommentTriggerHelper',
@@ -65,11 +65,11 @@ public class DEL_CaseCommentTriggerHelper {
         if (!map_UserById.containsKey(objCaseComment.CreatedById)) {
             return;
         }
-
+        
         if (String.isBlank(objCaseComment.CommentCreatedName__c)) {
             objCaseComment.CommentCreatedName__c = map_UserById.get(objCaseComment.CreatedById).Name;
         }
-
+        
         if (String.isBlank(objCaseComment.CreatedByEmail__c)) {   
             objCaseComment.CreatedByEmail__c = map_UserById.get(objCaseComment.CreatedById).Email;
         }
@@ -88,19 +88,16 @@ public class DEL_CaseCommentTriggerHelper {
         map_UserById = new Map<Id, User>();
         map_CaseById = new Map<Id, Case>();
         map_EmailMessageByCaseId = new Map<Id, EmailMessage>();
-
+        
         // Query to get the list of case comments that will be updated
-        list_CaseCommentsToUpdate = [
-            SELECT
-                Id,
-                CommentCreatedName__c,
-                CreatedByEmail__c,
-                CreatedById
-            FROM 
-                DEL_CaseComment__c
-            WHERE
-                Id IN :list_CaseComments
-        ];
+        list_CaseCommentsToUpdate = [SELECT
+                                     Id,
+                                     CommentCreatedName__c,
+                                     CreatedByEmail__c,
+                                     CreatedById
+                                     FROM DEL_CaseComment__c
+                                     WHERE Id IN :list_CaseComments
+                                    ];
         
         for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
             set_CaseIds.add(objCaseComment.Case__c);
@@ -108,24 +105,25 @@ public class DEL_CaseCommentTriggerHelper {
         }
         
         // Query the Case Collaborators related the Case
-        for (DEL_CaseCollaborator__c objCollaborator : [
-            SELECT 
-            Id,
-            Case__c,
-            User__c
-            FROM
-            DEL_CaseCollaborator__c
-            WHERE
-            Case__c IN :set_CaseIds
-        ]) {
-            if (map_CaseCollaboratorsByCaseId.containsKey(objCollaborator.Case__c)) {
-                map_CaseCollaboratorsByCaseId.get(objCollaborator.Case__c).add(objCollaborator);
-            } else { 
-                map_CaseCollaboratorsByCaseId.put(objCollaborator.Case__c, new List<DEL_CaseCollaborator__c> { objCollaborator });
+        for (DEL_CaseCollaborator__c objCollaborator : [SELECT 
+                                                        Id,
+                                                        Case__c,
+                                                        User__c
+                                                        FROM DEL_CaseCollaborator__c
+                                                        WHERE Case__c IN :set_CaseIds
+                                                       ]
+            ) {
+                if (map_CaseCollaboratorsByCaseId.containsKey(objCollaborator.Case__c)) {
+                    map_CaseCollaboratorsByCaseId.get(objCollaborator.Case__c).add(objCollaborator);
+                } else { 
+                    map_CaseCollaboratorsByCaseId.put(
+                        objCollaborator.Case__c,
+                        new List<DEL_CaseCollaborator__c> { objCollaborator }
+                    );
+                }
+                
+                set_UserIds.add(objCollaborator.User__c);
             }
-            
-            set_UserIds.add(objCollaborator.User__c);
-        }
         
         // Query Cases
         String strCaseQuery = 'SELECT Id, OwnerId, SuppliedEmail, ' + objEmailAlertConfiguration.CaseQueryFields__c 
@@ -137,35 +135,31 @@ public class DEL_CaseCommentTriggerHelper {
         }
         
         // Query Users
-        map_UserById = new Map<Id, User>([
-            SELECT  
-                Id,
-                Name,
-                Email
-            FROM 
-                User
-            WHERE Id IN :set_UserIds
-        ]);
-
+        map_UserById = new Map<Id, User>([SELECT  
+                                          Id,
+                                          Name,
+                                          Email
+                                          FROM User
+                                          WHERE Id IN :set_UserIds
+                                         ]);
+        
         // Query the latest EmailMessage record which have Headers for Cases
-        for (EmailMessage objEmailMessage : [
-            SELECT 
-                Id,
-                ParentId,
-                Headers
-            FROM
-                EmailMessage
-            WHERE
-                ParentId IN :set_CaseIds
-            ORDER BY ParentId, CreatedDate DESC
-        ]) {
-            if (
-                String.isNotBlank(objEmailMessage.Headers) && 
-                !map_EmailMessageByCaseId.containsKey(objEmailMessage.ParentId)
+        for (EmailMessage objEmailMessage : [SELECT 
+                                             Id,
+                                             ParentId,
+                                             Headers
+                                             FROM EmailMessage
+                                             WHERE ParentId IN :set_CaseIds
+                                             ORDER BY ParentId, CreatedDate DESC
+                                            ]
             ) {
-                map_EmailMessageByCaseId.put(objEmailMessage.ParentId, objEmailMessage);
+                if (
+                    String.isNotBlank(objEmailMessage.Headers) && 
+                    !map_EmailMessageByCaseId.containsKey(objEmailMessage.ParentId)
+                ) {
+                    map_EmailMessageByCaseId.put(objEmailMessage.ParentId, objEmailMessage);
+                }
             }
-        }
     }
     
     /**
@@ -175,23 +169,20 @@ public class DEL_CaseCommentTriggerHelper {
     **/
     public static void sendCommentNotificationEmail(List<DEL_CaseComment__c> list_CaseComments) {
         List<Messaging.SingleEmailMessage> list_EmailMessages = new List<Messaging.SingleEmailMessage>();
-        List<OrgWideEmailAddress> list_OrgWideEmailAddresses = [
-            SELECT 
-            Id, 
-            Address, 
-            DisplayName 
-            FROM 
-            OrgWideEmailAddress 
-            WHERE Address = :objEmailAlertConfiguration.OrgWideAddress__c
-        ];
-        EmailTemplate objTemplate = [
-            SELECT 
-            Id,
-            HtmlValue,
-            Subject
-            FROM EmailTemplate
-            WHERE DeveloperName = :objEmailAlertConfiguration.CaseCommentEmailTemplate__c
-        ];
+        List<OrgWideEmailAddress> list_OrgWideEmailAddresses = [SELECT 
+                                                                Id, 
+                                                                Address, 
+                                                                DisplayName 
+                                                                FROM OrgWideEmailAddress 
+                                                                WHERE Address = :objEmailAlertConfiguration.OrgWideAddress__c
+                                                               ];
+        EmailTemplate objTemplate = [SELECT 
+                                     Id,
+                                     HtmlValue,
+                                     Subject
+                                     FROM EmailTemplate
+                                     WHERE DeveloperName = :objEmailAlertConfiguration.CaseCommentEmailTemplate__c
+                                    ];
         
         String strSiteURL;
         if (Test.isRunningTest()) {
@@ -210,7 +201,7 @@ public class DEL_CaseCommentTriggerHelper {
                 // Adding the Case Comment Created By Email
                 list_ToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
             }
-
+            
             if (map_CaseCollaboratorsByCaseId.containsKey(objCaseComment.Case__c)) {
                 // Adding the Case Collabortors Emails
                 for (DEL_CaseCollaborator__c objCollaborator : map_CaseCollaboratorsByCaseId.get(objCaseComment.Case__c)) {
@@ -226,7 +217,7 @@ public class DEL_CaseCommentTriggerHelper {
                 if (strSubject.contains('{!Case.Subject}')) {
                     strSubject = strSubject.replace('{!Case.Subject}', objCase.Subject);
                 }
-
+                
                 objSingleMessage.setSubject(strSubject);
                 if (map_UserById.containsKey(objCase.OwnerId)) {
                     // Adding the Case Owner Email
@@ -234,10 +225,10 @@ public class DEL_CaseCommentTriggerHelper {
                 }
                 
                 if (String.isNotBlank(objCase.SuppliedEmail)) {
-                     // Adding the Case Web Email
+                    // Adding the Case Web Email
                     list_ToAddresses.add(objCase.SuppliedEmail);
                 }
-
+                
                 // Setting the references in the Email headers 
                 if (map_EmailMessageByCaseId.containsKey(objCase.Id)) {
                     EmailMessage objEmailMessage = map_EmailMessageByCaseId.get(objCase.Id);
@@ -248,7 +239,7 @@ public class DEL_CaseCommentTriggerHelper {
                         objSingleMessage.setReferences(strReferences);
                     }
                 }
-
+                
                 objSingleMessage.setWhatId(objCase.Id);
             }
             
@@ -260,17 +251,17 @@ public class DEL_CaseCommentTriggerHelper {
                 strHtmlBody, 
                 strSiteURL
             );
-
+            
             objSingleMessage.setToAddresses(list_ToAddresses);
             
             if (!list_OrgWideEmailAddresses.isEmpty()) {
                 objSingleMessage.setOrgWideEmailAddressId(list_OrgWideEmailAddresses[0].Id);
             }
-
+            
             objSingleMessage.setHtmlBody(strHtmlBody); 
             list_EmailMessages.add(objSingleMessage);
         }
-
+        
         Messaging.SendEmailResult[] list_Results = Messaging.sendEmail(list_EmailMessages);
     }
     
@@ -301,20 +292,26 @@ public class DEL_CaseCommentTriggerHelper {
                 if (strMergeFieldName.contains('SiteLink')) {
                     strHTML = strHTML.replace(strMergeFieldName, strSiteURL + '/' + objCase.Id);
                 } else if (strMergeFieldName.contains('{!Case.')) {
-                    strField = strMergeFieldName.subString(strMergeFieldName.indexOf('.') + 1, strMergeFieldName.indexOf('}'));
+                    strField = strMergeFieldName.subString(
+                        strMergeFieldName.indexOf('.') + 1, strMergeFieldName.indexOf('}')
+                    );
                     if (map_CaseFieldByName.get(strField) != null) {
                         strHTML = strHTML.replace(strMergeFieldName, (String) map_CaseFieldByName.get(strField));
                     } else {
                         strHTML = strHTML.replace(strMergeFieldName, '');
                     }
                 } else if (strMergeFieldName.contains('{!CaseComment.') && strMergeFieldName.contains('Date')) {
-                    strField = strMergeFieldName.subString(strMergeFieldName.indexOf('.') + 1, strMergeFieldName.indexOf('}'));
+                    strField = strMergeFieldName.subString(
+                        strMergeFieldName.indexOf('.') + 1, strMergeFieldName.indexOf('}')
+                    );
                     DateTime dtmDateValue = DateTime.valueOf(map_CaseCommentFieldByName.get(strField));
                     String strDate = dtmDateValue.format('MMMM d');
                     String strTime = dtmDateValue.format('h:mm a z');
                     strHTML = strHTML.replace(strMergeFieldName, strDate + ' at ' + strTime);
                 } else if (strMergeFieldName.contains('{!CaseComment.')) {
-                    strField = strMergeFieldName.subString(strMergeFieldName.indexOf('.') + 1, strMergeFieldName.indexOf('}'));
+                    strField = strMergeFieldName.subString(
+                        strMergeFieldName.indexOf('.') + 1, strMergeFieldName.indexOf('}')
+                    );
                     if (map_CaseCommentFieldByName.get(strField) != null) {
                         strHTML = strHTML.replace(strMergeFieldName, (String) map_CaseCommentFieldByName.get(strField));
                     } else {
