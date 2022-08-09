@@ -14,7 +14,7 @@
         <members>DEL_CaseCollaborationTriggerHelper</members>
         <members>DEL_ContactCollaborationControllerTest</members>
         <members>DEL_ContactCollaborationController</members>
-        <members>DEL_ContactCollaborationTwoController</members>
+        <members>DEL_CaseCollabaoratorUtility</members>
         <members>DEL_CaseCommentTriggerHelper</members>
         <members>DEL_CaseCommentTriggerHelperTest</members>
         <name>ApexClass</name>
@@ -24,7 +24,6 @@
     <members>DEL_CaseCollaborationEmail</members>
     <members>DEL_CaseCollaborationEmailFrench</members>
     <members>DEL_CaseCollaborationEmailSpanish</members>
-
     <name>EmailTemplate</name>
 </types>
     <types>

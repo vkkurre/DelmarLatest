@@ -1,4 +1,17 @@
-public without sharing class DEL_ContactCollaborationTwoController {
+/*******************************************************************************************************
+* 
+* @ Name            :   DEL_CaseCollabaoratorUtility
+* @ Purpose         :   utility Class for DEL_ContactCollaborationController
+* @ Author          :   Dinesh Chandra
+* @ Usage           :   1)Querying users under and Account for a case
+                        2)Inserting case collaborator.
+* @ Test Class Name :   DEL_ContactCollaborationControllerTest
+*
+*   Date            |  Developer Name               |  Version      |  Changes
+* ======================================================================================================
+*  18-07-2022       |  dinesh.chandra@absyz.com       |  1.0          |  Initial version
+*******************************************************************************************************/
+public without sharing class DEL_CaseCollabaoratorUtility {
     public class ResponseWrapper {
         @AuraEnabled public Boolean blnIsSuccess;
         @AuraEnabled public String strErrorMessage;
@@ -22,15 +35,15 @@ public without sharing class DEL_ContactCollaborationTwoController {
                             WHERE Id = :idCaseId];
             String strPattern = '%' + strUserName + '%';
              list_User = [SELECT 
-                                             AccountId, 
-                                             ContactId, 
-                                             Id, 
-                                             Name, 
-                                             Username, 
-                                             Email 
-                                             FROM User 
-                                             WHERE Name LIKE :strpattern AND Id <>: currentId
-                                             AND AccountId = :objCase.AccountId];
+                          AccountId, 
+                          ContactId, 
+                          Id, 
+                          Name, 
+                          Username, 
+                          Email 
+                          FROM User 
+                          WHERE Name LIKE :strpattern AND Id != :currentId
+                          AND AccountId = :objCase.AccountId];
        } catch (Exception obj_exception) {
          system.debug(obj_exception.getMessage());
        }

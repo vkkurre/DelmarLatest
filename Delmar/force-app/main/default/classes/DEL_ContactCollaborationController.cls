@@ -38,7 +38,7 @@ public with sharing class DEL_ContactCollaborationController {
     @AuraEnabled(cacheable = true)
     public static ResponseWrapper getUserData(Id idCaseId, String strUserName, Id currentId) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
-        objResponseWrapper.list_Users = DEL_ContactCollaborationTwoController.getUser(idCaseId, strUserName, currentId);
+        objResponseWrapper.list_Users = DEL_CaseCollabaoratorUtility.getUser(idCaseId, strUserName, currentId);
         return objResponseWrapper;
     }
     
@@ -51,22 +51,19 @@ public with sharing class DEL_ContactCollaborationController {
     @AuraEnabled
     public static ResponseWrapper addContactCollaborator(List<Id> list_UserIds, Id idCaseId) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
-      try{
-        List <DEL_CaseCollaborator__c> list_Collaborators= DEL_ContactCollaborationTwoController.addUser(list_UserIds,idCaseId);
-      }
-       catch(Exception objException)
-       {
-        objResponseWrapper.blnIsSuccess = false;
-        objResponseWrapper.strErrorMessage = objException.getMessage();
-        DEL_Utils.logException(
-            'DEL_ContactCollaborationTwoController',
-            'addContactCollaborator',
-            objException,
-            true
-        ); 
-       }
-        return objResponseWrapper;
-        
-    }
+        try {
+            List <DEL_CaseCollaborator__c> list_Collaborators= DEL_CaseCollabaoratorUtility.addUser(list_UserIds,idCaseId);
+        } catch(Exception objException) {
+            objResponseWrapper.blnIsSuccess = false;
+            objResponseWrapper.strErrorMessage = objException.getMessage();
+            DEL_Utils.logException(
+                'DEL_ContactCollaborationController',
+                'addContactCollaborator',
+                objException,
+                true
+            ); 
+        }
 
+        return objResponseWrapper; 
+    }
 }
