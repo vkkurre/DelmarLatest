@@ -22,8 +22,8 @@ import insertComment from "@salesforce/apex/DEL_CaseCollaborationController.inse
 export default class Del_caseCollaborationComponent extends NavigationMixin(LightningElement) {
     strBody = "";
     @api recordId;
-    @api blnValid;
-    @api strErrorMessageCommentInput;
+    blnValid = true;
+    strErrorMessageCommentInput;
     @track list_Comments = [];
     strPlaceHolderText = CLDEL00002;
     blnIsLoading = false;
