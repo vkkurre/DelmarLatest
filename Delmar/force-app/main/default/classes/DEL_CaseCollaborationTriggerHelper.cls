@@ -66,7 +66,7 @@ public class DEL_CaseCollaborationTriggerHelper {
             if (Test.isRunningTest() && DEL_CaseCollaborationTriggerHelperTest.blnThrowException) {
                 throw new DMLException();
             }
-            
+             
             for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
                 set_CaseIds.add(objCaseCollaborator.Case__c);
             }

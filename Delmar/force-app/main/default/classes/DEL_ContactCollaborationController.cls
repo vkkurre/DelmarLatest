@@ -51,8 +51,9 @@ public with sharing class DEL_ContactCollaborationController {
     @AuraEnabled
     public static ResponseWrapper addContactCollaborator(List<Id> list_UserIds, Id idCaseId) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
-        try {
+        try { 
             List <DEL_CaseCollaborator__c> list_Collaborators= DEL_CaseCollabaoratorUtility.addUser(list_UserIds,idCaseId);
+        
         } catch(Exception objException) {
             objResponseWrapper.blnIsSuccess = false;
             objResponseWrapper.strErrorMessage = objException.getMessage();

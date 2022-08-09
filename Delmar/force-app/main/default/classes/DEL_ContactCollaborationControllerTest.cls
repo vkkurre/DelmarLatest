@@ -109,7 +109,7 @@ private class DEL_ContactCollaborationControllerTest {
         //Test Methods
         Test.startTest();
         objResponseWrapper = DEL_ContactCollaborationController.addContactCollaborator(list_UserIds, objCase.Id);
-        objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(objCase.Id, strUserNameSearchKey);
+        objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(objCase.Id, strUserNameSearchKey,objUser.Id);
         Test.stopTest();
         
         //  Assert results
@@ -135,11 +135,12 @@ private class DEL_ContactCollaborationControllerTest {
         
         Test.startTest();
         objResponseWrapper = DEL_ContactCollaborationController.addContactCollaborator(list_UserIds, null);
-        objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(null, 'ram');
-        Test.stopTest();
+        objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(null, 'ram',objUser.get(0).Id);
+         Test.stopTest();
         
         // Assert if the methods encountered exceptions in them
         System.assert(!objResponseWrapper.blnIsSuccess);
         System.assert(!objResponseWrapper2.blnIsSuccess);
     }
+    
 }
