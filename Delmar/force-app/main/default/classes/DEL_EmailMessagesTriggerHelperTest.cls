@@ -9,7 +9,7 @@
 *   19-07-2022      |  rakesh.nayak@absyz.com       |  1.0          |  Initial Version
 *
 *******************************************************************************************************/
-@IsTest
+@isTest
 public class DEL_EmailMessagesTriggerHelperTest {
     
     public static Boolean blnThrowException = false;
@@ -36,11 +36,11 @@ public class DEL_EmailMessagesTriggerHelperTest {
         DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
             .setMergeFields(strMergeFields)
             .setCaseQueryFields('Subject,CaseNumber,Description')
-            .setCaseCommentFields('CommentCreatedName__c,Body__c,CreatedDate')
             .setSiteName('CaseComments')
             .setEmailTemplateName('DEL_CaseCommentAlert')
             .setOwnerId(UserInfo.getOrganizationId())
             .setOrgWideAddress(objOrgWideAddress.Address)
+            .setEmailBreakPattern('(<br><div class="gmail_quote">){1}')
             .createConfiguration();
         insert objEmailAlertConfiguration;
         
@@ -67,7 +67,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
-            .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
+            .setHtmlBody('<div>this is HtmlBody</div><br><div class="gmail_quote"><body>Test</body>')
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
@@ -86,7 +86,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
                                              FROM DEL_CaseComment__c
                                              LIMIT 1];
         // Assert if a case comment was created successfully from the email message.                                     
-        System.assertEquals(objCaseComment.Body__c, 'this is HtmlBody');
+        System.assertEquals(objCaseComment.Body__c, '<div>this is HtmlBody</div>');
     }
     
     /**
@@ -94,13 +94,13 @@ public class DEL_EmailMessagesTriggerHelperTest {
     * @ description  :  This method is used to test to cover the catch blocks in
     *                   'handleEmailsOnInsert' method in DEL_EmailMessagesTriggerHelper
     **/
-    @IsTest
+    @isTest
     private static void handleExceptions() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
-            .setHtmlBody('<div>this is HtmlBody</div><br><body>Test</body>')
+            .setHtmlBody('<div>this is HtmlBody</div><br><div class="gmail_quote"><body>Test</body>')
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')

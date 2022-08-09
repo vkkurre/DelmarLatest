@@ -165,6 +165,7 @@ public class DEL_TestUtility {
         private String strType;
         private String strStatus;
         private String strPriority;
+        private String strSuppliedEmail;
         
         public CaseBuilder() {
             this.strSubject = '';
@@ -173,6 +174,7 @@ public class DEL_TestUtility {
             this.strType = '';
             this.strStatus = '';
             this.strPriority = '';
+            this.strSuppliedEmail = '';
         }
         
         public CaseBuilder setSubject(String strValue) {
@@ -215,6 +217,11 @@ public class DEL_TestUtility {
             return this;
         }
         
+        public CaseBuilder setSuppliedEmail(String strValue) {
+            this.strSuppliedEmail = strValue;
+            return this;
+        }
+        
         public Case createCase() {
             Case objCase = new Case();
             objCase.Subject = this.strSubject;
@@ -224,6 +231,7 @@ public class DEL_TestUtility {
             objCase.Priority = this.strPriority;
             objCase.AccountId = this.idAccountId;
             objCase.ContactId = this.idContactId;
+            objCase.SuppliedEmail = this.strSuppliedEmail;
             
             return objCase;
         }
@@ -237,13 +245,20 @@ public class DEL_TestUtility {
     public class CaseCommentBuilder {
         private String strBody;
         private String idCaseId;
+        private String strEmailMessageId;
         
         public CaseCommentBuilder() {
             this.strBody = '';
+            this.strEmailMessageId = '';
         }
         
         public CaseCommentBuilder setBody(String strValue) {
             this.strBody = strValue;
+            return this;
+        }
+        
+        public CaseCommentBuilder setEmailMessageId(String strValue) {
+            this.strEmailMessageId = strValue;
             return this;
         }
         
@@ -256,6 +271,7 @@ public class DEL_TestUtility {
             DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c();
             objCaseComment.Body__c = this.strBody;
             objCaseComment.Case__c = this.idCaseId;
+            objCaseComment.EmailMessageId__c = this.strEmailMessageId;
             
             return objCaseComment;
         }
@@ -303,6 +319,7 @@ public class DEL_TestUtility {
         private String strMessageIdentifier;
         private String strThreadIdentifier;
         private Boolean blnIncoming;
+        private String strHeaders;
         
         public EmailMessageBuilder() {
             this.strTextBody = '';
@@ -311,6 +328,7 @@ public class DEL_TestUtility {
             this.strFromName = '';
             this.strMessageIdentifier = '';
             this.strThreadIdentifier = '';
+            this.strHeaders = '';
         }
         
         public EmailMessageBuilder setTextBody(String strValue) {
@@ -353,6 +371,11 @@ public class DEL_TestUtility {
             return this;
         }
         
+        public EmailMessageBuilder setHeaders(String strValue) {
+            this.strHeaders = strValue;
+            return this;
+        }
+        
         public EmailMessage createEmailMessage() {
             EmailMessage objEmailMessage = new EmailMessage();
             objEmailMessage.TextBody = this.strTextBody;
@@ -363,6 +386,7 @@ public class DEL_TestUtility {
             objEmailMessage.FromAddress = this.strFromAddress;
             objEmailMessage.ParentId = this.idParentId;
             objEmailMessage.Incoming = this.blnIncoming;
+            objEmailMessage.Headers = this.strHeaders;
             
             return objEmailMessage;
         }
@@ -376,19 +400,19 @@ public class DEL_TestUtility {
     public class EmailAlertConfigurationBuilder {
         private String strMergeFields;
         private String strCaseQueryFields;
-        private String strCaseCommentFields;
         private String strSiteName;
         private String strEmailTemplateName;
         private String strOrgWideAddress;
         private Id idSetupOwnerId;
+        private String strEmailBreakPattern;
         
         public EmailAlertConfigurationBuilder() {
             this.strMergeFields = '';
             this.strCaseQueryFields = '';
-            this.strCaseCommentFields = '';
             this.strSiteName = '';
             this.strEmailTemplateName = '';
             this.strOrgWideAddress = '';
+            this.strEmailBreakPattern = '';
         }
         
         public EmailAlertConfigurationBuilder setMergeFields(String strValue) {
@@ -398,11 +422,6 @@ public class DEL_TestUtility {
         
         public EmailAlertConfigurationBuilder setCaseQueryFields(String strValue) {
             this.strCaseQueryFields = strValue;
-            return this;
-        }
-        
-        public EmailAlertConfigurationBuilder setCaseCommentFields(String strValue) {
-            this.strCaseCommentFields = strValue;
             return this;
         }
         
@@ -421,6 +440,11 @@ public class DEL_TestUtility {
             return this;
         }
         
+        public EmailAlertConfigurationBuilder setEmailBreakPattern(String strValue) {
+            this.strEmailBreakPattern = strValue;
+            return this;
+        }
+        
         public EmailAlertConfigurationBuilder setOwnerId(Id idValue) {
             this.idSetupOwnerId = idValue;
             return this;
@@ -430,11 +454,11 @@ public class DEL_TestUtility {
             DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c(
                 MergeFields__c = this.strMergeFields,
                 CaseQueryFields__c = this.strCaseQueryFields,
-                CaseCommentFields__c = this.strCaseCommentFields,
                 SiteName__c = this.strSiteName,
                 CaseCommentEmailTemplate__c = this.strEmailTemplateName,
                 SetupOwnerId = this.idSetupOwnerId,
-                OrgWideAddress__c = this.strOrgWideAddress
+                OrgWideAddress__c = this.strOrgWideAddress,
+                EmailReplyBreakPattern__c = this.strEmailBreakPattern
             );
             
             return objEmailAlertConfiguration;
@@ -452,12 +476,14 @@ public class DEL_TestUtility {
         private String strHtmlValue;
         private Id idFolderId;
         private String strTemplateType;
+        private String strSubject;
         
         public EmailTemplateBuilder() {
             this.strName = '';
             this.strDeveloperName = '';
             this.strHtmlValue = '';
             this.strTemplateType = '';
+            this.strSubject = '';
         }
         
         public EmailTemplateBuilder setName(String strValue) {
@@ -485,16 +511,116 @@ public class DEL_TestUtility {
             return this;
         }
         
+        public EmailTemplateBuilder setSubject(String strValue) {
+            this.strSubject = strValue;
+            return this;
+        }
+        
         public EmailTemplate createEmailTemplate() {
             EmailTemplate objEmailTemplate = new EmailTemplate(
                 Name = this.strName,
                 DeveloperName = this.strDeveloperName,
                 HtmlValue = this.strHtmlValue,
                 FolderId = this.idFolderId,
-                TemplateType = this.strTemplateType
+                TemplateType = this.strTemplateType,
+                Subject = this.strSubject
             );
             
             return objEmailTemplate;
+        }
+    }
+
+    /**
+    * @ Name     :  ContentVersionBuilder
+    * @ Purpose  :  To create ContentVersion record
+    * @ Author   :  Rakesh Nayak
+    **/
+    public class ContentVersionBuilder {
+        private String strTitle;
+        private String strPathOnClient;
+        private Blob blobVersionData;
+        private  Boolean blnIsMajorVersion;
+        
+        public ContentVersionBuilder() {
+            this.strTitle= '';
+            this.strPathOnClient = '';
+        }
+        
+        public ContentVersionBuilder setTitle(String strValue) {
+            this.strTitle = strValue;
+            return this;
+        }
+        
+        public ContentVersionBuilder setPathOnClient(String strValue) {
+            this.strPathOnClient = strValue;
+            return this;
+        }
+        
+        public ContentVersionBuilder setVersionData(String strValue) {
+            this.blobVersionData = EncodingUtil.base64Decode(strValue);
+            return this;
+        }
+        
+        public ContentVersionBuilder setIsMajorVersion(Boolean blnValue) {
+            this.blnIsMajorVersion = blnValue;
+            return this;
+        }
+        
+        public ContentVersion createContentVersion() {
+            ContentVersion objContentVersion = new ContentVersion();
+            objContentVersion.Title = this.strTitle;
+            objContentVersion.PathOnClient = this.strPathOnclient;
+            objContentVersion.VersionData = this.blobVersionData;
+            objContentVersion.IsMajorVersion =this.blnIsMajorVersion;
+            
+            return objContentVersion;
+        }
+    }
+
+    /**
+    * @ Name     :  ContentDocumentLinkBuilder
+    * @ Purpose  :  To create ContentDocumentLink record
+    * @ Author   :  Rakesh Nayak
+    **/
+    public class ContentDocumentLinkBuilder {
+        private Id idContentDocumentId;
+        private String strVisibility;
+        private String strShareType;
+        private Id idLinkedEntityId;
+        
+        public ContentDocumentLinkBuilder() {
+            this.strVisibility = '';
+            this.strShareType = '';
+        }
+        
+        public ContentDocumentLinkBuilder setContentDocumentId(Id idValue) {
+            this.idContentDocumentId = idValue;
+            return this;
+        }
+        
+        public ContentDocumentLinkBuilder setLinkedEntityId(Id idValue) {
+            this.idLinkedEntityId = idValue;
+            return this;
+        }
+        
+        public ContentDocumentLinkBuilder setShareType(String strValue) {
+            this.strShareType = strValue;
+            return this;
+        }
+        
+        public ContentDocumentLinkBuilder setVisibility(String strValue) {
+            this.strVisibility = strValue;
+            return this;
+        }
+        
+        public ContentDocumentLink createContentDocumentLink() {
+            ContentDocumentLink objContentDocumentLink = new ContentDocumentLink();
+            objContentDocumentLink.ContentDocumentId = this.idContentDocumentId;
+            objContentDocumentLink.LinkedEntityId = this.idLinkedEntityId;
+            objContentDocumentLink.ShareType = this.strShareType;
+            objContentDocumentLink.Visibility = this.strVisibility;
+            
+            return objContentDocumentLink;
         }
     }
 }

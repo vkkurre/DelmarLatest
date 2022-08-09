@@ -1,6 +1,6 @@
 lightning-button-icon {
-    --slds-c-button-radius-border: 50%;
-    --slds-c-button-left-margin: 1.25rem;
+    --slds-c-button-radius-border: 0.25rem;
+    --slds-c-button-top-margin: 0.25rem;
 }
 
 lightning-input {
@@ -11,12 +11,32 @@ lightning-avatar {
     --slds-c-avatar-color-background: #7F8CED;
 }
 
+.del-style-file-pills {
+    background-color: #f3f3f3;
+    border-radius: 0.30rem;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #cdcbcb;
+}
+
+.del-style-file-pills:hover {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ada8a8;
+}
+
 .del-style-username {
     font-weight: bold;
 }
 
 .del-style-button-left-margin {
-    margin-left: -2.0rem;
+    margin-left: -2.25rem;
+}
+
+.del-style-download-icon {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
 }
 
 .del-avatar-width {

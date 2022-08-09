@@ -8,13 +8,13 @@
 * ======================================================================================================
 *  26-07-2022       |  ankit.c@absyz.com            |  1.0          |  Initial version
 *******************************************************************************************************/
-@IsTest
+@isTest
 private class DEL_UtilsTest {
     /**
     * @ author       :  Ankit C
     * @ description  :  Test method for logException() method in DEL_Utils class
     **/
-    @IsTest
+    @isTest
     private static void testLogException() {
         Account objAccount = new Account();
         DEL_ExceptionLog__c objExceptionLog = new DEL_ExceptionLog__c();
@@ -41,7 +41,7 @@ private class DEL_UtilsTest {
     * @ author       :  Ankit C
     * @ description  :  Test method for logDMLException() and processDMLErrors() method in DEL_Utils class
     **/
-    @IsTest
+    @isTest
     private static void testLogDMLException() {
         List<Account> list_Accounts = new List<Account>();
         list_Accounts.add(new Account());
@@ -62,5 +62,5 @@ private class DEL_UtilsTest {
                                                         FROM DEL_ExceptionLog__c
                                                         WHERE MethodName__c = 'testLogDMLException'];
         System.assert(!list_ExceptionLogs.isEmpty());
-    }   
+    }
 }

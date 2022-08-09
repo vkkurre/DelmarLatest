@@ -9,6 +9,14 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>DEL_ContentDocumentLinkTriggerTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>DEL_ContentDocumentLinkTriggerHelper</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>DEL_CaseCollaborationTriggerHelper</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -33,14 +41,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>DEL_FlowHandler</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>DEL_FlowHandlerTest</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>DEL_TestUtility</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -50,6 +50,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>DEL_UtilsTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>DEL_CaseCommentTriggerHelper</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>DEL_CaseCommentTriggerHelperTest</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <custom>false</custom>
@@ -76,6 +84,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>DEL_CaseComment__c.CreatedByEmail__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>DEL_CaseComment__c.EmailMessageId__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
