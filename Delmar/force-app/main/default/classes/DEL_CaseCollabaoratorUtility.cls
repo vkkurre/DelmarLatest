@@ -10,7 +10,7 @@
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
-*  18-07-2022       |  dinesh.chandra@absyz.com       |  1.0          |  Initial version
+*  18-07-2022       |  dinesh.chandra@absyz.com     |  1.0          |  Initial version
 *******************************************************************************************************/
 public without sharing class DEL_CaseCollabaoratorUtility {
     /**
@@ -30,7 +30,7 @@ public without sharing class DEL_CaseCollabaoratorUtility {
                         FROM Case
                         WHERE Id = :idCaseId];
         
-        String strPattern = '%' + strUserName + '%';
+        String strPattern = '%' + String.escapeSingleQuotes(strUserName) + '%';
         //Excluding users who are already collaborators for the Case.
         for (DEL_CaseCollaborator__c objCaseCollaborator : [SELECT 
                                                             Id,
@@ -65,18 +65,18 @@ public without sharing class DEL_CaseCollabaoratorUtility {
      *                   'idCaseId' - Case Id
     **/
     public static void insertCaseCollaborators(List<Id> list_UserIds, Id idCaseId) {
-        List<DEL_CaseCollaborator__c> list_objCaseCollaborators = new List<DEL_CaseCollaborator__c>();
+        List<DEL_CaseCollaborator__c> list_CaseCollaborators = new List<DEL_CaseCollaborator__c>();
         for (Id idUser : list_UserIds) {
-            DEL_CaseCollaborator__c objCaseCollaborator = new DEL_CaseCollaborator__c (
+            DEL_CaseCollaborator__c objCaseCollaborator = new DEL_CaseCollaborator__c(
                 User__c = idUser,
                 Case__c = idCaseId
             );
             
-            list_objCaseCollaborators.add(objCaseCollaborator);
+            list_CaseCollaborators.add(objCaseCollaborator);
         }
         
-        if (!list_objCaseCollaborators.isEmpty()) {
-            insert list_objCaseCollaborators;
+        if (!list_CaseCollaborators.isEmpty()) {
+            insert list_CaseCollaborators;
         }
     }
 }

@@ -83,6 +83,12 @@
         <members>CLDEL00007</members>
     </types>
     <types>
+        <members>DEL_CaseCollaborator__c.DEL_CaseCollab</members>
+        <members>DEL_CaseCollaborator__c.DEL_CaseCollabFrench</members>
+        <members>DEL_CaseCollaborator__c.DEL_CaseCollabSpanish	</members>
+        <name>WorkflowAlert</name>
+    </types>
+    <types>
         <members>Admin</members>
         <name>Profile</name>
     </types>

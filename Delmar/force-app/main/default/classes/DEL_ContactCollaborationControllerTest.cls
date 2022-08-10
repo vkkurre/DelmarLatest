@@ -87,7 +87,7 @@ private class DEL_ContactCollaborationControllerTest {
     
     /**
     * @ author       :  Dinesh Chandra
-    * @ description  :  This method is used to test the 'getUserData' and 'addContactCollaborator'methods on DEL_ContactCollaborationController
+    * @ description  :  This method is used to test the 'fetchUsers' and 'addCaseCollaborators'methods on DEL_ContactCollaborationController
     **/
     @isTest
     private static void testCaseCollaboration() {  
@@ -128,7 +128,7 @@ private class DEL_ContactCollaborationControllerTest {
         List<User> objUser = [SELECT 
                               Id
                               FROM User 
-                              WHERE Username = 'customer@delmar.com'
+                              WHERE Username = 'customer@delmar.com' 
                               LIMIT 1];
         List<Id> list_UserIds = new List<Id>();
         list_UserIds.add(objUser.get(0).Id);

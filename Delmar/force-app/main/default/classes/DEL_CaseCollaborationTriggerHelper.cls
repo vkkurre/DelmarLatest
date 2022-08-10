@@ -10,7 +10,7 @@
 *
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
-*  18-07-2022       |  dinesh.chandra@absyz.com       |  1.0        |  Initial version
+*  18-07-2022       |  dinesh.chandra@absyz.com     |  1.0          |  Initial version
 *******************************************************************************************************/
 public class DEL_CaseCollaborationTriggerHelper {
      public static Boolean blnSkipTrigger = false;

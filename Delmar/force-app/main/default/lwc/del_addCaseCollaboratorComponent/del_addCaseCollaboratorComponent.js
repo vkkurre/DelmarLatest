@@ -76,7 +76,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         });
 
         list_SelectedUserIds = [...new Set(list_SelectedUserIds)];
-        if (list_SelectedUserIds.length > 0) {
+        if (list_SelectedUserIds.length) {
             /**
              * @ author      : Dinesh Chandra
              * @ description : This method queries and returns the CaseComment records related to the case with Id 'recordID'
