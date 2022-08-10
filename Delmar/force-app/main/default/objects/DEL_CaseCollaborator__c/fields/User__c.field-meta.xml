@@ -10,22 +10,22 @@
         <filterItems>
             <field>$Profile.Name</field>
             <operation>equals</operation>
-            <value>Customer Community Plus User, Customer Community User, Delmar Customer Profile</value>
+            <value>Customer Community Plus User, Customer Community User, CustomerPlus, System Administrator</value>
         </filterItems>
         <filterItems>
             <field>User.Profile.Name</field>
             <operation>equals</operation>
-            <value>Customer Community Plus User, Customer Community User, Delmar Customer Profile</value>
+            <value>Customer Community Plus User, Customer Community User, CustomerPlus</value>
         </filterItems>
         <filterItems>
             <field>$Profile.Name</field>
             <operation>equals</operation>
-            <value>Standard User, Delmar Support,System Administrator</value>
+            <value>Standard User, System Administrator</value>
         </filterItems>
         <filterItems>
             <field>User.Profile.Name</field>
             <operation>equals</operation>
-            <value>Standard User,Delmar Support, System Administrator</value>
+            <value>Standard User, System Administrator</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>

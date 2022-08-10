@@ -11,7 +11,6 @@
 *  18-07-2022       |  dinesh.chandra@absyz.com       |  1.0          |  Initial version
 *******************************************************************************************************/
 public with sharing class DEL_ContactCollaborationController {
-    
     /**
     * @ name     :  ResponseWrapper
     * @ purpose  :  Wrapper class to send response to the lwc.
@@ -31,14 +30,30 @@ public with sharing class DEL_ContactCollaborationController {
     
     /**
     * @ author       :  Dinesh Chandra
-    * @ description  :  This method handles the User data of case under the same account.
-    * @ params       :  'idCaseId'    - list of Case Collaborator records passed from trigger.
-    *                   'strUserName' - string of user name in the searchbar.
+    * @ description  :  This method fetches all the users under the Account for the Case.
+    * @ params       :  'idCaseId'    - Case Id
+    *                   'strUserName' - Name entered in the search bar
+    * @ return       :  objResponseWrapper - instance of the ResponseWrapper class
     **/
     @AuraEnabled(cacheable = true)
-    public static ResponseWrapper getUserData(Id idCaseId, String strUserName, Id currentId) {
+    public static ResponseWrapper fetchUsers(Id idCaseId, String strUserName) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
-        objResponseWrapper.list_Users = DEL_CaseCollabaoratorUtility.getUser(idCaseId, strUserName, currentId);
+        try {
+            objResponseWrapper.list_Users = DEL_CaseCollabaoratorUtility.queryUsers(
+                idCaseId, 
+                strUserName
+            );
+        } catch(Exception objException) {
+            objResponseWrapper.blnIsSuccess = false;
+            objResponseWrapper.strErrorMessage = objException.getMessage();
+            DEL_Utils.logException(
+                'DEL_ContactCollaborationController',
+                'fetchUsers',
+                objException,
+                true
+            ); 
+        }
+
         return objResponseWrapper;
     }
     
@@ -47,19 +62,19 @@ public with sharing class DEL_ContactCollaborationController {
     * @ description  :  This method handles the sharing of case with selected users.
     * @ params       :  'list_UserIds' - list of Selected Users
     *                   'idCaseId' - Id of Case
+    * @ return       :  objResponseWrapper - instance of the ResponseWrapper class
     **/
     @AuraEnabled
-    public static ResponseWrapper addContactCollaborator(List<Id> list_UserIds, Id idCaseId) {
+    public static ResponseWrapper addCaseCollaborators(List<Id> list_UserIds, Id idCaseId) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
         try { 
-            List <DEL_CaseCollaborator__c> list_Collaborators= DEL_CaseCollabaoratorUtility.addUser(list_UserIds,idCaseId);
-        
+            DEL_CaseCollabaoratorUtility.insertCaseCollaborators(list_UserIds, idCaseId);
         } catch(Exception objException) {
             objResponseWrapper.blnIsSuccess = false;
             objResponseWrapper.strErrorMessage = objException.getMessage();
             DEL_Utils.logException(
                 'DEL_ContactCollaborationController',
-                'addContactCollaborator',
+                'addCaseCollaborators',
                 objException,
                 true
             ); 

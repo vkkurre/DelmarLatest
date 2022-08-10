@@ -12,6 +12,10 @@
 --> 
 <template>
 	<lightning-card title={strCardTitle}>
+		<div if:true={blnIsLoading}>
+			<lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+			</lightning-spinner>
+		</div>
 		<lightning-layout multiple-rows="true" vertical-align="end">
 			<lightning-layout-item size="4" padding="around-small">
 				<!--Input text to Search Contact-->

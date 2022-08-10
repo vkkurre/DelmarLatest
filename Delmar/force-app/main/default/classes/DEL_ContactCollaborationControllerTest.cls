@@ -108,8 +108,8 @@ private class DEL_ContactCollaborationControllerTest {
         DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper2 = new DEL_ContactCollaborationController.ResponseWrapper();
         //Test Methods
         Test.startTest();
-        objResponseWrapper = DEL_ContactCollaborationController.addContactCollaborator(list_UserIds, objCase.Id);
-        objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(objCase.Id, strUserNameSearchKey,objUser.Id);
+        objResponseWrapper = DEL_ContactCollaborationController.addCaseCollaborators(list_UserIds, objCase.Id);
+        objResponseWrapper2 = DEL_ContactCollaborationController.fetchUsers(objCase.Id, strUserNameSearchKey);
         Test.stopTest();
         
         //  Assert results
@@ -134,13 +134,18 @@ private class DEL_ContactCollaborationControllerTest {
         list_UserIds.add(objUser.get(0).Id);
         
         Test.startTest();
-        objResponseWrapper = DEL_ContactCollaborationController.addContactCollaborator(list_UserIds, null);
-        objResponseWrapper2 = DEL_ContactCollaborationController.getUserData(null, 'ram',objUser.get(0).Id);
-         Test.stopTest();
+        objResponseWrapper = DEL_ContactCollaborationController.addCaseCollaborators(list_UserIds, null);
+        objResponseWrapper2 = DEL_ContactCollaborationController.fetchUsers(null, 'ram');
+        Test.stopTest();
         
         // Assert if the methods encountered exceptions in them
-        System.assert(!objResponseWrapper.blnIsSuccess);
+        List<DEL_ExceptionLog__c> list_ExceptionLogs = [SELECT
+                                                        Id
+                                                        FROM
+                                                        DEL_ExceptionLog__c
+                                                        WHERE
+                                                        ClassName__c = 'DEL_CaseCollaborationTriggerHelper'];
+        System.assert(!list_ExceptionLogs.isEmpty());
         System.assert(!objResponseWrapper2.blnIsSuccess);
     }
-    
 }

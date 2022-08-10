@@ -1,11 +1,10 @@
 import { api, LightningElement, track, wire } from "lwc";
-import getUserData from "@salesforce/apex/DEL_ContactCollaborationController.getUserData";
-import addContactCollaborator from "@salesforce/apex/DEL_ContactCollaborationController.addContactCollaborator";
+import getUsers from "@salesforce/apex/DEL_ContactCollaborationController.fetchUsers";
+import createCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.addCaseCollaborators";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import uId from '@salesforce/user/Id';
+import { refreshApex } from '@salesforce/apex';
 export default class Del_addCaseCollaboratorComponent extends LightningElement {
     @api recordId;
-    @api userId;
     @api strCardTitle;
     strSearchKey = "";
     @track list_Users;
@@ -28,25 +27,21 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
             type: "email"
         }
     ];
-
+  
     /**
      * @ author      : Dinesh Chandra
-     * @ description : This method queries and returns the CaseComment records related to the case with Id 'recordID'
-     **/
-     connectedCallback(){
-        this.userId = uId;
-   }   
-    @wire(getUserData, {
+     * @ description : Method to fetch all the users associated to the Account for the Case..
+    **/
+    @wire(getUsers, {
         idCaseId: "$recordId",
-        strUserName: "$strSearchKey",
-        currentId:'$userId'
+        strUserName: "$strSearchKey"
     })
     wiredUserList(result) {
         this.blnIsLoading = true;
         if (result.data) {
             let objResponse = result.data;
             if (objResponse.blnIsSuccess) {
-                this.list_Users = objResponse.list_Users;
+                this.list_Users = result.data.list_Users;
                 this.blnIsLoading = false;
             } else {
                 this.blnIsLoading = false;
@@ -87,12 +82,13 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
              * @ description : This method queries and returns the CaseComment records related to the case with Id 'recordID'
              **/
             this.blnIsLoading = true;
-            addContactCollaborator({
+            createCaseCollaborators({
                 list_UserIds: list_SelectedUserIds,
                 idCaseId: this.recordId
             })
                 .then((result) => {
                     if (result.blnIsSuccess) {
+                        refreshApex(this.list_Users);
                         this.blnIsLoading = false;
                         this.showToastMessage(
                             "Success",
@@ -110,7 +106,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
                     this.handleErrors(error, "Error");
                 });
         } else {
-            this.showToastMessage("Error", "Please Select a User", "error");
+            this.showToastMessage("Error", "Please select atlease one User", "error");
         }
        
     }

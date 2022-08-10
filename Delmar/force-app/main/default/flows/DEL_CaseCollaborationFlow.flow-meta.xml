@@ -125,7 +125,7 @@
             <name>French</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_User_Details.Contact.DEL_PrefferedLanguage__c</leftValueReference>
+                <leftValueReference>Get_User_Details.Contact.Preferred_Language__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>French</stringValue>
@@ -140,7 +140,7 @@
             <name>Spanish</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_User_Details.Contact.DEL_PrefferedLanguage__c</leftValueReference>
+                <leftValueReference>Get_User_Details.Contact.Preferred_Language__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Spanish</stringValue>
@@ -155,7 +155,7 @@
             <name>English</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_User_Details.Contact.DEL_PrefferedLanguage__c</leftValueReference>
+                <leftValueReference>Get_User_Details.Contact.Preferred_Language__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>English</stringValue>

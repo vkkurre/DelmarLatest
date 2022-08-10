@@ -86,5 +86,10 @@
         <members>Admin</members>
         <name>Profile</name>
     </types>
+    <types>
+        <members>Contact.Preferred_Language__c</members>
+        <members>Case.Language__c</members>
+        <name>CustomField</name>
+    </types>
     <version>55.0</version>
 </Package>
