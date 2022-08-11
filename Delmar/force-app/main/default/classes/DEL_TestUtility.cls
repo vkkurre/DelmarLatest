@@ -45,10 +45,12 @@ public class DEL_TestUtility {
         private String strFirstName;
         private String strLastName;
         private Id idAccountId;
+        private String strPreferredLangauge;
         
         public ContactBuilder() {
             this.strFirstName = '';
             this.strLastName = '';
+            this.strPreferredLangauge = '';
         }
         
         public ContactBuilder setFirstName(String strValue) {
@@ -65,12 +67,18 @@ public class DEL_TestUtility {
             this.idAccountId = idValue;
             return this;
         }
+
+        public ContactBuilder setPreferredLanguage(String strValue) {
+            this.strPreferredLangauge = strValue;
+            return this;
+        }
         
         public Contact createContact() {
             Contact objContact = new Contact();
             objContact.FirstName = this.strFirstName;
             objContact.LastName = this.strLastName;
             objContact.AccountId = this.idAccountId;
+            objContact.Preferred_Language__c = this.strPreferredLangauge;
             
             return objContact;
         }
@@ -166,6 +174,7 @@ public class DEL_TestUtility {
         private String strStatus;
         private String strPriority;
         private String strSuppliedEmail;
+        private String strLanguage;
         
         public CaseBuilder() {
             this.strSubject = '';
@@ -175,6 +184,7 @@ public class DEL_TestUtility {
             this.strStatus = '';
             this.strPriority = '';
             this.strSuppliedEmail = '';
+            this.strLanguage = '';
         }
         
         public CaseBuilder setSubject(String strValue) {
@@ -221,6 +231,11 @@ public class DEL_TestUtility {
             this.strSuppliedEmail = strValue;
             return this;
         }
+
+        public CaseBuilder setLanguage(String strValue) {
+            this.strLanguage = strValue;
+            return this;
+        }
         
         public Case createCase() {
             Case objCase = new Case();
@@ -232,6 +247,7 @@ public class DEL_TestUtility {
             objCase.AccountId = this.idAccountId;
             objCase.ContactId = this.idContactId;
             objCase.SuppliedEmail = this.strSuppliedEmail;
+            objCase.Language__c = this.strLanguage;
             
             return objCase;
         }
@@ -405,6 +421,8 @@ public class DEL_TestUtility {
         private String strOrgWideAddress;
         private Id idSetupOwnerId;
         private String strEmailBreakPattern;
+        private String strTemplateNameSpanish;
+        private String strTemplateNameFrench;
         
         public EmailAlertConfigurationBuilder() {
             this.strMergeFields = '';
@@ -413,6 +431,8 @@ public class DEL_TestUtility {
             this.strEmailTemplateName = '';
             this.strOrgWideAddress = '';
             this.strEmailBreakPattern = '';
+            this.strTemplateNameSpanish = '';
+            this.strTemplateNameFrench = '';
         }
         
         public EmailAlertConfigurationBuilder setMergeFields(String strValue) {
@@ -449,16 +469,28 @@ public class DEL_TestUtility {
             this.idSetupOwnerId = idValue;
             return this;
         }
+
+        public EmailAlertConfigurationBuilder setSpanishTemplateName(String strValue) {
+            this.strTemplateNameSpanish = strValue;
+            return this;
+        }
+
+        public EmailAlertConfigurationBuilder setFrenchTemplateName(String strValue) {
+            this.strTemplateNameFrench = strValue;
+            return this;
+        }
         
         public DEL_EmailAlertConfiguration__c createConfiguration() {
             DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c(
                 MergeFields__c = this.strMergeFields,
                 CaseQueryFields__c = this.strCaseQueryFields,
                 SiteName__c = this.strSiteName,
-                CaseCommentEmailTemplate__c = this.strEmailTemplateName,
+                CaseCommentEmailTemplateEnglish__c = this.strEmailTemplateName,
                 SetupOwnerId = this.idSetupOwnerId,
                 OrgWideAddress__c = this.strOrgWideAddress,
-                EmailReplyBreakPattern__c = this.strEmailBreakPattern
+                EmailReplyBreakPattern__c = this.strEmailBreakPattern,
+                CaseCommentsEmailTemplateFrench__c = this.strTemplateNameFrench,
+                CaseCommentsEmailTemplateSpanish__c = this.strTemplateNameSpanish
             );
             
             return objEmailAlertConfiguration;

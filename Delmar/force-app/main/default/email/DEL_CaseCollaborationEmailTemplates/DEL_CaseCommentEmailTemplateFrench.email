@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html style="width: 100%;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delmar Case Collaboration Email</title>
+    <style type="text/css">
+        div,
+        p,
+        a,
+        li,
+        td {
+            -webkit-text-size-adjust: none;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        .ReadMsgBody {
+            width: 100%;
+            background-color: #fff;
+        }
+
+        li {
+            font-family: Arial, sans-serif !important;
+            font-size: 15px;
+        }
+
+        .ExternalClass {
+            width: 100%;
+            background-color: #fff;
+            line-height: 100%;
+        }
+
+        .logo {
+            text-align: center;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: 100%;
+            font-family: Arial, sans-serif !important;
+            font-size: 15px !important;
+            line-height: 21px !important;
+        }
+
+        table td p {
+            font-family: Arial, sans-serif !important;
+            font-size: 15px !important;
+            line-height: 21px !important;
+            text-align: left;
+        }
+
+        html {
+            width: 100%;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+
+        a {
+            text-decoration: none;
+            color: #003399;
+        }
+
+        table[class=full] {
+            padding: 0 !important;
+            border: none !important;
+        }
+
+        table td img[class=imgresponsive] {
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            border-spacing: 0;
+        }
+
+        td {
+            padding: 0;
+        }
+
+        img {
+            border: 0;
+            text-align: justify;
+        }
+
+        .wrapper {
+            width: 100%;
+            table-layout: fixed;
+            padding-bottom: 40px;
+        }
+
+        .webkit {
+            max-width: 600px;
+            background-color: #FFFFFF;
+        }
+
+        .outer {
+            Margin: 0 auto;
+            width: 100%;
+            max-width: 600px;
+            border-spacing: 0;
+            font-family: Arial;
+            color: black;
+        }
+
+        .three-columns {
+            text-align: center;
+            font-size: 0;
+            padding-top: 40px;
+            padding-bottom: 30px;
+        }
+
+        .three-columns .column {
+            width: 100%;
+            max-width: 200px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .padding {
+            padding: 15px;
+        }
+
+        .three-columns .content {
+            font-size: 15px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+<body style="
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            line-height: 20px !important;
+            font-family: Arial, sans-serif !important;
+            font-size: 15px !important;
+            background-color: rgb(255, 255, 255);
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+        ">
+    <div style="margin: auto; background-color: #ebebeb;">
+        <table style="width: 100%">
+            <tbody>
+                <tr>
+                    <td align="center" style="-webkit-text-size-adjust: none;">
+                        <table align="center" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr>
+                                    <td height="" style="-webkit-text-size-adjust: none;">
+                                        <table width="100%" align="center" border="0" cellspacing="0"
+                                            cellpadding="0">
+                                            <td height="430" align="center" valign="top" id="x_bodyCell" style="
+                                                        border-collapse: collapse;
+                                                        table-layout: auto;
+                                                        margin: 0;
+                                                        border-top: 0;
+                                                        height: 100%;
+                                                        width: 100%;
+                                                        padding: 20px 20px 20px 20px;
+                                                    ">
+                                                <div style="max-width:700px; box-shadow: 2px 2px #d9354a;">
+                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                        class="x_templateRow" width="100%">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td height="315" valign="top"
+                                                                    class="x_rowContainer x_kmFloatLeft" style="
+                                                                            border-collapse: collapse;
+                                                                            table-layout: fixed;
+                                                                        ">
+                                                                    <table border="0" cellpadding="0"
+                                                                        cellspacing="0" class="x_kmTextBlock"
+                                                                        width="100%" style="
+                                                                                border-collapse: collapse;
+                                                                                table-layout: fixed;
+                                                                            ">
+                                                                        <tbody class="x_kmTextBlockOuter">
+                                                                            <tr>
+                                                                                <td class="x_kmTextBlockInner"
+                                                                                    valign="top" style="
+                                                                                            border-collapse: collapse;
+                                                                                            table-layout: fixed;
+                                                                                        ">
+                                                                                    <table align="left" border="0"
+                                                                                        cellpadding="0"
+                                                                                        cellspacing="0"
+                                                                                        class="x_kmTextContentContainer"
+                                                                                        width="100%" style="
+                                                                                                border-collapse: collapse;
+                                                                                                table-layout: fixed;
+                                                                                            ">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td class="x_kmTextContent"
+                                                                                                    valign="top"
+                                                                                                    style="
+                                                                                                            border-collapse: collapse;
+                                                                                                            table-layout: fixed;
+                                                                                                            color: #222;
+                                                                                                            font-family: 'Helvetica Neue',
+                                                                                                                Arial;
+                                                                                                            font-size: 16px;
+                                                                                                            letter-spacing: 0;
+                                                                                                            line-height: 1.5;
+                                                                                                            max-width: 100%;
+                                                                                                            text-align: left;
+                                                                                                            word-wrap: break-word;
+                                                                                                            padding-top: 0;
+                                                                                                            padding-bottom: 0;
+                                                                                                            padding-left: 0;
+                                                                                                            padding-right: 0;
+                                                                                                        ">
+                                                                                                    <table
+                                                                                                        border="0"
+                                                                                                        cellpadding="0"
+                                                                                                        cellspacing="0"
+                                                                                                        class="x_mcnCodeBlock"
+                                                                                                        width="100%"
+                                                                                                        style="
+                                                                                                                border-collapse: collapse;
+                                                                                                                table-layout: fixed;
+                                                                                                            ">
+                                                                                                        <tbody
+                                                                                                            class="x_mcnTextBlockOuter">
+                                                                                                            <tr>
+                                                                                                                <td class="x_mcnTextBlockInner"
+                                                                                                                    valign="top"
+                                                                                                                    style="
+                                                                                                                            border-collapse: collapse;
+                                                                                                                            table-layout: fixed;
+                                                                                                                        ">
+                                                                                                                    <div class="x_tMc--sectionheader__blog"
+                                                                                                                        style="
+                                                                                                                                border-top: 4px
+                                                                                                                                    solid
+                                                                                                                                    #003685;
+                                                                                                                                color: #003685;
+                                                                                                                                font-family: Arial,
+                                                                                                                                    sans-serif,
+                                                                                                                                    serif,
+                                                                                                                                    EmojiFont;
+                                                                                                                                font-size: 12px;
+                                                                                                                                letter-spacing: 2px;
+                                                                                                                                padding: 10px;
+                                                                                                                                text-align: center;
+                                                                                                                                background-color: #fff;
+                                                                                                                            ">
+                                                                                                                        <img class="logo"
+                                                                                                                            src="https://insights.delmarcargo.com/delmarcargo-logo"
+                                                                                                                            width="50%"
+                                                                                                                            alt="" />
+                                                                                                                        <br />
+                                                                                                                        <strong>
+COMMENTAIRE SUR LE CAS</strong>
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                    <table border="0" cellpadding="0"
+                                                                        cellspacing="0" class="x_kmTextBlock"
+                                                                        width="100%" style="
+                                                                                border-collapse: collapse;
+                                                                                table-layout: fixed;
+                                                                                background-color: #fff;
+                                                                            ">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td height="203" valign="top"
+                                                                                    class="x_kmTextContent" style="
+                                                                                            border-collapse: collapse;
+                                                                                            table-layout: fixed;
+                                                                                            color: #222;
+                                                                                            font-family: 'Helvetica Neue',
+                                                                                                Arial;
+                                                                                            font-size: 16px;
+                                                                                            letter-spacing: 0;
+                                                                                            line-height: 1.5;
+                                                                                            max-width: 100%;
+                                                                                            text-align: left;
+                                                                                            word-wrap: break-word;
+                                                                                            padding: 10px 20px 10px 20px;
+                                                                                        ">
+                                                                                    <br />
+                                                                                    <p style="
+                                                                                                margin: 0 0 0 0;
+                                                                                            ">
+                                                                                        Nouveau commentaire posté sur Case
+                                                                                        <b>{!Case.CaseNumber}</b>
+                                                                                    </p>
+                                                                                    <br />
+                                                                                    <div style="
+                                                                                                border-bottom: 1px solid #9a9a9b;
+                                                                                            ">
+                                                                                        <p
+                                                                                            style="display: inline-block; width: 49%; vertical-align: top;">
+                                                                                            {!CaseComment.CommentCreatedName__c}
+                                                                                        </p>
+                                                                                        <p
+                                                                                            style="display: inline-block; width: 49%; vertical-align: top; text-align: end;">
+                                                                                            {!CaseComment.CreatedDate}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <br />
+                                                                                    <p>
+                                                                                        {!CaseComment.Body__c}
+                                                                                    </p>
+                                                                                    <br />
+                                                                                    <p>
+                                                                                        Merci,
+                                                                                    </p>
+                                                                                    <p>
+                                                                                        Équipe de soutien Delmar
+                                                                                    </p>
+                                                                                    <br />
+                                                                                    <center>
+                                                                                        <div style="width: 160px; border-radius: 30px; padding: 10px 10px; background-color: #003685;"
+                                                                                            bgcolor="#009164"
+                                                                                            valign="top"
+                                                                                            align="center">
+                                                                                            <a href="SiteLink"
+                                                                                                style="text-decoration: none; line-height: 24px; letter-spacing: -0.2px; font-size: 16px; font-weight: 500; color: #ffffff; word-break: break-word; display: block;"
+                                                                                                target="_blank">Voir le cas</a>
+                                                                                        </div>
+                                                                                    </center>
+                                                                                    <br /><br />
+                                                                                    <center>
+                                                                                        ---
+                                                                                        Détails de la Demande
+                                                                                        ---
+                                                                                    </center>
+                                                                                    <br />
+                                                                                    <b>Sujet: </b>
+                                                                                    <i>{!Case.Subject}</i>
+                                                                                    <br /><br />
+                                                                                    <b>Détails:</b><br />
+                                                                                    <i>{!Case.Description}</i>
+                                                                                    <br /><br />
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table width="100%" class="full" border="0.5" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr>
+                                    <td align="center" style="-webkit-text-size-adjust: none;">
+                                        <table width="100%" align="center" border="0" cellspacing="0"
+                                            cellpadding="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="-webkit-text-size-adjust: none;">
+                                                        <table width="100%" style="
+                                                                    border-spacing: 0;
+                                                                    background-color: #003685;
+                                                                ">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td height="0" style="
+                                                                                padding: 15px;
+                                                                                text-align: center;
+                                                                                background-color: #003685;
+                                                                                -webkit-text-size-adjust: none;
+                                                                            ">
+                                                                        <a style="
+                                                                                    color: black;
+                                                                                    font-size: 16px;
+                                                                                    text-decoration: none;
+                                                                                "
+                                                                            href="https://insights.delmarcargo.com/l/875811/2020-09-22/2xp4b"><img
+                                                                                width="32" style="
+                                                                                        border: 0px
+                                                                                            currentColor;
+                                                                                        border-image: none;
+                                                                                    " alt="Social Media"
+                                                                                src="http://www.delmarcargo.com/notices/2020/SM_ICON_White_FACEBOOK.png" />&nbsp;&nbsp;&nbsp;</a><a
+                                                                            style="
+                                                                                    color: black;
+                                                                                    font-size: 16px;
+                                                                                    text-decoration: none;
+                                                                                "
+                                                                            href="https://insights.delmarcargo.com/l/875811/2020-09-22/2xpsg"><img
+                                                                                width="32" style="
+                                                                                        border: 0px
+                                                                                            currentColor;
+                                                                                        border-image: none;
+                                                                                    " alt="Social Media"
+                                                                                src="http://www.delmarcargo.com/notices/2020/SM_ICON_White_INSTAGRAM.png" />&nbsp;
+                                                                            &nbsp;</a>
+                                                                        <a style="
+                                                                                    color: black;
+                                                                                    font-size: 16px;
+                                                                                    text-decoration: none;
+                                                                                "
+                                                                            href="https://insights.delmarcargo.com/l/875811/2020-09-21/2xbl6"><img
+                                                                                width="32" style="
+                                                                                        border: 0px
+                                                                                            currentColor;
+                                                                                        border-image: none;
+                                                                                    " alt="Social Media"
+                                                                                src="http://www.delmarcargo.com/notices/2020/SM_ICON_White_LINKEDIN.png" />&nbsp;
+                                                                            &nbsp;</a>
+                                                                        <a style="
+                                                                                    color: black;
+                                                                                    font-size: 16px;
+                                                                                    text-decoration: none;
+                                                                                "
+                                                                            href="https://insights.delmarcargo.com/l/875811/2020-09-22/2xprq"><img
+                                                                                width="32" style="
+                                                                                        border: 0px
+                                                                                            currentColor;
+                                                                                        border-image: none;
+                                                                                    " alt="Social Media"
+                                                                                src="http://www.delmarcargo.com/notices/2020/SM_ICON_White_YOUTUBE.png" /></a>
+
+                                                                        <hr />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="
+                                                                                padding: 0px 20px 20px
+                                                                                    20px;
+                                                                                text-align: center;
+                                                                            " class="">
+                                                                        <p style="
+                                                                                    color: rgb(
+                                                                                        255,
+                                                                                        255,
+                                                                                        255
+                                                                                    );
+                                                                                    font-family: Arial,
+                                                                                        sans serif;
+                                                                                    font-size: 15px;
+                                                                                    margin-top: 0px;
+                                                                                    text-align: center;
+                                                                                ">
+                                                                            Copyright © 2021
+                                                                            <a :=""
+                                                                                href="https://www.delmarcargo.com/fr/index.html"
+                                                                                style="
+                                                                                        font-size: 15px;
+                                                                                        color: #ffffff;
+                                                                                    "
+                                                                                target="_blank"><u>Delmar&nbsp;International&nbsp;Inc.</u></a><br />
+                                                                            All rights reserved.
+                                                                        </p>
+                                                                        <p style="
+                                                                                    color: rgb(
+                                                                                        255,
+                                                                                        255,
+                                                                                        255
+                                                                                    );
+                                                                                    font-size: 10px;
+                                                                                    margin-top: 5px;
+                                                                                    text-align: center;
+                                                                                ">
+                                                                            <a href="https://www.delmarcargo.com"
+                                                                                target="_blank" style="
+                                                                                        color: rgb(
+                                                                                            255,
+                                                                                            255,
+                                                                                            255
+                                                                                        );
+                                                                                        font-size: 10px;
+                                                                                        margin-top: 5;
+                                                                                    "><u>DelmarCargo.com</u></a>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

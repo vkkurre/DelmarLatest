@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>CaseCommentEmailTemplate__c</fullName>
-    <description>Developer name of the email template used to send email when a Case Comment is created.</description>
+    <fullName>CaseCommentEmailTemplateEnglish__c</fullName>
+    <description>Developer name of the English email template used to send email when a Case Comment is created.</description>
     <externalId>false</externalId>
     <inlineHelpText>Enter the Developer Name of the Email Template to be used to send email when case comment is created.</inlineHelpText>
-    <label>Case Comments Email Template</label>
+    <label>Case Comments Email Template - English</label>
     <length>255</length>
     <required>false</required>
     <trackTrending>false</trackTrending>

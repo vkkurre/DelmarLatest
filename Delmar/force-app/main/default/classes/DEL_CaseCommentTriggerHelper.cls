@@ -32,10 +32,8 @@ public class DEL_CaseCommentTriggerHelper {
     public static void processAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
         list_CaseCommentsToUpdate = new List<DEL_CaseComment__c>();
         objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
-        List<String> list_ConsolidatedDMLErrors = new List<String>();
         createCollectionsAfterInsert(list_CaseComments);
-        sendCommentNotificationEmail(list_CaseComments);
-        
+        List<String> list_ConsolidatedDMLErrors = new List<String>();
         if (!list_CaseCommentsToUpdate.isEmpty()) {
             for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
                 populateFields(objCaseComment);
@@ -46,6 +44,8 @@ public class DEL_CaseCommentTriggerHelper {
             list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_UpdateResults, 'Update'));
             blnSkipTrigger = false;
         }
+
+        sendCommentNotificationEmail(list_CaseCommentsToUpdate);
         
         if (!list_ConsolidatedDMLErrors.isEmpty()) {
             DEL_Utils.logDMLException(
@@ -94,7 +94,11 @@ public class DEL_CaseCommentTriggerHelper {
                                      Id,
                                      CommentCreatedName__c,
                                      CreatedByEmail__c,
-                                     CreatedById
+                                     CreatedById,
+                                     Body__c,
+                                     Case__c,
+                                     EmailMessageId__c,
+                                     CreatedDate
                                      FROM DEL_CaseComment__c
                                      WHERE Id IN :list_CaseComments
                                     ];
@@ -126,8 +130,8 @@ public class DEL_CaseCommentTriggerHelper {
             }
         
         // Query Cases
-        String strCaseQuery = 'SELECT Id, OwnerId, SuppliedEmail, ' + objEmailAlertConfiguration.CaseQueryFields__c 
-            + ' FROM Case WHERE Id IN :set_CaseIds';
+        String strCaseQuery = 'SELECT Id, OwnerId, SuppliedEmail, Contact.Preferred_Language__c, Language__c, ' + 
+            + objEmailAlertConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
         List<Case> list_Cases = Database.query(strCaseQuery);
         map_CaseById = new Map<Id, Case>(list_Cases);
         for (Case objCase : map_CaseById.values()) {
@@ -169,6 +173,13 @@ public class DEL_CaseCommentTriggerHelper {
     **/
     public static void sendCommentNotificationEmail(List<DEL_CaseComment__c> list_CaseComments) {
         List<Messaging.SingleEmailMessage> list_EmailMessages = new List<Messaging.SingleEmailMessage>();
+        Set<String> set_EmailTemplateNames = new Set<String> {
+            objEmailAlertConfiguration.CaseCommentEmailTemplateEnglish__c,
+            objEmailAlertConfiguration.CaseCommentsEmailTemplateFrench__c,
+            objEmailAlertConfiguration.CaseCommentsEmailTemplateSpanish__c
+        };
+        Map<String, EmailTemplate> map_EmailTemplateByName = new Map<String, EmailTemplate>();
+        Map<String, EmailTemplate> map_EmailTemplateByLanguage = new Map<String, EmailTemplate>();
         List<OrgWideEmailAddress> list_OrgWideEmailAddresses = [SELECT 
                                                                 Id, 
                                                                 Address, 
@@ -176,13 +187,31 @@ public class DEL_CaseCommentTriggerHelper {
                                                                 FROM OrgWideEmailAddress 
                                                                 WHERE Address = :objEmailAlertConfiguration.OrgWideAddress__c
                                                                ];
-        EmailTemplate objTemplate = [SELECT 
-                                     Id,
-                                     HtmlValue,
-                                     Subject
-                                     FROM EmailTemplate
-                                     WHERE DeveloperName = :objEmailAlertConfiguration.CaseCommentEmailTemplate__c
-                                    ];
+
+        for (EmailTemplate objTemplate : [SELECT 
+                                          Id,
+                                          HtmlValue,
+                                          Subject,
+                                          DeveloperName
+                                          FROM EmailTemplate
+                                          WHERE DeveloperName IN :set_EmailTemplateNames
+                                         ]
+        ) {
+            map_EmailTemplateByName.put(objTemplate.DeveloperName, objTemplate);
+        }
+
+        map_EmailTemplateByLanguage.put(
+            'English', 
+            map_EmailTemplateByName.get(objEmailAlertConfiguration.CaseCommentEmailTemplateEnglish__c)
+        );
+        map_EmailTemplateByLanguage.put(
+            'French', 
+            map_EmailTemplateByName.get(objEmailAlertConfiguration.CaseCommentsEmailTemplateFrench__c)
+        );
+        map_EmailTemplateByLanguage.put(
+            'Spanish', 
+            map_EmailTemplateByName.get(objEmailAlertConfiguration.CaseCommentsEmailTemplateSpanish__c)
+        );
         
         String strSiteURL;
         if (Test.isRunningTest()) {
@@ -197,6 +226,7 @@ public class DEL_CaseCommentTriggerHelper {
         for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
             Messaging.SingleEmailMessage objSingleMessage = new Messaging.SingleEmailMessage();
             List<String> list_ToAddresses = new List<String>();
+            EmailTemplate objTemplate;
             if (map_UserById.containsKey(objCaseComment.CreatedById)) {
                 // Adding the Case Comment Created By Email
                 list_ToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
@@ -213,6 +243,8 @@ public class DEL_CaseCommentTriggerHelper {
             
             if (map_CaseById.containsKey(objCaseComment.Case__c)) {
                 Case objCase = map_CaseById.get(objCaseComment.Case__c);
+                String strLanguage = getDefaultLanguage(objCase);
+                objTemplate = map_EmailTemplateByLanguage.get(strLanguage);
                 String strSubject = objTemplate.Subject;
                 if (strSubject.contains('{!Case.Subject}')) {
                     strSubject = strSubject.replace('{!Case.Subject}', objCase.Subject);
@@ -322,5 +354,25 @@ public class DEL_CaseCommentTriggerHelper {
         }
         
         return strHtml;
+    }
+
+    /**
+    * @ author       :  Ankit C
+    * @ description  :  This method gets the default language for the Case.
+    * @ params       :  objCase - related Case
+    * @ return       :  strDefaultLanguage - default language for the Case.
+    **/
+    public static String getDefaultLanguage(Case objCase) {
+        String strDefaultLanguage = 'English';
+        if (
+            String.isNotBlank(objCase.ContactId) &&
+            String.isNotBlank(objCase.Contact.Preferred_Language__c)
+        ) {
+            strDefaultLanguage = objCase.Contact.Preferred_Language__c;
+        } else if (String.isNotBlank(objCase.Language__c)) {
+            strDefaultLanguage = objCase.Language__c;
+        }
+
+        return strDefaultLanguage;
     }
 }

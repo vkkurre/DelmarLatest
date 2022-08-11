@@ -20,13 +20,15 @@
         <name>ApexClass</name>
     </types>
     <types>
-		<members>DEL_CaseCollaborationEmailTemplates</members>
-		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailEnglish</members>
-		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailFrench</members>
-		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailSpanish</members>
-		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplate</members>
-		<name>EmailTemplate</name>
-	</types>
+        <members>DEL_CaseCollaborationEmailTemplates</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailEnglish</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailFrench</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailSpanish</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateEnglish</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateFrench</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateSpanish</members>
+        <name>EmailTemplate</name>
+    </types>
     <types>
         <members>DEL_CaseComment__c</members>
         <members>DEL_TriggerConfiguration__mdt</members>
