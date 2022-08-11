@@ -41,6 +41,8 @@ public without sharing class DEL_CaseCollabaoratorUtility {
             set_UserIdsToExclude.add(objCaseCollaborator.User__c);
         }
 
+        /*Excluding the logged-in User (Case-Owner) to not to be visible in
+          the list of potential collaborators.*/
         set_UserIdsToExclude.add(UserInfo.getUserId());
 
         list_Users = [SELECT 
@@ -53,7 +55,8 @@ public without sharing class DEL_CaseCollabaoratorUtility {
                       FROM User 
                       WHERE Name LIKE :strpattern 
                       AND Id NOT IN :set_UserIdsToExclude
-                      AND AccountId = :objCase.AccountId];
+                      AND AccountId = :objCase.AccountId 
+                      AND IsActive = true];
         
         return list_Users;
     }

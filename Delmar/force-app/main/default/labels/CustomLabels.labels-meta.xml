@@ -53,7 +53,39 @@
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>It stores the title for success comment insertion toast message.</shortDescription>
+        <shortDescription>It stores the title for success toast message.</shortDescription>
         <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>CLDEL00008</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>It stores the toast message for success case collaborator insertion.</shortDescription>
+        <value>The selected contacts have been added as collaborators for this Case.</value>
+    </labels>
+    <labels>
+        <fullName>CLDEL00009</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>It stores the error message to have atleast one user selected.</shortDescription>
+        <value>Please select atleast one User</value>
+    </labels>
+    <labels>
+        <fullName>CLDEL00010</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>It stores the search input label value for Case Collaborator Search.</shortDescription>
+        <value>Enter Contact Name To Search</value>
+    </labels>
+    <labels>
+        <fullName>CLDEL00011</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>It stores the search input placeholder value for Case Collaborator Search.</shortDescription>
+        <value>Search</value>
     </labels>
 </CustomLabels>

@@ -1,14 +1,30 @@
 import { api, LightningElement, track, wire } from "lwc";
-import getUsers from "@salesforce/apex/DEL_ContactCollaborationController.fetchUsers";
-import createCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.addCaseCollaborators";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from '@salesforce/apex';
+import getUsers from "@salesforce/apex/DEL_ContactCollaborationController.fetchUsers";
+import createCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.addCaseCollaborators";
+//Custom label error message title.
+import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
+//Custom label for success message title.
+import CLDEL00007 from "@salesforce/label/c.CLDEL00007";
+//Custom label for success message for case collaboration addition.
+import CLDEL00008 from "@salesforce/label/c.CLDEL00008";
+//Custom label for error message for having atleast one user selected.
+import CLDEL00009 from "@salesforce/label/c.CLDEL00009";
+//Custom label for search input text label for searching case collaborator user.
+import CLDEL00010 from "@salesforce/label/c.CLDEL00010";
+//Custom label for search input text placeholder value for searching case collaborator user.
+import CLDEL00011 from "@salesforce/label/c.CLDEL00011";
+
 export default class Del_addCaseCollaboratorComponent extends LightningElement {
     @api recordId;
     @api strCardTitle;
+    strSearchLabelText = CLDEL00010;
+    strPlaceHolderValue = CLDEL00011;
     strSearchKey = "";
     @track list_Users;
     blnIsLoading = false;
+    @track objWiredResult;
     // Columns to be display for the datatable.
     list_Columns = [
         {
@@ -37,6 +53,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         strUserName: "$strSearchKey"
     })
     wiredUserList(result) {
+        this.objWiredResult = result;
         this.blnIsLoading = true;
         if (result.data) {
             let objResponse = result.data;
@@ -45,11 +62,11 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
                 this.blnIsLoading = false;
             } else {
                 this.blnIsLoading = false;
-                this.showToastMessage("Error", "error", objResponse.strErrorMessage);
+                this.showToastMessage(CLDEL00001, "error", objResponse.strErrorMessage);
             }
         } else if (result.error) {
-            this.blnIsLoading = fasle;
-            this.handleErrors(result.error, "ERROR!");
+            this.blnIsLoading = false;
+            this.handleErrors(result.error, CLDEL00001);
         }
     }
 
@@ -88,25 +105,25 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
             })
                 .then((result) => {
                     if (result.blnIsSuccess) {
-                        refreshApex(this.list_Users);
+                        refreshApex(this.objWiredResult);
                         this.blnIsLoading = false;
                         this.showToastMessage(
-                            "Success",
-                            "The selected contacts have been added as collaborators for this Case.",
+                            CLDEL00007,
+                            CLDEL00008,
                             "success"
                         );
                         
                     } else {
                         this.blnIsLoading = false;
-                        this.showToastMessage("Error", result.strErrorMessage, "error");
+                        this.showToastMessage(CLDEL00001, result.strErrorMessage, "error");
                     }
                 })
                 .catch((error) => {
                     this.blnIsLoading = false;
-                    this.handleErrors(error, "Error");
+                    this.handleErrors(error, CLDEL00001);
                 });
         } else {
-            this.showToastMessage("Error", "Please select atlease one User", "error");
+            this.showToastMessage(CLDEL00001, CLDEL00009, "error");
         }
        
     }
