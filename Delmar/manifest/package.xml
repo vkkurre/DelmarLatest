@@ -14,14 +14,19 @@
         <members>DEL_CaseCollaborationTriggerHelper</members>
         <members>DEL_ContactCollaborationControllerTest</members>
         <members>DEL_ContactCollaborationController</members>
+        <members>DEL_CaseCollabaoratorUtility</members>
         <members>DEL_CaseCommentTriggerHelper</members>
         <members>DEL_CaseCommentTriggerHelperTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-    <members>DEL_CaseCommentEmailTemplate</members>
-    <name>EmailTemplate</name>
-</types>
+		<members>DEL_CaseCollaborationEmailTemplates</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailEnglish</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailFrench</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailSpanish</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplate</members>
+		<name>EmailTemplate</name>
+	</types>
     <types>
         <members>DEL_CaseComment__c</members>
         <members>DEL_TriggerConfiguration__mdt</members>
@@ -79,8 +84,19 @@
         <members>CLDEL00007</members>
     </types>
     <types>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertEnglish</members>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertFrench</members>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertSpanish</members>
+        <name>WorkflowAlert</name>
+    </types>
+    <types>
         <members>Admin</members>
         <name>Profile</name>
+    </types>
+    <types>
+        <members>Contact.Preferred_Language__c</members>
+        <members>Case.Language__c</members>
+        <name>CustomField</name>
     </types>
     <version>55.0</version>
 </Package>

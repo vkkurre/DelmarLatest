@@ -17,12 +17,12 @@ trigger DEL_CaseCollaborationTrigger on DEL_CaseCollaborator__c (after insert, b
     */
     if (
         (DEL_TriggerConfiguration__mdt.getInstance('CMDEL0002') != null &&
-         !DEL_TriggerConfiguration__mdt.getInstance('CMDEL0002').IsActive__c) ||
+        !DEL_TriggerConfiguration__mdt.getInstance('CMDEL0002').IsActive__c) ||
         DEL_CaseCollaborationTriggerHelper.blnSkipTrigger
     )  {
         return;
     }
-    
+
     if (Trigger.isInsert && Trigger.isBefore) {
         DEL_CaseCollaborationTriggerHelper.handleDuplicates(trigger.new);
     }
