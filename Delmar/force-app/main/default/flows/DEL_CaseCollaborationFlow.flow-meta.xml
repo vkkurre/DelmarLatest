@@ -1,30 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <description>Here we are setting up the notification. Goes on invite.</description>
-        <name>CustomNotificationForInvite</name>
-        <label>CustomNotificationForInvite</label>
-        <locationX>446</locationX>
-        <locationY>1151</locationY>
+        <description>Send email alert in English</description>
+        <name>EmailAlertEnglish</name>
+        <label>Email Alert - English</label>
+        <locationX>578</locationX>
+        <locationY>935</locationY>
+        <actionName>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertEnglish</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Notification_to_Collaborator_English_0</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>Send email alert in French</description>
+        <name>EmailAlertFrench</name>
+        <label>Email Alert - French</label>
+        <locationX>50</locationX>
+        <locationY>935</locationY>
+        <actionName>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertFrench</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>NotificationtoCollaboratorFrench</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>Send email alert in Spanish</description>
+        <name>EmailAlertSpanish</name>
+        <label>Email Alert - Spanish</label>
+        <locationX>314</locationX>
+        <locationY>935</locationY>
+        <actionName>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertSpanish</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>NotificationtoCollaboratorSpanish</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>Notification that will be sent in English</description>
+        <name>Notification_to_Collaborator_English_0</name>
+        <label>Notification to Collaborator - English</label>
+        <locationX>578</locationX>
+        <locationY>1055</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>customNotifTypeId</name>
             <value>
-                <elementReference>Get_Custom_Notification_ID.Id</elementReference>
+                <elementReference>Get_Custom_Notification_Id.Id</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>body</name>
             <value>
-                <stringValue>You have received an Collaboration Invite on this Case &quot;{!Get_Case.CaseNumber}&quot;</stringValue>
+                <stringValue>You have received a Collaboration Invite on the Case &quot;{!Get_Case.CaseNumber}&quot;</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>title</name>
             <value>
-                <stringValue>Collaboration</stringValue>
+                <stringValue>Collaboration Invite</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -41,56 +98,82 @@
         </inputParameters>
     </actionCalls>
     <actionCalls>
-        <name>EnglishAction</name>
-        <label>EnglishAction</label>
-        <locationX>578</locationX>
-        <locationY>815</locationY>
-        <actionName>DEL_CaseCollaborator__c.DEL_CaseCollab</actionName>
-        <actionType>emailAlert</actionType>
-        <connector>
-            <targetReference>Get_Custom_Notification_ID</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>SObjectRowId</name>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-    </actionCalls>
-    <actionCalls>
-        <name>FrenchEmailAction</name>
-        <label>FrenchEmailAction</label>
+        <description>Notification that will be sent in French</description>
+        <name>NotificationtoCollaboratorFrench</name>
+        <label>Notification to Collaborator - French</label>
         <locationX>50</locationX>
-        <locationY>815</locationY>
-        <actionName>DEL_CaseCollaborator__c.DEL_CaseCollabFrench</actionName>
-        <actionType>emailAlert</actionType>
-        <connector>
-            <targetReference>Get_Custom_Notification_ID</targetReference>
-        </connector>
+        <locationY>1055</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>SObjectRowId</name>
+            <name>customNotifTypeId</name>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>Get_Custom_Notification_Id.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <stringValue>Vous avez reçu une invitation à collaborer sur le cas &quot;{!Get_Case.CaseNumber}&quot;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <stringValue>Invitation à collaborer</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>alluser</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
             </value>
         </inputParameters>
     </actionCalls>
     <actionCalls>
-        <name>SpanishEmailAction</name>
-        <label>SpanishEmailAction</label>
+        <description>Notification that will be sent in Spanish</description>
+        <name>NotificationtoCollaboratorSpanish</name>
+        <label>Notification to Collaborator - Spanish</label>
         <locationX>314</locationX>
-        <locationY>815</locationY>
-        <actionName>DEL_CaseCollaborator__c.DEL_CaseCollabSpanish</actionName>
-        <actionType>emailAlert</actionType>
-        <connector>
-            <targetReference>Get_Custom_Notification_ID</targetReference>
-        </connector>
+        <locationY>1055</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>SObjectRowId</name>
+            <name>customNotifTypeId</name>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>Get_Custom_Notification_Id.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <stringValue>Ha recibido una invitación de colaboración en el caso &quot;{!Get_Case.CaseNumber}&quot;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <stringValue> Invitación de colaboración</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>alluser</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
             </value>
         </inputParameters>
     </actionCalls>
@@ -109,16 +192,18 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>PreferredLanguagesEmailAlerts</targetReference>
+            <targetReference>Get_Custom_Notification_Id</targetReference>
         </connector>
     </assignments>
     <decisions>
-        <name>PreferredLanguagesEmailAlerts</name>
-        <label>PreferredLanguagesEmailAlerts</label>
+        <description>Check the default language that should be used for alerts.</description>
+        <name>CheckLanguage</name>
+        <label>Check Language</label>
         <locationX>446</locationX>
-        <locationY>695</locationY>
+        <locationY>815</locationY>
         <defaultConnector>
-            <targetReference>Get_Custom_Notification_ID</targetReference>
+            <isGoTo>true</isGoTo>
+            <targetReference>EmailAlertEnglish</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -132,7 +217,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>FrenchEmailAction</targetReference>
+                <targetReference>EmailAlertFrench</targetReference>
             </connector>
             <label>French</label>
         </rules>
@@ -147,7 +232,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>SpanishEmailAction</targetReference>
+                <targetReference>EmailAlertSpanish</targetReference>
             </connector>
             <label>Spanish</label>
         </rules>
@@ -162,19 +247,20 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>EnglishAction</targetReference>
+                <targetReference>EmailAlertEnglish</targetReference>
             </connector>
             <label>English</label>
         </rules>
     </decisions>
     <description>Send custom notifications and email alerts to collaborators</description>
+    <environments>Default</environments>
     <formulas>
         <name>casenotilink</name>
         <dataType>String</dataType>
         <expression>&quot;https://absyz-2b-dev-ed.lightning.force.com/&quot;+{!Get_Case.Id}</expression>
     </formulas>
     <interviewLabel>CaseCollabFlow {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>DEL_CaseCollaborationFlow</label>
+    <label>Case Collaboration Flow</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -218,13 +304,13 @@
     </recordLookups>
     <recordLookups>
         <description>This step is to send the custom notifications to the collaborators</description>
-        <name>Get_Custom_Notification_ID</name>
-        <label>Get Custom Notification ID</label>
+        <name>Get_Custom_Notification_Id</name>
+        <label>Get Custom Notification Id</label>
         <locationX>446</locationX>
-        <locationY>1031</locationY>
+        <locationY>695</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>CustomNotificationForInvite</targetReference>
+            <targetReference>CheckLanguage</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

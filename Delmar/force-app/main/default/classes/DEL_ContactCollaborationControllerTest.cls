@@ -144,7 +144,7 @@ private class DEL_ContactCollaborationControllerTest {
                                                         FROM
                                                         DEL_ExceptionLog__c
                                                         WHERE
-                                                        ClassName__c = 'DEL_CaseCollaborationTriggerHelper'];
+                                                        ClassName__c = 'DEL_ContactCollaborationController'];
         System.assert(!list_ExceptionLogs.isEmpty());
         System.assert(!objResponseWrapper2.blnIsSuccess);
     }

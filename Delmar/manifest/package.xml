@@ -20,12 +20,13 @@
         <name>ApexClass</name>
     </types>
     <types>
-    <members>DEL_CaseCommentEmailTemplate</members>
-    <members>DEL_CaseCollaborationEmail</members>
-    <members>DEL_CaseCollaborationEmailFrench</members>
-    <members>DEL_CaseCollaborationEmailSpanish</members>
-    <name>EmailTemplate</name>
-</types>
+		<members>DEL_CaseCollaborationEmailTemplates</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailEnglish</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailFrench</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailSpanish</members>
+		<members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplate</members>
+		<name>EmailTemplate</name>
+	</types>
     <types>
         <members>DEL_CaseComment__c</members>
         <members>DEL_TriggerConfiguration__mdt</members>
@@ -83,9 +84,9 @@
         <members>CLDEL00007</members>
     </types>
     <types>
-        <members>DEL_CaseCollaborator__c.DEL_CaseCollab</members>
-        <members>DEL_CaseCollaborator__c.DEL_CaseCollabFrench</members>
-        <members>DEL_CaseCollaborator__c.DEL_CaseCollabSpanish	</members>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertEnglish</members>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertFrench</members>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertSpanish</members>
         <name>WorkflowAlert</name>
     </types>
     <types>
