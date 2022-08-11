@@ -18,14 +18,12 @@
     a. sfdx force:source:convert --rootdir force-app --outputdir delmarpackage
     b. jar -cfM zippackage.zip delmarpackage
     c. rmdir /s delmarpackage
-    d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_EmailMessagesTriggerHelperTest,
-       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_ContentDocumentLinkTriggerTest,DEL_CaseCommentTriggerHelperTest
+    d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_CaseCollaborationTriggerHelperTest,DEL_CaseCommentTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_ContentDocumentLinkTriggerTest,DEL_EmailMessagesTriggerHelperTest,DEL_UtilsTest
 2. For MAC
     a. sfdx force:source:convert --rootdir force-app --outputdir delmarpackage
     b. zip -r zippackage.zip delmarpackage
     c. rm -r delmarpackage
-    d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_EmailMessagesTriggerHelperTest,
-       DEL_UtilsTest,DEL_CaseCollaborationTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_ContentDocumentLinkTriggerTest,DEL_CaseCommentTriggerHelperTest
+    d. sfdx force:mdapi:deploy --zipfile zippackage.zip --checkonly --testlevel RunSpecifiedTests --runtests DEL_CaseCollaborationControllerTest,DEL_CaseCollaborationTriggerHelperTest,DEL_CaseCommentTriggerHelperTest,DEL_ContactCollaborationControllerTest,DEL_ContentDocumentLinkTriggerTest,DEL_EmailMessagesTriggerHelperTest,DEL_UtilsTest
     e. rm -r zippackage.zip
 
 
