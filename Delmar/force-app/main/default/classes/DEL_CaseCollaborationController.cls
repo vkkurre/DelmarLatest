@@ -53,7 +53,8 @@ public class DEL_CaseCollaborationController {
                                                     CreatedBy.Name,
                                                     Body__c,
                                                     CommentCreatedName__c,
-                                                    CreatedByEmail__c
+                                                    CreatedByEmail__c,
+                                                    EmailMessageId__c
                                                     FROM DEL_CaseComment__c 
                                                     WHERE Case__c = :strRecordId 
                                                     ORDER BY CreatedDate 

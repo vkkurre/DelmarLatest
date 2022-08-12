@@ -88,4 +88,12 @@
         <shortDescription>It stores the search input placeholder value for Case Collaborator Search.</shortDescription>
         <value>Search</value>
     </labels>
+    <labels>
+        <fullName>CLDEL00012</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>It stores the View Full Message Label for Menu Option in Case Comment.</shortDescription>
+        <value>View Full Message</value>
+    </labels>
 </CustomLabels>

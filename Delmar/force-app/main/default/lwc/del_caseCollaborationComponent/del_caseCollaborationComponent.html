@@ -20,19 +20,20 @@
     <lightning-card>
         <div class="slds-var-p-around_x-small">
             <lightning-layout multiple-rows="false" vertical-align="start">
-                <lightning-layout-item size="12" class="del-avatar-width">
-                    <lightning-avatar variant="circle" src="/bad/image/url.jpg" fallback-icon-name="standard:avatar"
-                        alternative-text="avatar">
+                <lightning-layout-item size="2" small-device-size="2" medium-device-size="2" large-device-size="1">
+                    <lightning-avatar variant="circle" src="/bad/image/url.jpg" initials=""
+                        fallback-icon-name="standard:avatar" alternative-text="">
                     </lightning-avatar>
                 </lightning-layout-item>
-                <lightning-layout-item size="12" small-device-size="10" medium-device-size="10" large-device-size="10">
+                <lightning-layout-item size="9" small-device-size="9" medium-device-size="9" large-device-size="10">
                     <lightning-input-rich-text onchange={handleChangeComment} type="text" class="nullify"
                         value={strBody} placeholder={strPlaceHolderText} variant="bottom-toolbar"
                         disabled-categories="INSERT_CONTENT" message-when-bad-input={strErrorMessageCommentInput}
                         valid={blnValid}>
                     </lightning-input-rich-text>
                 </lightning-layout-item>
-                <lightning-layout-item size="12" class="del-button-icon-width">
+                <lightning-layout-item class="slds-p-left_none slds-m-top_x-small" size="1"
+                    small-device-size="1" medium-device-size="1" large-device-size="1">
                     <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}
                         class="del-style-button-left-margin">
                     </lightning-button-icon>
@@ -45,12 +46,12 @@
                             <template for:each={list_Comments} for:item="objCaseComment">
                                 <div key={objCaseComment.Id} class="slds-var-p-vertical_medium slds-border_bottom">
                                     <lightning-layout multiple-rows="false" vertical-align="center">
-                                        <lightning-layout-item size="12" class="del-avatar-width">
+                                        <lightning-layout-item size="1" small-device-size="1" class="del-avatar-width">
                                             <lightning-avatar variant="circle" src="/bad/image/url.jpg"
                                                 fallback-icon-name="standard:avatar" alternative-text="avatar">
                                             </lightning-avatar>
                                         </lightning-layout-item>
-                                        <lightning-layout-item size="12" small-device-size="10" medium-device-size="10"
+                                        <lightning-layout-item size="9" small-device-size="8" medium-device-size="8"
                                             large-device-size="10">
                                             <div class="slds-var-p-bottom_none">
                                                 <a href=""
@@ -62,6 +63,20 @@
                                                     year="numeric" day="2-digit" month="long" hour="2-digit"
                                                     minute="2-digit">
                                                 </lightning-formatted-date-time>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="1" small-device-size="1">
+                                            <div class="slds-float_right">
+                                                <span>
+                                                    <template if:true={objCaseComment.blnMenuOption}>
+                                                        <lightning-button-menu variant="border-filled"
+                                                            icon-size="x-small" alternative-text="Go to Email Message">
+                                                            <lightning-menu-item value={objCaseComment.EmailMessageId__c} label={strViewFullMessageMenuLabel}
+                                                                onclick={navigateToRecordPage}>
+                                                            </lightning-menu-item>
+                                                        </lightning-button-menu>
+                                                    </template>
+                                                </span>
                                             </div>
                                         </lightning-layout-item>
                                     </lightning-layout>

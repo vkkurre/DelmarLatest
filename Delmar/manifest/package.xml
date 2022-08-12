@@ -88,6 +88,7 @@
         <members>CLDEL00009</members>
         <members>CLDEL00010</members>
         <members>CLDEL00011</members>
+        <members>CLDEL00012</members>
     </types>
     <types>
         <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertEnglish</members>

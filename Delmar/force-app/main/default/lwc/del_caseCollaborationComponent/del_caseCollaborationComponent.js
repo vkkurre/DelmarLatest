@@ -16,6 +16,8 @@ import CLDEL00006 from "@salesforce/label/c.CLDEL00006";
 import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
 //Custom label success message title
 import CLDEL00007 from "@salesforce/label/c.CLDEL00007";
+//Custom label for View Full Message Label in Menu Option.
+import CLDEL00012 from "@salesforce/label/c.CLDEL00012";
 import fetchComments from "@salesforce/apex/DEL_CaseCollaborationController.fetchComments";
 import insertComment from "@salesforce/apex/DEL_CaseCollaborationController.insertComment";
 
@@ -26,6 +28,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     strErrorMessageCommentInput;
     @track list_Comments = [];
     strPlaceHolderText = CLDEL00002;
+    strViewFullMessageMenuLabel = CLDEL00012;
     blnIsLoading = false;
     // List that contains retrieved data and errors from fetchComments(). Used to refresh apex data after insertion
     list_WiredComments;
@@ -61,6 +64,9 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
 
                 this.list_Comments = JSON.parse(JSON.stringify(data.list_CaseComments));
                 let list_CommentsTemp = this.list_Comments;
+                
+                /*Adding attributes in each of the comment retreived from apex class 
+                  in List of Object 'DEL_CaseComment__c'. */
                 for (let objComment of list_CommentsTemp) {
                     /*Adding one attribute to each of the Case Comment with list of the attachments 
                     file*/
@@ -69,6 +75,10 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                     } else {
                         objComment["listAttachments"] = [];
                     }
+
+                    /*Adding one attribute to each of the Case Comment whether to show View Full
+                    Message Menu Option*/
+                    objComment["blnMenuOption"] = objComment.hasOwnProperty("EmailMessageId__c");
                 }
 
                 this.list_Comments = list_CommentsTemp;
@@ -126,6 +136,26 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                     this.handleErrors(error, CLDEL00001);
                 });
         }
+    }
+
+    /**
+     * @ author        : Vinaykant
+     * @ description   : This method will navigate user to pages.
+     **/
+    navigateToRecordPage(event) {
+        /**
+         * @ author      : Vinaykant
+         * @ description : This method is used to navigate to Record Page based recordId.
+        **/
+        this[NavigationMixin.GenerateUrl]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: event.target.value,
+                actionName: 'view',
+            },
+        }).then((url) => {
+            window.open(url);
+        });
     }
 
     /**
