@@ -67,7 +67,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
-            .setHtmlBody('<div>this is HtmlBody</div><br><div class="gmail_quote"><body>Test</body>')
+            .setHtmlBody('<div>this is HtmlBody<br><div><i>Okay</i></div><br><b>Update please</b></div><br><div class="gmail_quote"><body>Test</body>')
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
@@ -86,7 +86,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
                                              FROM DEL_CaseComment__c
                                              LIMIT 1];
         // Assert if a case comment was created successfully from the email message.                                     
-        System.assertEquals(objCaseComment.Body__c, '<div>this is HtmlBody</div>');
+        System.assertEquals(objCaseComment.Body__c, '<div>this is HtmlBody<br><div><i>Okay</i></div><br><b>Update please</b></div>');
     }
     
     /**
@@ -100,7 +100,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
         
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
-            .setHtmlBody('<div>this is HtmlBody</div><br><div class="gmail_quote"><body>Test</body>')
+            .setHtmlBody('<div>this is HtmlBody<br><div><i>Okay</i></div><br><b>Update please</b></div><br><div class="gmail_quote"><body>Test</body>')
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')

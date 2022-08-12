@@ -21,8 +21,6 @@ public class DEL_EmailMessagesTriggerHelper {
     **/
     public static void handleEmailsOnInsert(List<EmailMessage> list_EmailMessages) {
         List<String> list_ConsolidatedDMLErrors = new List<String>();
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
-        Pattern objPattern = Pattern.compile(objEmailAlertConfiguration.EmailReplyBreakPattern__c);
         List<DEL_CaseComment__c> list_CaseComments = new List<DEL_CaseComment__c>();
         try {
             for (EmailMessage objEmailMessage : list_EmailMessages) {
@@ -34,12 +32,10 @@ public class DEL_EmailMessagesTriggerHelper {
                         objCaseComment.CreatedByEmail__c = objEmailMessage.FromAddress;
                         objCaseComment.CommentCreatedName__c = objEmailMessage.FromName;
                         if (String.isNotBlank(objEmailMessage.HtmlBody)) {
-                            List<String> list_SplitResults = objPattern.split(objEmailMessage.HtmlBody);
-                            if (!list_SplitResults.isEmpty()) {
-                                objCaseComment.Body__c = list_SplitResults.get(0);
-                                list_CaseComments.add(objCaseComment);
-                            }
+                            objCaseComment.Body__c = DEL_Utils.handleHtmlBody(objEmailMessage.HtmlBody);
                         }
+
+                        list_CaseComments.add(objCaseComment);
                     }
                 }
             }

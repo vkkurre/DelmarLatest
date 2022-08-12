@@ -8,13 +8,13 @@
 * ======================================================================================================
 *  26-07-2022       |  ankit.c@absyz.com            |  1.0          |  Initial version
 *******************************************************************************************************/
-@isTest
+@IsTest
 private class DEL_UtilsTest {
     /**
     * @ author       :  Ankit C
     * @ description  :  Test method for logException() method in DEL_Utils class
     **/
-    @isTest
+    @IsTest
     private static void testLogException() {
         Account objAccount = new Account();
         DEL_ExceptionLog__c objExceptionLog = new DEL_ExceptionLog__c();
@@ -41,7 +41,7 @@ private class DEL_UtilsTest {
     * @ author       :  Ankit C
     * @ description  :  Test method for logDMLException() and processDMLErrors() method in DEL_Utils class
     **/
-    @isTest
+    @IsTest
     private static void testLogDMLException() {
         List<Account> list_Accounts = new List<Account>();
         list_Accounts.add(new Account());
@@ -63,4 +63,19 @@ private class DEL_UtilsTest {
                                                         WHERE MethodName__c = 'testLogDMLException'];
         System.assert(!list_ExceptionLogs.isEmpty());
     }
+    
+    /**
+    * @ author       :  Rakesh Nayak
+    * @ description  :  Test method for HandleHtmlBody()  method in DEL_Utils class
+    **/
+    @IsTest
+    private static void testHandleHtmlBody() {
+        String strHtmlBody = '<div>this is HtmlBody<br><div><i>Okay</i></div><br><b>Update please</b></div><br><div class="gmail_quote"><body>Test</body>';
+        Test.startTest();
+        String strLatestReply = DEL_Utils.handleHtmlBody(strHtmlBody);
+        Test.stopTest();
+
+        System.assertEquals('<div>this is HtmlBody<br><div><i>Okay</i></div><br><b>Update please</b></div>', strLatestReply);
+    }
+
 }

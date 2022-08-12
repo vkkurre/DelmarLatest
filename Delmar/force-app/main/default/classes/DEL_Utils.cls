@@ -9,6 +9,7 @@
 *   Date            |  Developer Name               |  Version      |  Changes
 * ======================================================================================================
 *  26-07-2022       |  ankit.c@absyz.com            |  1.0          |  Initial version
+*  12-08-2022       |  rakesh.nayak@absyz.com       |  1.1          |  Added Html body handler logic
 *******************************************************************************************************/
 public class DEL_Utils {
     /**
@@ -93,5 +94,36 @@ public class DEL_Utils {
         }
         
         return list_Errors;
-    } 
+    }
+
+    /**
+    * @ author       :  Rakesh Nayak
+    * @ description  :  This method is used to process the Html body of email message to get latest reply mail.
+    * @ params       :  strHtmlBody - Html Body of email message record
+    * @ return       :  strLatestReply - Latest reply from the email thread.
+    **/
+    public static String handleHtmlBody(String strHtmlBody) {
+        String strLatestReply = '';
+        Boolean blnMainDivStarted = false;
+        Integer intOpenDivCount;
+        Integer intClosedDivCount;
+        List<String> list_EmailThreadParts = strHtmlBody.split('>');
+        for (String strEmailSection : list_EmailThreadParts) {
+            if (strEmailSection.contains('<div') && !blnMainDivStarted) {
+                strLatestReply = strEmailsection;
+                blnMainDivStarted = true;
+                intOpenDivCount = strEmailSection.countMatches('<div');
+            } else if(blnMainDivStarted) {
+                strLatestReply = strLatestReply + '>' + strEmailSection;
+                intOpenDivCount = (intOpenDivCount + strEmailSection.countMatches('<div')) - strEmailSection.countMatches('</div');
+            }
+
+            if (intOpenDivCount == 0) {
+                strLatestReply = strLatestReply + '>';
+                break;
+            }
+        }
+
+        return strLatestReply;
+    }
 }
