@@ -1,6 +1,6 @@
 import { api, LightningElement, track, wire } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import { refreshApex } from '@salesforce/apex';
+import { refreshApex } from "@salesforce/apex";
 import getUsers from "@salesforce/apex/DEL_ContactCollaborationController.fetchUsers";
 import createCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.addCaseCollaborators";
 //Custom label error message title.
@@ -43,11 +43,11 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
             type: "email"
         }
     ];
-  
+
     /**
      * @ author      : Dinesh Chandra
      * @ description : Method to fetch all the users associated to the Account for the Case..
-    **/
+     **/
     @wire(getUsers, {
         idCaseId: "$recordId",
         strUserName: "$strSearchKey"
@@ -107,12 +107,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
                     if (result.blnIsSuccess) {
                         refreshApex(this.objWiredResult);
                         this.blnIsLoading = false;
-                        this.showToastMessage(
-                            CLDEL00007,
-                            CLDEL00008,
-                            "success"
-                        );
-                        
+                        this.showToastMessage(CLDEL00007, CLDEL00008, "success");
                     } else {
                         this.blnIsLoading = false;
                         this.showToastMessage(CLDEL00001, result.strErrorMessage, "error");
@@ -125,7 +120,6 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         } else {
             this.showToastMessage(CLDEL00001, CLDEL00009, "error");
         }
-       
     }
 
     /**

@@ -14,7 +14,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>It stores the Placeholder Text used in Comment Input field.</shortDescription>
-        <value>Add a comment...</value>
+        <value>Add Comment</value>
     </labels>
     <labels>
         <fullName>CLDEL00003</fullName>

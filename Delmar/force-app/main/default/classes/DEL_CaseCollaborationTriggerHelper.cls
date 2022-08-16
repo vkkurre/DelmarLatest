@@ -13,7 +13,9 @@
 *  18-07-2022       |  dinesh.chandra@absyz.com     |  1.0          |  Initial version
 *******************************************************************************************************/
 public class DEL_CaseCollaborationTriggerHelper {
-     public static Boolean blnSkipTrigger = false;
+    
+    public static Boolean blnSkipTrigger = false;
+    
     /**
     * @ author      : Dinesh Chandra
     * @ description : This method handles the Case Sharing.Case collaborators are created and cases are shared.

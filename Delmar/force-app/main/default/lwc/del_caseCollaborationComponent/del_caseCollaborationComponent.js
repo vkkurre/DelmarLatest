@@ -64,7 +64,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
 
                 this.list_Comments = JSON.parse(JSON.stringify(data.list_CaseComments));
                 let list_CommentsTemp = this.list_Comments;
-                
+
                 /*Adding attributes in each of the comment retreived from apex class 
                   in List of Object 'DEL_CaseComment__c'. */
                 for (let objComment of list_CommentsTemp) {
@@ -146,13 +146,13 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         /**
          * @ author      : Vinaykant
          * @ description : This method is used to navigate to Record Page based recordId.
-        **/
+         **/
         this[NavigationMixin.GenerateUrl]({
-            type: 'standard__recordPage',
+            type: "standard__recordPage",
             attributes: {
                 recordId: event.target.value,
-                actionName: 'view',
-            },
+                actionName: "view"
+            }
         }).then((url) => {
             window.open(url);
         });
