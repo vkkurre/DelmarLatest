@@ -26,25 +26,19 @@
                         alternative-text="avatar">
                     </lightning-avatar>
                 </lightning-layout-item>
-                <lightning-layout-item size="10" small-device-size="10" medium-device-size="10" large-device-size="10">
+                <lightning-layout-item size="12" small-device-size="10" medium-device-size="10" large-device-size="10">
                     <lightning-input-rich-text onchange={handleChangeComment} type="text" class="nullify"
                         value={strBody} placeholder={strPlaceHolderText} variant="bottom-toolbar"
                         disabled-categories="INSERT_CONTENT" message-when-bad-input={strErrorMessageCommentInput}
                         valid={blnValid}>
                     </lightning-input-rich-text>
+                    <lightning-layout multiple-rows="false" horizontal-align="end" vertical-align="center"
+                        class="slds-var-p-vertical_medium">
+                        <lightning-button variant="brand" label={strPlaceHolderText} title={strPlaceHolderText}
+                            onclick={handleOnClick}>
+                        </lightning-button>
+                    </lightning-layout>
                 </lightning-layout-item>
-                <lightning-layout-item size="12" small-device-size="1" medium-device-size="1" large-device-size="1"
-                    class="del-button-icon-width slds-show_medium">
-                    <lightning-button-icon icon-name="utility:arrowup" variant="brand" onclick={handleOnClick}
-                        class="del-style-button-left-margin">
-                    </lightning-button-icon>
-                </lightning-layout-item>
-            </lightning-layout>
-            <lightning-layout multiple-rows="false" horizontal-align="end" vertical-align="center"
-                class="slds-var-p-vertical_medium slds-var-p-horizontal_small slds-hide_medium">
-                <lightning-button variant="brand" label={strPlaceHolderText} title={strPlaceHolderText}
-                    onclick={handleOnClick}>
-                </lightning-button>
             </lightning-layout>
             <lightning-layout>
                 <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
@@ -74,7 +68,7 @@
                                             </div>
                                         </lightning-layout-item>
                                         <lightning-layout-item size="12" small-device-size="1" medium-device-size="1"
-                                            large-device-size="1" class="del-style-button-left-margin">
+                                            large-device-size="1" class="del-button-icon-width">
                                             <div class="slds-float_right">
                                                 <span>
                                                     <template if:true={objCaseComment.blnMenuOption}>
@@ -100,46 +94,34 @@
                                                 <lightning-formatted-rich-text value={objCaseComment.Body__c}>
                                                 </lightning-formatted-rich-text>
                                             </div>
-                                            <div class="slds-p-top_small">
+                                            <div>
                                                 <template if:true={objCaseComment.listAttachments}>
                                                     <lightning-layout multiple-rows="true">
                                                         <template for:each={objCaseComment.listAttachments}
                                                             for:item="objFile">
-                                                            <lightning-layout-item size="12"
-                                                                key={objFile.ContentDocumentId} small-device-size="6"
-                                                                medium-device-size="6" large-device-size="4"
-                                                                class="slds-p-vertical_xx-small slds-p-right_xx-small">
+                                                            <lightning-layout-item key={objFile.ContentDocumentId}
+                                                                class="slds-var-p-around_xx-small">
                                                                 <lightning-layout
                                                                     class="del-style-file-pills slds-p-around_x-small">
-                                                                    <lightning-layout-item size="1">
-                                                                        <span>
-                                                                            <lightning-icon
-                                                                                icon-name="doctype:attachment"
+                                                                    <lightning-layout-item>
+                                                                        <lightning-icon icon-name="doctype:attachment"
+                                                                            title={objFile.Title} size="x-small">
+                                                                        </lightning-icon>
+                                                                    </lightning-layout-item>
+                                                                    <lightning-layout-item
+                                                                        class="slds-p-horizontal_xx-small del-file-title-style">
+                                                                        <a href={objFile.strFileURL} target="_blank">
+                                                                            {objFile.Title}.{objFile.FileExtension}
+                                                                        </a>
+                                                                    </lightning-layout-item>
+                                                                    <lightning-layout-item>
+                                                                        <a href={objFile.strDownloadURL}
+                                                                            class="del-style-download-icon">
+                                                                            <lightning-icon icon-name="utility:download"
+                                                                                alternative-text="Download"
                                                                                 title={objFile.Title} size="x-small">
                                                                             </lightning-icon>
-                                                                        </span>
-                                                                    </lightning-layout-item>
-                                                                    <lightning-layout-item size="10"
-                                                                        class="slds-p-horizontal_xx-small">
-                                                                        <span>
-                                                                            <a href={objFile.strFileURL}
-                                                                                target="_blank">
-                                                                                {objFile.Title}.{objFile.FileExtension}
-                                                                            </a>
-                                                                        </span>
-                                                                    </lightning-layout-item>
-                                                                    <lightning-layout-item size="1">
-                                                                        <span>
-                                                                            <a href={objFile.strDownloadURL}
-                                                                                class="del-style-download-icon">
-                                                                                <lightning-icon
-                                                                                    icon-name="utility:download"
-                                                                                    alternative-text="Download"
-                                                                                    title={objFile.Title}
-                                                                                    size="x-small">
-                                                                                </lightning-icon>
-                                                                            </a>
-                                                                        </span>
+                                                                        </a>
                                                                     </lightning-layout-item>
                                                                 </lightning-layout>
                                                             </lightning-layout-item>

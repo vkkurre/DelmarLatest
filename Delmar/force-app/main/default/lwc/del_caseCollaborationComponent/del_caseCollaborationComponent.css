@@ -29,10 +29,6 @@ lightning-avatar {
     font-weight: bold;
 }
 
-.del-style-button-left-margin {
-    margin-left: 0rem;
-}
-
 .del-style-download-icon {
     display: inline-block;
     float: right;
@@ -45,4 +41,10 @@ lightning-avatar {
 
 .del-button-icon-width {
     width: 10px;
+}
+
+.del-file-title-style {
+    width: 120px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
