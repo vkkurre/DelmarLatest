@@ -32,12 +32,25 @@
                         disabled-categories="INSERT_CONTENT" message-when-bad-input={strErrorMessageCommentInput}
                         valid={blnValid}>
                     </lightning-input-rich-text>
-                    <lightning-layout multiple-rows="false" horizontal-align="end" vertical-align="center"
-                        class="slds-var-p-vertical_medium">
-                        <lightning-button variant="brand" label={strPlaceHolderText} title={strPlaceHolderText}
-                            onclick={handleOnClick}>
-                        </lightning-button>
-                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout>
+                <lightning-layout-item size="1" small-device-size="1" medium-device-size="1" large-device-size="1"
+                    class="del-avatar-width">
+                </lightning-layout-item>
+                <lightning-layout-item size="5" small-device-size="5" medium-device-size="5" large-device-size="5"
+                    class="slds-var-p-vertical_medium" >
+                    <template if:true={blnCheckboxVisible}>
+                        <lightning-input type="checkbox" label={strVisibleToCustomerLabel} onchange={handleVisibleToCustomer} 
+                            checked={blnVisibleToCustomer}>
+                        </lightning-input>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item size="5" small-device-size="5" medium-device-size="5" large-device-size="5" 
+                    class="slds-var-p-vertical_medium" >
+                    <lightning-button variant="brand" label={strPlaceHolderText} title={strPlaceHolderText} class="slds-float_right"
+                        onclick={handleOnClick}>
+                    </lightning-button>
                 </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>

@@ -98,7 +98,8 @@ public class DEL_CaseCommentTriggerHelper {
                                      Body__c,
                                      Case__c,
                                      EmailMessageId__c,
-                                     CreatedDate
+                                     CreatedDate,
+                                     VisibleToCustomer__c
                                      FROM DEL_CaseComment__c
                                      WHERE Id IN :list_CaseComments
                                     ];
@@ -142,7 +143,8 @@ public class DEL_CaseCommentTriggerHelper {
         map_UserById = new Map<Id, User>([SELECT  
                                           Id,
                                           Name,
-                                          Email
+                                          Email,
+                                          IsPortalEnabled
                                           FROM User
                                           WHERE Id IN :set_UserIds
                                          ]);
@@ -236,7 +238,13 @@ public class DEL_CaseCommentTriggerHelper {
                 // Adding the Case Collabortors Emails
                 for (DEL_CaseCollaborator__c objCollaborator : map_CaseCollaboratorsByCaseId.get(objCaseComment.Case__c)) {
                     if (map_UserById.containsKey(objCollaborator.User__c)) {
-                        list_ToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
+                        if (objCaseComment.VisibleToCustomer__c) {
+                            list_ToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
+                        } else {
+                            if (!(map_UserById.get(objCollaborator.User__c).IsPortalEnabled)) {
+                                list_ToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
+                            }
+                        }
                     }
                 }
             }
@@ -256,7 +264,7 @@ public class DEL_CaseCommentTriggerHelper {
                     list_ToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
                 }
                 
-                if (String.isNotBlank(objCase.SuppliedEmail)) {
+                if (String.isNotBlank(objCase.SuppliedEmail) && objCaseComment.VisibleToCustomer__c) {
                     // Adding the Case Web Email
                     list_ToAddresses.add(objCase.SuppliedEmail);
                 }

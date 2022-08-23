@@ -92,12 +92,13 @@ public class DEL_CaseCollaborationControllerTest {
         
         Id idCaseId = objCase.Id;
         String strComment = 'Power failure happened';
-        
+        Boolean blnVisibleToCustomer = true;
+
         DEL_CaseCollaborationController.ResponseWrapper objResultFetch = new DEL_CaseCollaborationController.ResponseWrapper();
         
         //Test the Class Methods.
         Test.startTest();
-        DEL_CaseCollaborationController.insertComment(strComment, idCaseId);
+        DEL_CaseCollaborationController.insertComment(strComment, idCaseId, blnVisibleToCustomer);
         DEL_CaseComment__c objCaseComment = [SELECT 
                                              Id 
                                              FROM DEL_CaseComment__c 
@@ -125,10 +126,11 @@ public class DEL_CaseCollaborationControllerTest {
         
         Id idCaseId = objCase.Id;
         String strComment = 'Power failure happened';
+        Boolean blnVisibleToCustomer = true;
         DEL_CaseCollaborationController.ResponseWrapper objResponse = new DEL_CaseCollaborationController.ResponseWrapper();
         Test.startTest();
         blnThrowException = true;
-        objResponse = DEL_CaseCollaborationController.insertComment(strComment, idCaseId);
+        objResponse = DEL_CaseCollaborationController.insertComment(strComment, idCaseId, blnVisibleToCustomer);
         objResponse = DEL_CaseCollaborationController.fetchComments(idCaseId);
         
         DEL_CaseComment__c objCaseComment = [SELECT 

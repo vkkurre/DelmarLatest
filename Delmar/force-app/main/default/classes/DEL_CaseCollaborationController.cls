@@ -22,12 +22,14 @@ public class DEL_CaseCollaborationController {
         @AuraEnabled public String strErrorMessage;
         @AuraEnabled public List<DEL_CaseComment__c> list_CaseComments;
         @AuraEnabled public Map<Id, List<ContentVersion>> map_AttachmentsByCaseCommentId;
+        @AuraEnabled public User objCurrentUser;
         
         public ResponseWrapper() {
             this.blnIsSuccess = true;
             this.strErrorMessage = '';
             this.list_CaseComments = new List<DEL_CaseComment__c>();
             this.map_AttachmentsByCaseCommentId = new Map<Id, List<ContentVersion>>();
+            this.objCurrentUser = new User();
         }
     }
     
@@ -43,23 +45,24 @@ public class DEL_CaseCollaborationController {
         Map<Id, ContentDocumentLink> map_ContentDocumentLinkByContentDocumentId = new Map<Id, ContentDocumentLink>();
         Map<Id, List<ContentVersion>> map_ContentVersionsByCaseCommentId = new Map<Id, List<ContentVersion>>();
         List<Id> list_CaseCommentIds = new List<Id>();
-        
+        Id idCurrentUser = UserInfo.getUserId();
+        String strQueryCurrentUser = 'Select Id, Name, IsPortalEnabled From User WHERE Id = :idCurrentUser';
+
         try {
-            objResponseWrapper.list_CaseComments = [SELECT
-                                                    CreatedDate,
-                                                    LastModifiedDate,
-                                                    CreatedById,
-                                                    CreatedBy.SmallPhotoUrl,
-                                                    CreatedBy.Name,
-                                                    Body__c,
-                                                    CommentCreatedName__c,
-                                                    CreatedByEmail__c,
-                                                    EmailMessageId__c
-                                                    FROM DEL_CaseComment__c 
-                                                    WHERE Case__c = :strRecordId 
-                                                    ORDER BY CreatedDate 
-                                                    DESC];
-            
+            User objUser = Database.query(strQueryCurrentUser);
+            String strQueryCaseComments = 'SELECT CreatedDate, LastModifiedDate, CreatedById, ' 
+                + ' CreatedBy.SmallPhotoUrl, CreatedBy.Name, Body__c, CommentCreatedName__c, CreatedByEmail__c, '
+                + ' EmailMessageId__c, VisibleToCustomer__c FROM DEL_CaseComment__c WHERE Case__c = :strRecordId';
+
+            if (objUser.IsPortalEnabled) {
+                strQueryCaseComments += ' AND VisibleToCustomer__c = true';
+            }
+
+            strQueryCaseComments += ' ORDER BY CreatedDate DESC';
+
+            objResponseWrapper.objCurrentUser = objUser;
+            objResponseWrapper.list_CaseComments = Database.query(strQueryCaseComments);
+
             if (!objResponseWrapper.list_CaseComments.isEmpty()) {
                 for (DEL_CaseComment__c objCaseComment : objResponseWrapper.list_CaseComments) {
                     list_caseCommentIds.add(objCaseComment.Id);
@@ -123,11 +126,12 @@ public class DEL_CaseCollaborationController {
     * @ return       :  objResponseWrapper - instance of ResponseWrapper class
     **/
     @AuraEnabled
-    public static ResponseWrapper insertComment(String strBody, String strRecordId) {
+    public static ResponseWrapper insertComment(String strBody, String strRecordId, Boolean blnVisibleToCustomer) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
         DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c(
             Body__c = strBody,
-            Case__c = strRecordId
+            Case__c = strRecordId,
+            VisibleToCustomer__c = blnVisibleToCustomer
         );
         
         try {
@@ -143,7 +147,7 @@ public class DEL_CaseCollaborationController {
         
         return objResponseWrapper;
     }
-    
+
     /**
     * @ author       :  Ankit
     * @ description  :  This method should be called to force an exception which 

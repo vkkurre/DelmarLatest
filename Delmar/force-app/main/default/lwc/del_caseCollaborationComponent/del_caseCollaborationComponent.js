@@ -18,6 +18,8 @@ import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
 import CLDEL00007 from "@salesforce/label/c.CLDEL00007";
 //Custom label for View Full Message Label in Menu Option.
 import CLDEL00012 from "@salesforce/label/c.CLDEL00012";
+//Custom label for Visible To Customer Label in Checkbox.
+import CLDEL00013 from "@salesforce/label/c.CLDEL00013";
 import fetchComments from "@salesforce/apex/DEL_CaseCollaborationController.fetchComments";
 import insertComment from "@salesforce/apex/DEL_CaseCollaborationController.insertComment";
 
@@ -25,10 +27,14 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     strBody = "";
     @api recordId;
     blnValid = true;
+    blnVisibleToCustomer = true;
+    blnCheckboxVisible = false;
     strErrorMessageCommentInput;
     @track list_Comments = [];
+    objCurrentUserDetails;
     strPlaceHolderText = CLDEL00002;
     strViewFullMessageMenuLabel = CLDEL00012;
+    strVisibleToCustomerLabel = CLDEL00013;
     blnIsLoading = false;
     // List that contains retrieved data and errors from fetchComments(). Used to refresh apex data after insertion
     list_WiredComments;
@@ -43,6 +49,12 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
+                let objCurrentUser = JSON.parse(
+                    JSON.stringify(data.objCurrentUser)
+                );
+
+                this.blnCheckboxVisible = !(objCurrentUser.IsPortalEnabled);
+
                 let list_Attachments = JSON.parse(
                     JSON.stringify(data.map_AttachmentsByCaseCommentId)
                 );
@@ -94,6 +106,14 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     }
 
     /**
+     * @ author      : Vinaykant
+     * @ description : This method is used to handle the checkbox value to be stored on the variable.
+     **/
+    handleVisibleToCustomer(event) {
+        this.blnVisibleToCustomer = event.target.checked;
+    }
+
+    /**
      * @ author      : Deeksha Suvarna
      * @ description : This method is invoked on the change of comment text field to store
      *                 the value on 'strBody' variable.
@@ -118,12 +138,14 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
             **/
             insertComment({
                 strRecordId: this.recordId,
-                strBody: this.strBody
+                strBody: this.strBody,
+                blnVisibleToCustomer: this.blnVisibleToCustomer
             })
                 .then((result) => {
                     if (result.blnIsSuccess) {
                         // Nullifying the comment input box after comment is submitted.
                         this.strBody = "";
+                        this.blnVisibleToCustomer = true;
                         // Refreshing the comment list.
                         this.updateRecordView();
                         this.showToastMessage(CLDEL00007, "success", CLDEL00006);
