@@ -13,7 +13,7 @@
 *  18-07-2022       |  dinesh.chandra@absyz.com     |  1.0          |  Initial version
 *******************************************************************************************************/
 public class DEL_CaseCollaborationTriggerHelper {
-    
+    public static DEL_EmailAlertConfiguration__c objEmailAlertConfiguration;
     public static Boolean blnSkipTrigger = false;
     
     /**
@@ -24,7 +24,7 @@ public class DEL_CaseCollaborationTriggerHelper {
     public static void shareCases(List<DEL_CaseCollaborator__c> list_CaseCollaborators) {    
         List<CaseShare> list_CaseShares = new List<CaseShare>();
         List<String> list_ConsolidatedDMLErrors = new List<String>();
-        try {
+        try { 
             for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
                 CaseShare objCaseShare = new CaseShare();
                 objCaseShare.UserOrGroupId = objCaseCollaborator.User__c ;
@@ -55,7 +55,66 @@ public class DEL_CaseCollaborationTriggerHelper {
             );
         }
     }
-     
+     /**
+    * @ author      : Dinesh Chandra
+    * @ description : This method handles creation of URL's for Community Portal for Customers and Salesforce Login for Agents.
+    * @ params      : list_CaseCollaborators - list of Case collaborator records passed from trigger
+    **/
+    public static void populateFields(List<DEL_CaseCollaborator__c> list_CaseCollaborators) {
+        String strCommnunityURL = '';
+        try {
+            objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+            String strSFURL = URL.getSalesforceBaseUrl().toExternalForm();
+            if (Test.isRunningTest()) {
+                if (DEL_CaseCollaborationTriggerHelperTest.blnThrowException) {
+                    throw new DMLException();
+                }
+                
+                strCommnunityURL = DEL_CaseCollaborationTriggerHelperTest.getSiteLink();
+            } else {
+                Site objSite = [SELECT 
+                                Id
+                                FROM Site 
+                                WHERE Name = :objEmailAlertConfiguration.SiteName__c
+                                ];
+                SiteDetail objSiteDetail = [SELECT
+                                            SecureURL 
+                                            FROM SiteDetail
+                                            WHERE DurableId = :objSite.Id
+                                            ];
+                strCommnunityURL = objSiteDetail.SecureURL;
+            }
+
+            Set<Id> set_UserIds = new Set<Id>();
+            for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
+                set_UserIds.add(objCaseCollaborator.User__c);
+            }
+
+            Map<Id, User> map_UsersById = new Map<Id, User>([SELECT 
+                                                             Id,
+                                                             IsPortalEnabled 
+                                                             FROM User 
+                                                             WHERE Id IN :set_UserIds
+                                                             ]);
+            for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
+                if (map_UsersById.containsKey(objCaseCollaborator.User__c) && 
+                    map_UsersById.get(objCaseCollaborator.User__c).IsPortalEnabled
+                ) {
+                    objCaseCollaborator.CaseUrl__c = strCommnunityURL + '/' + objCaseCollaborator.Case__c;
+                } else {
+                    objCaseCollaborator.CaseUrl__c = strSFURL + '/' + objCaseCollaborator.Case__c;
+                }
+            }
+        } catch (Exception objException) {
+            DEL_Utils.logException(
+                'DEL_CaseCollaborationTriggerHelper',
+                'populateFields',
+                objException,
+                true
+            );
+        }
+    }
+    
     /**
     * @ author      : Dinesh Chandra
     * @ description : This method handle avoids creation of duplicate case collaborators.
@@ -91,8 +150,8 @@ public class DEL_CaseCollaborationTriggerHelper {
             for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
                 String strUniqueKey = objCaseCollaborator.Case__c + '' + objCaseCollaborator.User__c;
                 if (map_ExistingCaseCollaborators.containsKey(strUniqueKey) &&
-                 !map_ExistingCaseCollaborators.get(strUniqueKey).isEmpty()
-                   ) {
+                    !map_ExistingCaseCollaborators.get(strUniqueKey).isEmpty()
+                ) {
                     objCaseCollaborator.addError('This user is already a collaborator for this Case.');
                 }
             }

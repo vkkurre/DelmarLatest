@@ -340,6 +340,18 @@
                                                                                         <p>
                                                                                             Delmar Support Team
                                                                                         </p>
+                                                                                        <br />
+                                                                                        <center>
+                                                                                            <div style="width: 160px; border-radius: 30px; padding: 10px 10px; background-color: #003685;"
+                                                                                                bgcolor="#009164"
+                                                                                                valign="top"
+                                                                                                align="center">
+                                                                                                <a href = {!DEL_CaseCollaborator__c.CaseUrl__c}
+                                                                                                    style="text-decoration: none; line-height: 24px; letter-spacing: -0.2px; font-size: 16px; font-weight: 500; color: #ffffff; word-break: break-word; display: block;"
+                                                                                                    target="_blank">View
+                                                                                                    the Case</a>
+                                                                                            </div>
+                                                                                        </center>
                                                                                         
 
                                                                                      

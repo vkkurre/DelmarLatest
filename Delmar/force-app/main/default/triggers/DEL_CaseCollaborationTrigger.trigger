@@ -24,7 +24,8 @@ trigger DEL_CaseCollaborationTrigger on DEL_CaseCollaborator__c (after insert, b
     }
 
     if (Trigger.isInsert && Trigger.isBefore) {
-        DEL_CaseCollaborationTriggerHelper.handleDuplicates(trigger.new);
+        DEL_CaseCollaborationTriggerHelper.handleDuplicates(trigger.new); 
+        DEL_CaseCollaborationTriggerHelper.populateFields(trigger.new);
     }
     
     if (Trigger.isInsert && Trigger.isAfter) {

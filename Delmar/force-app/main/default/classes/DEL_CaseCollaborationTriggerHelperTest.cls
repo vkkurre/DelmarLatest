@@ -153,7 +153,16 @@ public class DEL_CaseCollaborationTriggerHelperTest {
                                                                 DEL_CaseCollaborator__c];
         blnThrowException = true;
         DEL_CaseCollaborationTriggerHelper.handleDuplicates(list_CaseCollaborators);
+        DEL_CaseCollaborationTriggerHelper.populateFields(list_CaseCollaborators);
         blnThrowException = false;
         Test.stopTest();
+    }
+
+    /**
+    * @ author       :  Ankit C 
+    * @ description  :  This method returns a dummy site link while running test class
+    **/
+    public static String getSiteLink() {
+        return 'https://demo-developer-edition.ap15.force.com';
     }
 }
