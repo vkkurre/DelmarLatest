@@ -336,6 +336,8 @@ public class DEL_TestUtility {
         private String strThreadIdentifier;
         private Boolean blnIncoming;
         private String strHeaders;
+        private String strToAddress;
+        private String strCcAddress;
         
         public EmailMessageBuilder() {
             this.strTextBody = '';
@@ -345,6 +347,8 @@ public class DEL_TestUtility {
             this.strMessageIdentifier = '';
             this.strThreadIdentifier = '';
             this.strHeaders = '';
+            this.strToAddress = '';
+            this.strCcAddress = '';
         }
         
         public EmailMessageBuilder setTextBody(String strValue) {
@@ -381,6 +385,16 @@ public class DEL_TestUtility {
             this.strFromAddress = strValue;
             return this;
         }
+
+        public EmailMessageBuilder setToAddress(String strValue) {
+            this.strToAddress = strValue;
+            return this;
+        }
+
+        public EmailMessageBuilder setCcAddress(String strValue) {
+            this.strCcAddress = strValue;
+            return this;
+        }
         
         public EmailMessageBuilder setIncoming(Boolean blnValue) {
             this.blnIncoming = blnValue;
@@ -400,9 +414,11 @@ public class DEL_TestUtility {
             objEmailMessage.MessageIdentifier = this.strMessageIdentifier;
             objEmailMessage.FromName = this.strFromName;
             objEmailMessage.FromAddress = this.strFromAddress;
+            objEmailMessage.ToAddress = this.strToAddress;
             objEmailMessage.ParentId = this.idParentId;
             objEmailMessage.Incoming = this.blnIncoming;
             objEmailMessage.Headers = this.strHeaders;
+            objEmailMessage.CcAddress = this.strCcAddress;
             
             return objEmailMessage;
         }

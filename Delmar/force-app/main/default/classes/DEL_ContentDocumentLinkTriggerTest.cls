@@ -61,6 +61,7 @@ public class DEL_ContentDocumentLinkTriggerTest {
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
+            .setToAddress(objEmailAlertConfiguration.OrgWideAddress__c)
             .setThreadIdentifier('qwerty')
             .setMessageIdentifier('1cwicjn')
             .setParentId(objCase.Id)

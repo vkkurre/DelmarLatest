@@ -1,4 +1,4 @@
-/*******************************************************************************************************
+/*********************************************************************************************************
 * 
 * @ Name            :   DEL_CaseCommentTriggerHelper
 * @ Purpose         :   Helper class for DEL_CaseCommentTrigger
@@ -7,9 +7,10 @@
 * @ Test Class Name :   DEL_CaseCommentTriggerHelperTest
 *
 *   Date            |  Developer Name                |  Version      |  Changes
-* ======================================================================================================
+* ========================================================================================================
 *  05-08-2022       |  ankit.c@absyz.com             |  1.0          |  Initial version
-*******************************************************************************************************/
+*  22-08-2022       |  rakesh.nayak@absyz.com        |  1.1          |  Added email differentiation logic
+*********************************************************************************************************/
 public class DEL_CaseCommentTriggerHelper {
     public static Boolean blnSkipTrigger = false;
     // Map of Users by Id
@@ -131,7 +132,7 @@ public class DEL_CaseCommentTriggerHelper {
             }
         
         // Query Cases
-        String strCaseQuery = 'SELECT Id, OwnerId, SuppliedEmail, Contact.Preferred_Language__c, Language__c, ' + 
+        String strCaseQuery = 'SELECT Id, OwnerId, DEL_CcAddress__c, SuppliedEmail, ContactEmail, Contact.Preferred_Language__c, Language__c, ' + 
             + objEmailAlertConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
         List<Case> list_Cases = Database.query(strCaseQuery);
         map_CaseById = new Map<Id, Case>(list_Cases);
@@ -143,8 +144,8 @@ public class DEL_CaseCommentTriggerHelper {
         map_UserById = new Map<Id, User>([SELECT  
                                           Id,
                                           Name,
-                                          Email,
-                                          IsPortalEnabled
+                                          IsPortalEnabled,
+                                          Email
                                           FROM User
                                           WHERE Id IN :set_UserIds
                                          ]);
@@ -226,24 +227,30 @@ public class DEL_CaseCommentTriggerHelper {
         
         List<String> list_MergeFields = objEmailAlertConfiguration.MergeFields__c.split(',');
         for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
-            Messaging.SingleEmailMessage objSingleMessage = new Messaging.SingleEmailMessage();
-            List<String> list_ToAddresses = new List<String>();
-            EmailTemplate objTemplate;
+            Messaging.SingleEmailMessage objSingleMessageForCustomers = new Messaging.SingleEmailMessage();
+            EmailTemplate objTemplateForCustomers;
+            List<String> list_CustomerToAddresses = new List<String>();
+            Messaging.SingleEmailMessage objSingleMessageForAgents = new Messaging.SingleEmailMessage();
+            List<String> list_AgentToAddresses = new List<String>();
+            EmailTemplate objTemplateForAgents = map_EmailTemplateByLanguage.get('English');
+
             if (map_UserById.containsKey(objCaseComment.CreatedById)) {
                 // Adding the Case Comment Created By Email
-                list_ToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
+                if (map_UserById.get(objCaseComment.CreatedById).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
+                    list_CustomerToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
+                } else {
+                    list_AgentToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
+                }
             }
             
             if (map_CaseCollaboratorsByCaseId.containsKey(objCaseComment.Case__c)) {
                 // Adding the Case Collabortors Emails
                 for (DEL_CaseCollaborator__c objCollaborator : map_CaseCollaboratorsByCaseId.get(objCaseComment.Case__c)) {
                     if (map_UserById.containsKey(objCollaborator.User__c)) {
-                        if (objCaseComment.VisibleToCustomer__c) {
-                            list_ToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
+                        if (map_UserById.get(objCollaborator.User__c).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
+                            list_CustomerToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
                         } else {
-                            if (!(map_UserById.get(objCollaborator.User__c).IsPortalEnabled)) {
-                                list_ToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
-                            }
+                            list_AgentToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
                         }
                     }
                 }
@@ -252,21 +259,41 @@ public class DEL_CaseCommentTriggerHelper {
             if (map_CaseById.containsKey(objCaseComment.Case__c)) {
                 Case objCase = map_CaseById.get(objCaseComment.Case__c);
                 String strLanguage = getDefaultLanguage(objCase);
-                objTemplate = map_EmailTemplateByLanguage.get(strLanguage);
-                String strSubject = objTemplate.Subject;
-                if (strSubject.contains('{!Case.Subject}')) {
-                    strSubject = strSubject.replace('{!Case.Subject}', objCase.Subject);
+                objTemplateForCustomers = map_EmailTemplateByLanguage.get(strLanguage);
+                if (objCaseComment.VisibleToCustomer__c) {
+                    String strSubjectForCustomers = objTemplateForCustomers.Subject;
+                    if (strSubjectForCustomers.contains('{!Case.Subject}')) {
+                        strSubjectForCustomers = strSubjectForCustomers.replace('{!Case.Subject}', objCase.Subject);
+                        objSingleMessageForCustomers.setSubject(strSubjectForCustomers);
+                    }
                 }
                 
-                objSingleMessage.setSubject(strSubject);
+                String strSubjectForAgents =objTemplateForAgents.Subject;
+                if (strSubjectForAgents.contains('{!Case.Subject}')) {
+                    strSubjectForAgents = strSubjectForAgents.replace('{!Case.Subject}', objCase.Subject);
+                    objSingleMessageForAgents.setSubject(strSubjectForAgents);
+                }
+
                 if (map_UserById.containsKey(objCase.OwnerId)) {
                     // Adding the Case Owner Email
-                    list_ToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
+                    if (map_UserById.get(objCase.OwnerId).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
+                        list_CustomerToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
+                    } else {
+                        list_AgentToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
+                    }
                 }
                 
-                if (String.isNotBlank(objCase.SuppliedEmail) && objCaseComment.VisibleToCustomer__c) {
+                if (String.isNotBlank(objCase.ContactEmail) && objCaseComment.VisibleToCustomer__c) {
+                    // Adding the Case Contact Email
+                    list_CustomerToAddresses.add(objCase.ContactEmail);
+                } else if (String.isNotBlank(objCase.SuppliedEmail) && objCaseComment.VisibleToCustomer__c) {
                     // Adding the Case Web Email
-                    list_ToAddresses.add(objCase.SuppliedEmail);
+                    list_CustomerToAddresses.add(objCase.SuppliedEmail);
+                }
+
+                if (String.isNotBlank(objCase.DEL_CcAddress__c) && objCaseComment.VisibleToCustomer__c) {
+                    // Adding the CC Emails
+                    list_CustomerToAddresses.addAll(objCase.DEL_CcAddress__c.split(';'));
                 }
                 
                 // Setting the references in the Email headers 
@@ -276,30 +303,60 @@ public class DEL_CaseCommentTriggerHelper {
                     if (objEmailMessage.Headers.contains('References:')) {
                         String strHeaders = objEmailMessage.Headers;
                         strReferences = strHeaders.substringAfter('References:');
-                        objSingleMessage.setReferences(strReferences);
+                        if (objCaseComment.VisibleToCustomer__c) {
+                            objSingleMessageForCustomers.setReferences(strReferences);
+                        }
+                        objSingleMessageForAgents.setReferences(strReferences);
                     }
                 }
-                
-                objSingleMessage.setWhatId(objCase.Id);
+                if (objCaseComment.VisibleToCustomer__c) {
+                    objSingleMessageForCustomers.setWhatId(objCase.Id);
+                }
+                objSingleMessageForAgents.setWhatId(objCase.Id);
             }
             
-            String strHtmlBody = objTemplate.HtmlValue;
-            strHtmlBody = getHtmlBody(
+            if (objCaseComment.VisibleToCustomer__c) {
+                String strHtmlBodyForCustomers = objTemplateForCustomers.HtmlValue;
+                strHtmlBodyForCustomers = getHtmlBody(
+                    objCaseComment, 
+                    map_CaseById.get(objCaseComment.Case__c), 
+                    list_MergeFields, 
+                    strHtmlBodyForCustomers,
+                    strSiteURL, 
+                    'Customer'
+                );
+    
+                objSingleMessageForCustomers.setToAddresses(list_CustomerToAddresses);
+                objSingleMessageForCustomers.setHtmlBody(strHtmlBodyForCustomers);
+            }
+
+            String strHtmlBodyForAgents = objTemplateForAgents.HtmlValue;
+            strHtmlBodyForAgents = getHtmlBody(
                 objCaseComment, 
                 map_CaseById.get(objCaseComment.Case__c), 
                 list_MergeFields, 
-                strHtmlBody, 
-                strSiteURL
+                strHtmlBodyForAgents,
+                strSiteURL, 
+                'Agent'
             );
-            
-            objSingleMessage.setToAddresses(list_ToAddresses);
+
+            objSingleMessageForAgents.setHtmlBody(strHtmlBodyForAgents);
+            objSingleMessageForAgents.setToAddresses(list_AgentToAddresses);
             
             if (!list_OrgWideEmailAddresses.isEmpty()) {
-                objSingleMessage.setOrgWideEmailAddressId(list_OrgWideEmailAddresses[0].Id);
+                if (objCaseComment.VisibleToCustomer__c) {
+                    objSingleMessageForCustomers.setOrgWideEmailAddressId(list_OrgWideEmailAddresses[0].Id);
+                }
+                
+                objSingleMessageForAgents.setOrgWideEmailAddressId(list_OrgWideEmailAddresses[0].Id);
+            }
+
+            if(objCaseComment.VisibleToCustomer__c) {
+                list_EmailMessages.add(objSingleMessageForCustomers);
             }
             
-            objSingleMessage.setHtmlBody(strHtmlBody); 
-            list_EmailMessages.add(objSingleMessage);
+            objSingleMessageForAgents.setHtmlBody(strHtmlBodyForAgents);
+            list_EmailMessages.add(objSingleMessageForAgents); 
         }
         
         Messaging.SendEmailResult[] list_Results = Messaging.sendEmail(list_EmailMessages);
@@ -318,9 +375,13 @@ public class DEL_CaseCommentTriggerHelper {
         DEL_CaseComment__c objCaseComment, 
         Case objCase, 
         List<String> list_MergeFields, 
-        String strHtml, 
-        String strSiteURL
+        String strHtml,
+        String strSiteURL, 
+        String strUsertype
     ) {
+        if (strUserType == 'Agent') {
+            strSiteURL = URL.getSalesforceBaseUrl().toExternalForm();
+        }
         // Map of Case field values by field API Names.
         Map<String, Object> map_CaseFieldByName = objCase.getPopulatedFieldsAsMap();
         // Map of Case Comment field values by field API Names.

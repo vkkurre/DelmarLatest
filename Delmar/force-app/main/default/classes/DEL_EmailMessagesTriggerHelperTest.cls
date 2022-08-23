@@ -64,6 +64,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
     **/
     @isTest
     private static void testEmailMessageCreation() {
+        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = [SELECT OrgWideAddress__c FROM DEL_EmailAlertConfiguration__c LIMIT 1];
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
@@ -71,8 +72,10 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
+            .setToAddress(objEmailAlertConfiguration.OrgWideAddress__c)
             .setThreadIdentifier('qwerty')
             .setMessageIdentifier('1cwicjn')
+            .setCcAddress('TestUser1@test.com; TestUser2@test.com; TestUser1@test.com')
             .setParentId(objCase.Id)
             .createEmailMessage();
         Test.startTest();
@@ -85,6 +88,18 @@ public class DEL_EmailMessagesTriggerHelperTest {
                                              Case__c
                                              FROM DEL_CaseComment__c
                                              LIMIT 1];
+
+        Case objNewCase = [SELECT
+                           Id,
+                           DEL_CcAddress__c,
+                           DEL_ToAddress__c
+                           FROM Case WHERE Id = :objCaseComment.Case__c
+                           ];
+        List<String> list_CcAddresses = objNewCase.DEL_CcAddress__c.split(';');
+        // Assert if the Support Address is stored in Case
+        System.assertEquals(objEmailAlertConfiguration.OrgWideAddress__c, objNewCase.DEL_ToAddress__c);
+        // Assert if unique email addresses in CC field are getting inserted to  DEL_CcAddress__c field in Case
+        System.assertEquals(2, list_CcAddresses.size());
         // Assert if a case comment was created successfully from the email message.                                     
         System.assertEquals(objCaseComment.Body__c, '<div>this is HtmlBody<br><div><i>Okay</i></div><br><b>Update please</b></div>');
     }
@@ -97,6 +112,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
     @isTest
     private static void handleExceptions() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
+        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = [SELECT OrgWideAddress__c FROM DEL_EmailAlertConfiguration__c LIMIT 1];
         
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
@@ -104,9 +120,11 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
+            .setToAddress(objEmailAlertConfiguration.OrgWideAddress__c)
             .setThreadIdentifier('qwerty')
             .setMessageIdentifier('1cwicjn')
             .setParentId(objCase.Id)
+            .setCcAddress('TestUser1@test.com; TestUser2@test.com')
             .createEmailMessage();
         
         Test.startTest();
