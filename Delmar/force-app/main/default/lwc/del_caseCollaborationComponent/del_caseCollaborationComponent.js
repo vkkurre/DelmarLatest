@@ -43,7 +43,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     // List that contains retrieved data and errors from fetchComments(). Used to refresh apex data after insertion
     @track list_WiredComments;
     // List of files that were uploaded
-    @track list_SelectedFiles;
+    @track list_SelectedFiles = [];
     blnVisibleToCustomer = true;
 
     /**

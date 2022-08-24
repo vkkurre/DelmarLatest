@@ -10,6 +10,7 @@
 *******************************************************************************************************/
 @isTest
 public class DEL_CaseCommentTriggerHelperTest {
+    public static Boolean blnThrowException = false;
     /**
     * @ author       :  Anit C
     * @ description  :  Method to setup test data
@@ -161,7 +162,7 @@ public class DEL_CaseCommentTriggerHelperTest {
         System.assert(objCaseComment.CreatedByEmail__c != null);
     }
 
-        /**
+    /**
     * @ author       :  Anit C
     * @ description  :  Test Case Comment creation with Attachments
     **/
@@ -204,29 +205,30 @@ public class DEL_CaseCommentTriggerHelperTest {
     }
 
     /**
+    * @ author       :  Anit C
+    * @ description  :  Test method to cover catch blocks
+    **/
+    @isTest
+    static void testExceptions() {
+        Case objCase = [SELECT Id FROM Case LIMIT 1];
+        DEL_CaseComment__c objCaseComment = new DEL_TestUtility.CaseCommentBuilder()
+            .setBody('Hi, can I get an update?')
+            .setHasAttachment(true)
+            .setCaseId(objCase.Id)
+            .setVisibleToCustomer(true)
+            .createCaseComment();
+        Test.startTest();
+        blnThrowException = true;
+        insert objCaseComment;  
+        blnThrowException = false;
+        Test.stopTest();
+    }
+
+    /**
     * @ author       :  Ankit C 
     * @ description  :  This method returns a dummy site link while running test class
     **/
     public static String getSiteLink() {
         return 'https://demo-developer-edition.ap15.force.com';
-    }
-
-    /**
-    * @ author       :  Anit C
-    * @ description  :  test method to test the logic in processAfterInsert()
-    **/
-    @isTest
-    static void testGetDefaultLanguage() {
-        Case objCase = [SELECT 
-                        Id,
-                        Contact.Preferred_Language__c,
-                        Language__c
-                        FROM Case 
-                        LIMIT 1];
-        Test.startTest();
-        String strLanguage = DEL_CaseCommentTriggerHelper.getDefaultLanguage(objCase);
-        Test.stopTest();
-
-        System.assertEquals('French', strLanguage);
     }
 }
