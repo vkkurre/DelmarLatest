@@ -90,7 +90,8 @@
         <members>CLDEL00011</members>
         <members>CLDEL00012</members>
         <members>CLDEL00013</members>
-        <name>CustomLabels</name>
+        <members>CLDEL00014</members>
+        <name>CustomLabel</name>
     </types>
     <types>
         <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertEnglish</members>

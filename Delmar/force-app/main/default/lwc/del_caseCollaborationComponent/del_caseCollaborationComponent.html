@@ -19,7 +19,8 @@
     <!-- lightning-card: holds the casecomments -->
     <lightning-card>
         <div class="slds-var-p-around_x-small">
-            <lightning-layout multiple-rows="false" vertical-align="start">
+            <lightning-layout multiple-rows="false" vertical-align="start"
+                class="slds-var-p-bottom_medium slds-border_bottom">
                 <lightning-layout-item size="12" small-device-size="1" medium-device-size="1" large-device-size="1"
                     class="del-avatar-width">
                     <lightning-avatar variant="circle" src="/bad/image/url.jpg" fallback-icon-name="standard:avatar"
@@ -32,25 +33,45 @@
                         disabled-categories="INSERT_CONTENT" message-when-bad-input={strErrorMessageCommentInput}
                         valid={blnValid}>
                     </lightning-input-rich-text>
-                </lightning-layout-item>
-            </lightning-layout>
-            <lightning-layout>
-                <lightning-layout-item size="1" small-device-size="1" medium-device-size="1" large-device-size="1"
-                    class="del-avatar-width">
-                </lightning-layout-item>
-                <lightning-layout-item size="5" small-device-size="5" medium-device-size="5" large-device-size="5"
-                    class="slds-var-p-vertical_medium" >
-                    <template if:true={blnCheckboxVisible}>
-                        <lightning-input type="checkbox" label={strVisibleToCustomerLabel} onchange={handleVisibleToCustomer} 
-                            checked={blnVisibleToCustomer}>
-                        </lightning-input>
+
+                    <lightning-layout multiple-rows="false" horizontal-align="spread" vertical-align="center"
+                        class="slds-var-p-vertical_medium">
+                        <!--<lightning-layout-item size="1" small-device-size="1" medium-device-size="1" large-device-size="1"
+                            class="del-avatar-width">
+                        </lightning-layout-item>-->
+                        <lightning-layout-item size="5" small-device-size="5" medium-device-size="5" large-device-size="5"
+                            class="slds-var-p-vertical_medium" alignment-bump="right">
+                                <template if:true={blnCheckboxVisible}>
+                                    <lightning-input type="checkbox" label={strVisibleToCustomerLabel} onchange={handleVisibleToCustomer}
+                                        checked={blnVisibleToCustomer}>
+                                    </lightning-input>
+                                </template>
+                            </lightning-layout-item>
+                        <lightning-layout-item class="slds-var-p-right_x-small">
+                            <lightning-file-upload name="fileUploader" record-id={recordId}
+                                onuploadfinished={handleUploadFinished} multiple></lightning-file-upload>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-var-p-top_x-small">
+                            <lightning-button variant="brand" label={strPlaceHolderText} title={strPlaceHolderText}
+                                onclick={handleOnClick}>
+                            </lightning-button>
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+
+                    <template if:true={list_SelectedFiles}>
+                        <lightning-layout multiple-rows="true" class="slds-var-p-vertical_medium">
+                            <template for:each={list_SelectedFiles} for:item="objFile">
+                                <span key={objFile}>
+                                    <lightning-pill class="slds-var-p-right_medium" label={objFile.name}
+                                        name={objFile.name} data-item={objFile.documentId} onremove={handleRemoveFile}>
+                                        <lightning-icon icon-name="doctype:attachment" variant="circle"
+                                            alternative-text={objFile.title}></lightning-icon>
+                                    </lightning-pill>
+                                </span>
+                            </template>
+                        </lightning-layout>
                     </template>
-                </lightning-layout-item>
-                <lightning-layout-item size="5" small-device-size="5" medium-device-size="5" large-device-size="5" 
-                    class="slds-var-p-vertical_medium" >
-                    <lightning-button variant="brand" label={strPlaceHolderText} title={strPlaceHolderText} class="slds-float_right"
-                        onclick={handleOnClick}>
-                    </lightning-button>
                 </lightning-layout-item>
             </lightning-layout>
             <lightning-layout>
@@ -109,20 +130,21 @@
                                             </div>
                                             <div>
                                                 <template if:true={objCaseComment.listAttachments}>
-                                                    <lightning-layout multiple-rows="true">
+                                                    <lightning-layout multiple-rows="true"
+                                                        class="slds-var-p-vertical_large">
                                                         <template for:each={objCaseComment.listAttachments}
                                                             for:item="objFile">
                                                             <lightning-layout-item key={objFile.ContentDocumentId}
                                                                 class="slds-var-p-around_xx-small">
                                                                 <lightning-layout
-                                                                    class="del-style-file-pills slds-p-around_x-small">
+                                                                    class="del-style-file-pills slds-var-p-around_x-small">
                                                                     <lightning-layout-item>
                                                                         <lightning-icon icon-name="doctype:attachment"
                                                                             title={objFile.Title} size="x-small">
                                                                         </lightning-icon>
                                                                     </lightning-layout-item>
                                                                     <lightning-layout-item
-                                                                        class="slds-p-horizontal_xx-small del-file-title-style">
+                                                                        class="slds-var-p-horizontal_xx-small del-file-title-style">
                                                                         <a href={objFile.strFileURL} target="_blank">
                                                                             {objFile.Title}.{objFile.FileExtension}
                                                                         </a>

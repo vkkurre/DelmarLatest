@@ -104,4 +104,12 @@
         <shortDescription>It stores the Visible to Customer Label for Checkbox in Case Comment.</shortDescription>
         <value>Visible to Customer</value>
     </labels>
+    <labels>
+        <fullName>CLDEL00014</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Success message when a file is uploaded</shortDescription>
+        <value>Selected files have been added to the comment</value>
+    </labels>
 </CustomLabels>

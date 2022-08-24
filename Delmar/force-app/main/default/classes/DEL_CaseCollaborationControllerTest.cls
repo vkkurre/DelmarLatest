@@ -42,6 +42,28 @@ public class DEL_CaseCollaborationControllerTest {
             .setContactId(objContact.Id)
             .createCase();
         insert objCase;
+
+        ContentVersion objContentVersion = new DEL_TestUtility.ContentVersionBuilder()
+            .setTitle('Test')
+            .setPathOnClient('image.jpg')
+            .setVersionData('this is test data')
+            .setIsMajorVersion(true)
+            .createContentVersion();
+        insert objContentVersion;
+        
+        ContentDocument objContentDocument = [SELECT 
+                                              Id,
+                                              Title,
+                                              LatestPublishedVersionId
+                                              FROM ContentDocument];
+        
+        ContentDocumentLink objContentDocumentLink = new DEL_TestUtility.ContentDocumentLinkBuilder()
+            .setContentDocumentId(objContentDocument.Id)
+            .setVisibility('AllUsers')
+            .setShareType('V')
+            .setLinkedEntityId(objCase.Id)
+            .createContentDocumentLink();
+        insert objContentDocumentLink;
         
         String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
             +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
@@ -98,7 +120,13 @@ public class DEL_CaseCollaborationControllerTest {
         
         //Test the Class Methods.
         Test.startTest();
-        DEL_CaseCollaborationController.insertComment(strComment, idCaseId, blnVisibleToCustomer);
+       
+        ContentDocument objContentDocument = [SELECT 
+                                              Id,
+                                              Title,
+                                              LatestPublishedVersionId
+                                              FROM ContentDocument];
+        DEL_CaseCollaborationController.insertComment(strComment, idCaseId, true, new List<String> { objContentDocument.Id });
         DEL_CaseComment__c objCaseComment = [SELECT 
                                              Id 
                                              FROM DEL_CaseComment__c 
@@ -108,8 +136,20 @@ public class DEL_CaseCollaborationControllerTest {
         objResultFetch = DEL_CaseCollaborationController.fetchComments(idCaseId);
         Test.stopTest();
         
+        DEL_CaseComment__c objNewCaseComment = [SELECT 
+                                                Id 
+                                                FROM DEL_CaseComment__c 
+                                                WHERE HasAttachment__c = true
+                                                LIMIT 1];
+        List<ContentDocumentLink> list_ContentDocumentLinks = [SELECT
+                                                               Id
+                                                               FROM
+                                                               ContentDocumentLink
+                                                               WHERE LinkedEntityId = :objNewCaseComment.Id];
         //Check the Result.
         System.assertEquals(2, objResultFetch.list_CaseComments.size(), 'ERROR: Atleast one case comment record should be created.');
+        // Assert if ContentDocumentLink was created for the Case Commment.
+        System.assert(!list_ContentDocumentLinks.isEmpty());
     }
     
     /**
@@ -130,7 +170,7 @@ public class DEL_CaseCollaborationControllerTest {
         DEL_CaseCollaborationController.ResponseWrapper objResponse = new DEL_CaseCollaborationController.ResponseWrapper();
         Test.startTest();
         blnThrowException = true;
-        objResponse = DEL_CaseCollaborationController.insertComment(strComment, idCaseId, blnVisibleToCustomer);
+        objResponse = DEL_CaseCollaborationController.insertComment(strComment, idCaseId, true, new List<String>());
         objResponse = DEL_CaseCollaborationController.fetchComments(idCaseId);
         
         DEL_CaseComment__c objCaseComment = [SELECT 

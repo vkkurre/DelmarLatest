@@ -1,29 +1,33 @@
 import { LightningElement, api, track, wire } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import { refreshApex } from "@salesforce/apex";
 import { NavigationMixin } from "lightning/navigation";
-//Custom label for the place holder in comment input field.
-import CLDEL00002 from "@salesforce/label/c.CLDEL00002";
-//Custom label for the message to indiciate that the comment input field is blank
-import CLDEL00003 from "@salesforce/label/c.CLDEL00003";
-//Custom label for file download url.
-import CLDEL00004 from "@salesforce/label/c.CLDEL00004";
-//Custom label for file preview url.
-import CLDEL00005 from "@salesforce/label/c.CLDEL00005";
-//Custom label for the success message when comment is added.
-import CLDEL00006 from "@salesforce/label/c.CLDEL00006";
-//Custom label error message title
-import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
-//Custom label success message title
-import CLDEL00007 from "@salesforce/label/c.CLDEL00007";
-//Custom label for View Full Message Label in Menu Option.
-import CLDEL00012 from "@salesforce/label/c.CLDEL00012";
-//Custom label for Visible To Customer Label in Checkbox.
-import CLDEL00013 from "@salesforce/label/c.CLDEL00013";
+import { deleteRecord } from 'lightning/uiRecordApi';
+import { refreshApex } from "@salesforce/apex";
 import fetchComments from "@salesforce/apex/DEL_CaseCollaborationController.fetchComments";
 import insertComment from "@salesforce/apex/DEL_CaseCollaborationController.insertComment";
+//CLDEL00001 - "Error" (Custom label error message title)
+import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
+//CLDEL00002 - "Add Comment" (Custom label for the place holder in comment input field)
+import CLDEL00002 from "@salesforce/label/c.CLDEL00002";
+//CLDEL00003 - "Please add a comment here" (Custom label for the message to indiciate that the comment input field is blank)
+import CLDEL00003 from "@salesforce/label/c.CLDEL00003";
+//CLDEL00004 - "/sfc/servlet.shepherd/document/download/" (Custom label for file download url)
+import CLDEL00004 from "@salesforce/label/c.CLDEL00004";
+//CLDEL00005 - "/sfc/servlet.shepherd/version/download/{!FileId}?asInline=true" (Custom label for file preview url)
+import CLDEL00005 from "@salesforce/label/c.CLDEL00005";
+//CLDEL00006 - "Your comment has been added successfully." (Custom label for the success message when comment is added)
+import CLDEL00006 from "@salesforce/label/c.CLDEL00006";
+//CLDEL00007 - "Success" (Custom label success message title)
+import CLDEL00007 from "@salesforce/label/c.CLDEL00007";
+//CLDEL00012 - "View Full Message" (Custom label for View Full Message Label in Menu Option)
+import CLDEL00012 from "@salesforce/label/c.CLDEL00012";
+//CLDEL00013 - "Visible to Customer	" (Label for Visible to Customer checkbox)
+import CLDEL00013 from "@salesforce/label/c.CLDEL00013";
+//CLDEL00014 - "Selected files have been added to the comment" (Custom label for success message when files are uploaded)
+import CLDEL00014 from "@salesforce/label/c.CLDEL00014";
 
 export default class Del_caseCollaborationComponent extends NavigationMixin(LightningElement) {
+    idCaseCommentId;
     strBody = "";
     @api recordId;
     blnValid = true;
@@ -37,7 +41,10 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     strVisibleToCustomerLabel = CLDEL00013;
     blnIsLoading = false;
     // List that contains retrieved data and errors from fetchComments(). Used to refresh apex data after insertion
-    list_WiredComments;
+    @track list_WiredComments;
+    // List of files that were uploaded
+    @track list_SelectedFiles;
+    blnVisibleToCustomer = true;
 
     /**
      * @ author      : Rakesh Nayak & Vinaykant
@@ -59,7 +66,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                     JSON.stringify(data.map_AttachmentsByCaseCommentId)
                 );
 
-                /*Adding two attributes in each attachment of every comment retreived from apex class 
+                /** Adding two attributes in each attachment of every comment retreived from apex class 
                   in Map Object 'map_AttachmentsByCaseCommentId'. */
                 for (var idCaseCommentId in list_Attachments) {
                     let list_AttachmentsTemp = list_Attachments[idCaseCommentId];
@@ -77,18 +84,18 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                 this.list_Comments = JSON.parse(JSON.stringify(data.list_CaseComments));
                 let list_CommentsTemp = this.list_Comments;
 
-                /*Adding attributes in each of the comment retreived from apex class 
+                /** Adding attributes in each of the comment retreived from apex class 
                   in List of Object 'DEL_CaseComment__c'. */
                 for (let objComment of list_CommentsTemp) {
-                    /*Adding one attribute to each of the Case Comment with list of the attachments 
-                    file*/
+                    /** Adding one attribute to each of the Case Comment with list of the attachments 
+                    file */
                     if (objComment["Id"] in list_Attachments) {
                         objComment["listAttachments"] = list_Attachments[objComment["Id"]];
                     } else {
                         objComment["listAttachments"] = [];
                     }
 
-                    /*Adding one attribute to each of the Case Comment whether to show View Full
+                    /** Adding one attribute to each of the Case Comment whether to show View Full
                     Message Menu Option*/
                     objComment["blnMenuOption"] = objComment.hasOwnProperty("EmailMessageId__c");
                 }
@@ -131,6 +138,11 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.blnValid = this.validateComment();
         if (this.blnValid) {
             this.handleIsLoading(true);
+            let list_DocumentIds = [];
+            for (let objFile of this.list_SelectedFiles) {
+                list_DocumentIds.push(objFile.documentId);
+            }
+
             /**
             * @ author      : Rakesh Nayak
             * @ description : This method is used to create new Case Comment record using comment 
@@ -139,36 +151,34 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
             insertComment({
                 strRecordId: this.recordId,
                 strBody: this.strBody,
-                blnVisibleToCustomer: this.blnVisibleToCustomer
+                blnVisibleToCustomer: this.blnVisibleToCustomer,
+                list_ContentDocumentIds: list_DocumentIds
             })
-                .then((result) => {
-                    if (result.blnIsSuccess) {
-                        // Nullifying the comment input box after comment is submitted.
-                        this.strBody = "";
-                        this.blnVisibleToCustomer = true;
-                        // Refreshing the comment list.
-                        this.updateRecordView();
-                        this.showToastMessage(CLDEL00007, "success", CLDEL00006);
-                    } else {
-                        this.showToastMessage(CLDEL00001, "error", result.strErrorMessage);
-                    }
-                    this.handleIsLoading(false);
-                })
-                .catch((error) => {
-                    this.handleErrors(error, CLDEL00001);
-                });
+            .then((result) => {
+                if (result.blnIsSuccess) {
+                    // Nullifying the comment input box after comment is submitted.
+                    this.strBody = "";
+                    this.blnVisibleToCustomer = true;
+                    this.list_SelectedFiles = [];
+                    // Refreshing the comment list.
+                    this.updateRecordView();
+                    this.showToastMessage(CLDEL00007, "success", CLDEL00006);
+                } else {
+                    this.showToastMessage(CLDEL00001, "error", result.strErrorMessage);
+                }
+                this.handleIsLoading(false);
+            })
+            .catch((error) => {
+                this.handleErrors(error, CLDEL00001);
+            });
         }
     }
 
     /**
      * @ author        : Vinaykant
-     * @ description   : This method will navigate user to pages.
+     * @ description   : This method is used to navigate to Record Page based recordId.
      **/
     navigateToRecordPage(event) {
-        /**
-         * @ author      : Vinaykant
-         * @ description : This method is used to navigate to Record Page based recordId.
-         **/
         this[NavigationMixin.GenerateUrl]({
             type: "standard__recordPage",
             attributes: {
@@ -203,11 +213,11 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     }
 
     /**
-     * @ author        : Rakesh Nayak
+     * @ author        : Rakesh Nayaks
      * @ description   : This method is used to update all the comments after insertion of new comment
      **/
     updateRecordView() {
-        refreshApex(this.list_WiredComments);
+        refreshApex(this.list_WiredComments); 
     }
 
     /**
@@ -225,14 +235,62 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     }
 
     /**
+     * @ author        : Ankit C
+     * @ description   : This method handles the logic to be performed after files are uploaded
+    **/
+    handleUploadFinished(event) {
+        // Get the list of uploaded files
+        this.handleIsLoading(true);
+        if (this.list_SelectedFiles) {
+            for (let objFile of event.detail.files) {
+                this.list_SelectedFiles.push(objFile);
+            }
+        } else {
+            this.list_SelectedFiles = event.detail.files;
+        }
+
+        this.handleIsLoading(false);
+        this.showToastMessage(CLDEL00007, "success", CLDEL00014);
+    }
+
+    /**
+     * @ author        : Deeksha Suvarna
+     * @ description   : This method is used to display the list after removal of unwanted files.
+     **/
+    handleRemoveFile(event) {
+        this.handleIsLoading(true);
+        let idRemovedDocumentId = event.target.dataset.item;
+        let list_Temp = this.list_SelectedFiles;
+        deleteRecord(idRemovedDocumentId)
+            .then(() => {
+                for (let i = 0; i < list_Temp.length; i++) {
+                    if (list_Temp[i].documentId === idRemovedDocumentId) {
+                        list_Temp.splice(i, 1);
+                    }  
+                }
+        
+                this.list_SelectedFiles = list_Temp;
+                this.handleIsLoading(false);
+            })
+            .catch(error => {
+                this.handleIsLoading(false);
+                this.handleErrors(error, CLDEL00001);
+            });
+    }
+
+    /**
      * @ author        : Rakesh Nayak
      * @ description   : This method is used to display the errors in apex operations or Javascript
      **/
     handleErrors(error, strTitle) {
-        if (error.isArray(error.body)) {
+        if (Array.isArray(error.body)) {
             this.showToastMessage(strTitle, "error", error.body.map((e) => e.message).join(", "));
-        } else {
+        } else if (error.body.error) {
+            this.showToastMessage(strTitle, "error", error.body.error);
+        } else if (error.body.message) {
             this.showToastMessage(strTitle, "error", error.body.message);
+        } else {
+            this.showToastMessage(strTitle, "error", "Unknown Error");
         }
     }
 }

@@ -24,6 +24,10 @@ public class DEL_CaseCommentTriggerHelper {
     public static Map<Id, EmailMessage> map_EmailMessageByCaseId;
     // List of DEL_CaseComment__c records to update
     public static List<DEL_CaseComment__c> list_CaseCommentsToUpdate;
+    // List of DEL_CaseComment__c records to which have attachments
+    public static List<DEL_CaseComment__c> list_CaseCommentsWithoutAttachments;
+    // Map of ContentVersion Ids by Case Comment Id
+    public static Map<Id, List<String>> map_ContentVersionIdsByCaseCommentId;
     
     /**
     * @ author       :  Ankit C
@@ -32,12 +36,16 @@ public class DEL_CaseCommentTriggerHelper {
     **/
     public static void processAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
         list_CaseCommentsToUpdate = new List<DEL_CaseComment__c>();
+        list_CaseCommentsWithoutAttachments = new List<DEL_CaseComment__c>();
         objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
         createCollectionsAfterInsert(list_CaseComments);
         List<String> list_ConsolidatedDMLErrors = new List<String>();
         if (!list_CaseCommentsToUpdate.isEmpty()) {
             for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
                 populateFields(objCaseComment);
+                if (!objCaseComment.HasAttachment__c) {
+                    list_CaseCommentsWithoutAttachments.add(objCaseComment);
+                }
             }
             
             blnSkipTrigger = true;
@@ -46,7 +54,10 @@ public class DEL_CaseCommentTriggerHelper {
             blnSkipTrigger = false;
         }
 
-        sendCommentNotificationEmail(list_CaseCommentsToUpdate);
+
+        if (!list_CaseCommentsWithoutAttachments.isEmpty()) {
+            sendCommentNotificationEmail(list_CaseCommentsWithoutAttachments);
+        } 
         
         if (!list_ConsolidatedDMLErrors.isEmpty()) {
             DEL_Utils.logDMLException(
@@ -89,6 +100,9 @@ public class DEL_CaseCommentTriggerHelper {
         map_UserById = new Map<Id, User>();
         map_CaseById = new Map<Id, Case>();
         map_EmailMessageByCaseId = new Map<Id, EmailMessage>();
+        //Map of CaseComment Id by ContentDocumentId
+        Map<Id, Id> map_CaseCommentIdByContentDocumentId = new Map<Id, Id>();
+        map_ContentVersionIdsByCaseCommentId = new Map<Id, List<String>>();
         
         // Query to get the list of case comments that will be updated
         list_CaseCommentsToUpdate = [SELECT
@@ -100,14 +114,52 @@ public class DEL_CaseCommentTriggerHelper {
                                      Case__c,
                                      EmailMessageId__c,
                                      CreatedDate,
-                                     VisibleToCustomer__c
+                                     VisibleToCustomer__c,
+                                     HasAttachment__c,
+                                     (
+                                        SELECT 
+                                        Id,
+                                        LinkedEntityId,
+                                        ContentDocumentId
+                                        FROM ContentDocumentLinks
+                                     )
                                      FROM DEL_CaseComment__c
                                      WHERE Id IN :list_CaseComments
                                     ];
         
-        for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
+        for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
             set_CaseIds.add(objCaseComment.Case__c);
             set_UserIds.add(objCaseComment.CreatedById);
+
+            if (!objCaseComment.ContentDocumentLinks.isEmpty()) {
+                for (ContentDocumentLink objContentDocumentLink : objCaseComment.ContentDocumentLinks) {
+                    map_CaseCommentIdByContentDocumentId.put(
+                        objContentDocumentLink.ContentDocumentId, 
+                        objContentDocumentLink.LinkedEntityId
+                    );
+                }
+            }
+        }
+
+        //Get ContenVersionIds By Case Comment
+        if (!map_CaseCommentIdByContentDocumentId.keySet().isEmpty()) {
+            for (ContentVersion objContentVersion : [SELECT 
+                                                     Id,
+                                                     ContentDocumentId
+                                                     FROM
+                                                     ContentVersion
+                                                     WHERE ContentDocumentId IN :map_CaseCommentIdByContentDocumentId.keySet()
+                                                    ]
+            ) {
+                if (!map_ContentVersionIdsByCaseCommentId.containsKey(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId))) {
+                    map_ContentVersionIdsByCaseCommentId.put(
+                        map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId), 
+                        new List<String> { objContentVersion.Id }
+                    );
+                } else {
+                   map_ContentVersionIdsByCaseCommentId.get(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId)).add(objContentVersion.Id);
+                }
+            }
         }
         
         // Query the Case Collaborators related the Case
@@ -228,10 +280,10 @@ public class DEL_CaseCommentTriggerHelper {
         List<String> list_MergeFields = objEmailAlertConfiguration.MergeFields__c.split(',');
         for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
             Messaging.SingleEmailMessage objSingleMessageForCustomers = new Messaging.SingleEmailMessage();
-            EmailTemplate objTemplateForCustomers;
-            List<String> list_CustomerToAddresses = new List<String>();
             Messaging.SingleEmailMessage objSingleMessageForAgents = new Messaging.SingleEmailMessage();
+            List<String> list_CustomerToAddresses = new List<String>();
             List<String> list_AgentToAddresses = new List<String>();
+            EmailTemplate objTemplateForCustomers;
             EmailTemplate objTemplateForAgents = map_EmailTemplateByLanguage.get('English');
 
             if (map_UserById.containsKey(objCaseComment.CreatedById)) {
@@ -282,19 +334,22 @@ public class DEL_CaseCommentTriggerHelper {
                         list_AgentToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
                     }
                 }
-                
-                if (String.isNotBlank(objCase.ContactEmail) && objCaseComment.VisibleToCustomer__c) {
-                    // Adding the Case Contact Email
-                    list_CustomerToAddresses.add(objCase.ContactEmail);
-                } else if (String.isNotBlank(objCase.SuppliedEmail) && objCaseComment.VisibleToCustomer__c) {
-                    // Adding the Case Web Email
-                    list_CustomerToAddresses.add(objCase.SuppliedEmail);
+
+                if (objCaseComment.VisibleToCustomer__c) {
+                    if (String.isNotBlank(objCase.ContactEmail)) {
+                        // Adding the Case Contact Email
+                        list_CustomerToAddresses.add(objCase.ContactEmail);
+                    } else if (String.isNotBlank(objCase.SuppliedEmail)) {
+                        // Adding the Case Web Email
+                        list_CustomerToAddresses.add(objCase.SuppliedEmail);
+                    }
+
+                    if (String.isNotBlank(objCase.DEL_CcAddress__c)) {
+                        // Adding the CC Emails
+                        list_CustomerToAddresses.addAll(objCase.DEL_CcAddress__c.split(';'));
+                    }
                 }
 
-                if (String.isNotBlank(objCase.DEL_CcAddress__c) && objCaseComment.VisibleToCustomer__c) {
-                    // Adding the CC Emails
-                    list_CustomerToAddresses.addAll(objCase.DEL_CcAddress__c.split(';'));
-                }
                 
                 // Setting the references in the Email headers 
                 if (map_EmailMessageByCaseId.containsKey(objCase.Id)) {
@@ -306,6 +361,7 @@ public class DEL_CaseCommentTriggerHelper {
                         if (objCaseComment.VisibleToCustomer__c) {
                             objSingleMessageForCustomers.setReferences(strReferences);
                         }
+
                         objSingleMessageForAgents.setReferences(strReferences);
                     }
                 }
@@ -317,6 +373,7 @@ public class DEL_CaseCommentTriggerHelper {
             
             if (objCaseComment.VisibleToCustomer__c) {
                 String strHtmlBodyForCustomers = objTemplateForCustomers.HtmlValue;
+                //Get the Email Template for Customers
                 strHtmlBodyForCustomers = getHtmlBody(
                     objCaseComment, 
                     map_CaseById.get(objCaseComment.Case__c), 
@@ -331,6 +388,7 @@ public class DEL_CaseCommentTriggerHelper {
             }
 
             String strHtmlBodyForAgents = objTemplateForAgents.HtmlValue;
+            //Get the Email Template for Agents
             strHtmlBodyForAgents = getHtmlBody(
                 objCaseComment, 
                 map_CaseById.get(objCaseComment.Case__c), 
@@ -343,12 +401,21 @@ public class DEL_CaseCommentTriggerHelper {
             objSingleMessageForAgents.setHtmlBody(strHtmlBodyForAgents);
             objSingleMessageForAgents.setToAddresses(list_AgentToAddresses);
             
+            //Setting Org Wide Email Address
             if (!list_OrgWideEmailAddresses.isEmpty()) {
                 if (objCaseComment.VisibleToCustomer__c) {
                     objSingleMessageForCustomers.setOrgWideEmailAddressId(list_OrgWideEmailAddresses[0].Id);
                 }
                 
                 objSingleMessageForAgents.setOrgWideEmailAddressId(list_OrgWideEmailAddresses[0].Id);
+            }
+
+            //Add attachments associated to the Case Comment
+            if (map_ContentVersionIdsByCaseCommentId.containsKey(objCaseComment.Id)) {
+                objSingleMessageForAgents.setEntityAttachments(map_ContentVersionIdsByCaseCommentId.get(objCaseComment.Id));
+                if (objCaseComment.VisibleToCustomer__c) {
+                    objSingleMessageForCustomers.setEntityAttachments(map_ContentVersionIdsByCaseCommentId.get(objCaseComment.Id));
+                }
             }
 
             if(objCaseComment.VisibleToCustomer__c) {
@@ -443,5 +510,17 @@ public class DEL_CaseCommentTriggerHelper {
         }
 
         return strDefaultLanguage;
+    }
+
+    /**
+    * @ author       :  Ankit C
+    * @ description  :  This method sends email alerts when Case Comments are created with attachments.
+    * @ params       :  list_CaseComments - List of CaseComment records
+    **/
+    public static void processCaseCommentsWithAttachments(List<DEL_CaseComment__c> list_CaseComments) {
+        objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+        list_CaseCommentsToUpdate = new List<DEL_CaseComment__c>();
+        createCollectionsAfterInsert(list_CaseComments);
+        sendCommentNotificationEmail(list_CaseCommentsToUpdate);
     }
 }

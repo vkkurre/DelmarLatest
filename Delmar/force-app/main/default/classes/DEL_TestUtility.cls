@@ -262,10 +262,14 @@ public class DEL_TestUtility {
         private String strBody;
         private String idCaseId;
         private String strEmailMessageId;
+        private Boolean blnHasAttachment;
+        private Boolean blnVisibleToCustomer;
         
         public CaseCommentBuilder() {
             this.strBody = '';
             this.strEmailMessageId = '';
+            this.blnHasAttachment = false;
+            this.blnVisibleToCustomer = false;
         }
         
         public CaseCommentBuilder setBody(String strValue) {
@@ -282,12 +286,24 @@ public class DEL_TestUtility {
             this.idCaseId = idValue;
             return this;
         }
+
+        public CaseCommentBuilder setHasAttachment(Boolean blnValue) {
+            this.blnHasAttachment = blnValue;
+            return this;
+        }
+
+        public CaseCommentBuilder setVisibleToCustomer(Boolean blnValue) {
+            this.blnVisibleToCustomer = blnValue;
+            return this;
+        }
         
         public DEL_CaseComment__c createCaseComment() {
             DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c();
             objCaseComment.Body__c = this.strBody;
             objCaseComment.Case__c = this.idCaseId;
             objCaseComment.EmailMessageId__c = this.strEmailMessageId;
+            objCaseComment.HasAttachment__c = this.blnHasAttachment;
+            objCaseComment.VisibleToCustomer__c = this.blnVisibleToCustomer;
             
             return objCaseComment;
         }

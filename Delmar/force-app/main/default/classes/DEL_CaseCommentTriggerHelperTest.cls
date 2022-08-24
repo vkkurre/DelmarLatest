@@ -37,6 +37,28 @@ public class DEL_CaseCommentTriggerHelperTest {
             .setLanguage('French')
             .createCase();
         insert objCase;
+
+        ContentVersion objContentVersion = new DEL_TestUtility.ContentVersionBuilder()
+            .setTitle('Test')
+            .setPathOnClient('image.jpg')
+            .setVersionData('this is test data')
+            .setIsMajorVersion(true)
+            .createContentVersion();
+        insert objContentVersion;
+        
+        ContentDocument objContentDocument = [SELECT 
+                                              Id,
+                                              Title,
+                                              LatestPublishedVersionId
+                                              FROM ContentDocument];
+        
+        ContentDocumentLink objContentDocumentLink = new DEL_TestUtility.ContentDocumentLinkBuilder()
+            .setContentDocumentId(objContentDocument.Id)
+            .setVisibility('AllUsers')
+            .setShareType('V')
+            .setLinkedEntityId(objCase.Id)
+            .createContentDocumentLink();
+        insert objContentDocumentLink;
         
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
@@ -118,9 +140,53 @@ public class DEL_CaseCommentTriggerHelperTest {
         DEL_CaseComment__c objCaseComment = new DEL_TestUtility.CaseCommentBuilder()
             .setBody('Hi, can I get an update?')
             .setCaseId(objCase.Id)
+            .setHasAttachment(false)
+            .setVisibleToCustomer(true)
             .createCaseComment();
         Test.startTest();
         insert objCaseComment;
+        Test.stopTest();
+        
+        objCaseComment = [
+            SELECT
+            Id,
+            CommentCreatedName__c,
+            CreatedByEmail__c
+            FROM 
+            DEL_CaseComment__c
+            WHERE Id = :objCaseComment.Id
+        ];
+        // Assert if the fields were populated
+        System.assert(objCaseComment.CommentCreatedName__c != null);
+        System.assert(objCaseComment.CreatedByEmail__c != null);
+    }
+
+        /**
+    * @ author       :  Anit C
+    * @ description  :  Test Case Comment creation with Attachments
+    **/
+    @isTest
+    static void testCaseCommentCreationWithAttachments() {
+        Case objCase = [SELECT Id FROM Case LIMIT 1];
+        DEL_CaseComment__c objCaseComment = new DEL_TestUtility.CaseCommentBuilder()
+            .setBody('Hi, can I get an update?')
+            .setCaseId(objCase.Id)
+            .setHasAttachment(true)
+            .setVisibleToCustomer(true)
+            .createCaseComment();
+        Test.startTest();
+        insert objCaseComment;
+        ContentDocument objContentDocument = [SELECT 
+                                              Id,
+                                              Title,
+                                              LatestPublishedVersionId
+                                              FROM ContentDocument LIMIT 1];
+        ContentDocumentLink objNewContentDocumentLink = new ContentDocumentLink();
+        objNewContentDocumentLink.ShareType = 'V';
+        objNewContentDocumentLink.Visibility = 'AllUsers';
+        objNewContentDocumentLink.ContentDocumentId = objContentDocument.Id;
+        objNewContentDocumentLink.LinkedEntityId = objCaseComment.Id;
+        insert objNewContentDocumentLink;
         Test.stopTest();
         
         objCaseComment = [

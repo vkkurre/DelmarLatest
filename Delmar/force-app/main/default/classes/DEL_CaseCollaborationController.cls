@@ -20,6 +20,7 @@ public class DEL_CaseCollaborationController {
     public class ResponseWrapper {
         @AuraEnabled public Boolean blnIsSuccess;
         @AuraEnabled public String strErrorMessage;
+        @AuraEnabled public Id idCaseCommentId;
         @AuraEnabled public List<DEL_CaseComment__c> list_CaseComments;
         @AuraEnabled public Map<Id, List<ContentVersion>> map_AttachmentsByCaseCommentId;
         @AuraEnabled public User objCurrentUser;
@@ -47,7 +48,6 @@ public class DEL_CaseCollaborationController {
         List<Id> list_CaseCommentIds = new List<Id>();
         Id idCurrentUser = UserInfo.getUserId();
         String strQueryCurrentUser = 'Select Id, Name, IsPortalEnabled From User WHERE Id = :idCurrentUser';
-
         try {
             User objUser = Database.query(strQueryCurrentUser);
             String strQueryCaseComments = 'SELECT CreatedDate, LastModifiedDate, CreatedById, ' 
@@ -67,7 +67,6 @@ public class DEL_CaseCollaborationController {
                 for (DEL_CaseComment__c objCaseComment : objResponseWrapper.list_CaseComments) {
                     list_caseCommentIds.add(objCaseComment.Id);
                 }
-                
                 List<ContentDocumentLink> list_ContentDocumentLinks = [SELECT 
                                                                        ContentDocumentId,
                                                                        LinkedEntityId
@@ -92,7 +91,6 @@ public class DEL_CaseCollaborationController {
                                                                  WHERE ContentDocumentId 
                                                                  IN :map_ContentDocumentLinkByContentDocumentId.KeySet()
                                                                  ORDER BY Title];
-                    
                     for (ContentVersion objContentVersion : list_contentVersions) {
                         String strCommentId = map_ContentDocumentLinkByContentDocumentId.get(objContentVersion.ContentDocumentId).LinkedEntityId;
                         if (map_ContentVersionsByCaseCommentId.containsKey(strCommentId)) {
@@ -102,7 +100,6 @@ public class DEL_CaseCollaborationController {
                         }
                     }
                 }
-                
                 objResponseWrapper.map_AttachmentsByCaseCommentId = map_ContentVersionsByCaseCommentId;
             }
             
@@ -123,19 +120,33 @@ public class DEL_CaseCollaborationController {
     * @ description  :  This method is used to create new Case Comment record using comment body 'strBody' and case ID 'strRecordId'
     * @ params       :  'strRecordId' - Record Id of the Case
     *                   'strBody'     - Body of the comment
+                        'blnVisibleToCustomer - flag to specify if comment should be visible to Customers.
+                        list_ContentDocumentIds -  List of ContentDocumentIds that were uploaded
     * @ return       :  objResponseWrapper - instance of ResponseWrapper class
     **/
     @AuraEnabled
-    public static ResponseWrapper insertComment(String strBody, String strRecordId, Boolean blnVisibleToCustomer) {
+    public static ResponseWrapper insertComment(
+        String strBody, 
+        String strRecordId, 
+        Boolean blnVisibleToCustomer, 
+        List<String> list_ContentDocumentIds
+    ) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
         DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c(
             Body__c = strBody,
             Case__c = strRecordId,
             VisibleToCustomer__c = blnVisibleToCustomer
         );
-        
         try {
+            if (!list_ContentDocumentIds.isEmpty()) {
+                objCaseComment.HasAttachment__c = true;
+            }
+
             insert objCaseComment;
+            if (!list_ContentDocumentIds.isEmpty()) {
+                createContentDocumentLink(objCaseComment.Id, list_ContentDocumentIds);
+            }
+
             // Throw an exception from test class                                        
             if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
                 throwException();
@@ -144,8 +155,42 @@ public class DEL_CaseCollaborationController {
             objResponseWrapper.blnIsSuccess = false;
             objResponseWrapper.strErrorMessage = objException.getMessage();
         }
-        
         return objResponseWrapper;
+    }
+
+    /**
+    * @ author       :  Deeksha Suvarna
+    * @ description  :  This method is used to create ContentDocumentLink for the ContentVersion
+    * @ params       :  'strRecordId' - Record Id of the Case
+    *                   'strBody'     - Body of the comment
+                        'list_ContentDocumentIds' - List of ContentDocument Ids
+    * @ return       :  objResponseWrapper - instance of ResponseWrapper class
+    **/
+    @AuraEnabled
+    public static void createContentDocumentLink(Id idCaseCommentId, List<String> list_ContentDocumentIds) {
+        List<ContentDocumentLink> list_ContentDocumentLinks = new List<ContentDocumentLink>();
+        List<String> list_ConsolidatedDMLErrors = new List<String>();
+        for (String strContentDocumentId : list_ContentDocumentIds) {
+            ContentDocumentLink objNewContentDocumentLink = new ContentDocumentLink();
+            objNewContentDocumentLink.ShareType = 'V';
+            objNewContentDocumentLink.Visibility = 'AllUsers';
+            objNewContentDocumentLink.ContentDocumentId = strContentDocumentId;
+            objNewContentDocumentLink.LinkedEntityId = idCaseCommentId;
+            list_ContentDocumentLinks.add(objNewContentDocumentLink);   
+        }
+
+        if (!list_ContentDocumentLinks.isEmpty()) {
+            List<Database.SaveResult> list_InsertResults = Database.insert(list_ContentDocumentLinks, false);
+            list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_InsertResults, 'Insert'));
+        }
+        
+        if (!list_ConsolidatedDMLErrors.isEmpty()) {
+            DEL_Utils.logDMLException(
+                'DEL_CaseCollaborationController',
+                'createContentDocumentLink',
+                list_ConsolidatedDMLErrors
+            );
+        }
     }
 
     /**

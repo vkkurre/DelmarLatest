@@ -3,17 +3,17 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 import getUsers from "@salesforce/apex/DEL_ContactCollaborationController.fetchUsers";
 import createCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.addCaseCollaborators";
-//Custom label error message title.
+//CLDEL00001 - "Error" (Custom label error message title)
 import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
-//Custom label for success message title.
+//CLDEL00007 - "Success" (Custom label success message title)
 import CLDEL00007 from "@salesforce/label/c.CLDEL00007";
-//Custom label for success message for case collaboration addition.
+//CLDEL00008 - "The selected contacts have been added as collaborators for this Case." (Success message)
 import CLDEL00008 from "@salesforce/label/c.CLDEL00008";
-//Custom label for error message for having atleast one user selected.
+//CLDEL00009 - "Please select atleast one User" (Custom label for error message for having atleast one user selected)
 import CLDEL00009 from "@salesforce/label/c.CLDEL00009";
-//Custom label for search input text label for searching case collaborator user.
+//CLDEL00010 - "Enter Contact Name To Search" (Custom label for search input text label for searching case collaborator user)
 import CLDEL00010 from "@salesforce/label/c.CLDEL00010";
-//Custom label for search input text placeholder value for searching case collaborator user.
+//CLDEL00011 - "Search" (Placeholder for Contact search input)
 import CLDEL00011 from "@salesforce/label/c.CLDEL00011";
 
 export default class Del_addCaseCollaboratorComponent extends LightningElement {

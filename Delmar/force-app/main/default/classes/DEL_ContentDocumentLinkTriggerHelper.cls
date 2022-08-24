@@ -22,6 +22,7 @@ public class DEL_ContentDocumentLinkTriggerHelper {
         Set<Id> set_LinkedEntityIDs = new Set<Id>();
         List<String> list_ConsolidatedDMLErrors = new List<String>();
         Map<Id, List<ContentDocumentLink>> map_ListOfContentDocumentLinksByLinkedEntityId = new Map<Id, List<ContentDocumentLink>>();
+        Set<Id> set_CaseCommentIds = new Set<Id>();
         List<ContentDocumentLink> list_ContentDocumentLinksToInsert = new List<ContentDocumentLink>();
         try {
             for (ContentDocumentLink objContentDocumentLink : list_ContentDocumentLinks) {
@@ -32,6 +33,8 @@ public class DEL_ContentDocumentLinkTriggerHelper {
                     } else {
                         map_ListOfContentDocumentLinksByLinkedEntityId.put(objContentDocumentLink.LinkedEntityId, new List<ContentDocumentLink> {objContentDocumentLink});
                     }
+                } else if (objContentDocumentLink.LinkedEntityId.getSObjectType().getDescribe().getName() == 'DEL_CaseComment__c') {
+                    set_CaseCommentIds.add(objContentDocumentLink.LinkedEntityId);
                 }
             }
             
@@ -75,6 +78,15 @@ public class DEL_ContentDocumentLinkTriggerHelper {
                     list_ConsolidatedDMLErrors
                 );
                 
+            }
+
+            if (!set_CaseCommentIds.isEmpty()) {
+                List<DEL_CaseComment__c> list_CaseComments = [SELECT
+                                                              Id
+                                                              FROM DEL_CaseComment__c
+                                                              WHERE Id IN :set_CaseCommentIds
+                                                              ];
+                DEL_CaseCommentTriggerHelper.processCaseCommentsWithAttachments(list_CaseComments);
             }
         } catch(Exception objException) {
             DEL_Utils.logException(
