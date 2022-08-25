@@ -441,91 +441,83 @@ public class DEL_TestUtility {
     }
     
     /**
-    * @ Name     :  EmailAlertConfigurationBuilder
-    * @ Purpose  :  To create DEL_EmailAlertConfiguration__c record
+    * @ Name     :  CaseCollaborationConfigurationBuilder
+    * @ Purpose  :  To create DEL_CaseCollaborationConfiguration__c record
     * @ Author   :  Ankit C
     **/
-    public class EmailAlertConfigurationBuilder {
+    public class CaseCollaborationConfigurationBuilder {
         private String strMergeFields;
         private String strCaseQueryFields;
         private String strSiteName;
         private String strEmailTemplateName;
         private String strOrgWideAddress;
         private Id idSetupOwnerId;
-        private String strEmailBreakPattern;
         private String strTemplateNameSpanish;
         private String strTemplateNameFrench;
         
-        public EmailAlertConfigurationBuilder() {
+        public CaseCollaborationConfigurationBuilder() {
             this.strMergeFields = '';
             this.strCaseQueryFields = '';
             this.strSiteName = '';
             this.strEmailTemplateName = '';
             this.strOrgWideAddress = '';
-            this.strEmailBreakPattern = '';
             this.strTemplateNameSpanish = '';
             this.strTemplateNameFrench = '';
         }
         
-        public EmailAlertConfigurationBuilder setMergeFields(String strValue) {
+        public CaseCollaborationConfigurationBuilder setMergeFields(String strValue) {
             this.strMergeFields = strValue;
             return this;
         }
         
-        public EmailAlertConfigurationBuilder setCaseQueryFields(String strValue) {
+        public CaseCollaborationConfigurationBuilder setCaseQueryFields(String strValue) {
             this.strCaseQueryFields = strValue;
             return this;
         }
         
-        public EmailAlertConfigurationBuilder setSiteName(String strValue) {
+        public CaseCollaborationConfigurationBuilder setSiteName(String strValue) {
             this.strSiteName = strValue;
             return this;
         }
         
-        public EmailAlertConfigurationBuilder setEmailTemplateName(String strValue) {
+        public CaseCollaborationConfigurationBuilder setEmailTemplateName(String strValue) {
             this.strEmailTemplateName = strValue;
             return this;
         }
         
-        public EmailAlertConfigurationBuilder setOrgWideAddress(String strValue) {
+        public CaseCollaborationConfigurationBuilder setOrgWideAddress(String strValue) {
             this.strOrgWideAddress = strValue;
             return this;
         }
         
-        public EmailAlertConfigurationBuilder setEmailBreakPattern(String strValue) {
-            this.strEmailBreakPattern = strValue;
-            return this;
-        }
-        
-        public EmailAlertConfigurationBuilder setOwnerId(Id idValue) {
+        public CaseCollaborationConfigurationBuilder setOwnerId(Id idValue) {
             this.idSetupOwnerId = idValue;
             return this;
         }
 
-        public EmailAlertConfigurationBuilder setSpanishTemplateName(String strValue) {
+        public CaseCollaborationConfigurationBuilder setSpanishTemplateName(String strValue) {
             this.strTemplateNameSpanish = strValue;
             return this;
         }
 
-        public EmailAlertConfigurationBuilder setFrenchTemplateName(String strValue) {
+        public CaseCollaborationConfigurationBuilder setFrenchTemplateName(String strValue) {
             this.strTemplateNameFrench = strValue;
             return this;
         }
         
-        public DEL_EmailAlertConfiguration__c createConfiguration() {
-            DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c(
+        public DEL_CaseCollaborationConfiguration__c createConfiguration() {
+            DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_CaseCollaborationConfiguration__c(
                 MergeFields__c = this.strMergeFields,
                 CaseQueryFields__c = this.strCaseQueryFields,
                 SiteName__c = this.strSiteName,
                 CaseCommentEmailTemplateEnglish__c = this.strEmailTemplateName,
                 SetupOwnerId = this.idSetupOwnerId,
                 OrgWideAddress__c = this.strOrgWideAddress,
-                EmailReplyBreakPattern__c = this.strEmailBreakPattern,
                 CaseCommentsEmailTemplateFrench__c = this.strTemplateNameFrench,
                 CaseCommentsEmailTemplateSpanish__c = this.strTemplateNameSpanish
             );
             
-            return objEmailAlertConfiguration;
+            return objCaseCollaborationConfiguration;
         }
     }
     

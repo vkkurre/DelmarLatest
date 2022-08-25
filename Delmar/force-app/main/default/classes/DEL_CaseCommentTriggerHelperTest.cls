@@ -81,7 +81,7 @@ public class DEL_CaseCommentTriggerHelperTest {
             + '{!CaseComment.CreatedDate},SiteLink';
         
         OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_TestUtility.CaseCollaborationConfigurationBuilder()
             .setMergeFields(strMergeFields)
             .setCaseQueryFields('Subject,CaseNumber,Description')
             .setSiteName('CaseComments')
@@ -90,9 +90,8 @@ public class DEL_CaseCommentTriggerHelperTest {
             .setFrenchTemplateName('DEL_CaseCommentAlertFrench')
             .setOwnerId(UserInfo.getOrganizationId())
             .setOrgWideAddress(objOrgWideAddress.Address)
-            .setEmailBreakPattern('(<br><div class="gmail_quote">){1}')
             .createConfiguration();
-        insert objEmailAlertConfiguration;
+        insert objCaseCollaborationConfiguration;
         
         List<EmailTemplate> list_EmailTemplates = new List<EmailTemplate>();
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()

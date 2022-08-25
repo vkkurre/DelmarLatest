@@ -19,7 +19,7 @@ public class DEL_CaseCommentTriggerHelper {
     public static Map<Id, List<DEL_CaseCollaborator__c>> map_CaseCollaboratorsByCaseId;
     // Map of Cases by Id
     public static Map<Id, Case> map_CaseById;
-    public static DEL_EmailAlertConfiguration__c objEmailAlertConfiguration;
+    public static DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration;
     // Map of EmailMessages records by Case Id
     public static Map<Id, EmailMessage> map_EmailMessageByCaseId;
     // List of DEL_CaseComment__c records to update
@@ -37,7 +37,7 @@ public class DEL_CaseCommentTriggerHelper {
     public static void processAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
         list_CaseCommentsToUpdate = new List<DEL_CaseComment__c>();
         list_CaseCommentsWithoutAttachments = new List<DEL_CaseComment__c>();
-        objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+        objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
         createCollectionsAfterInsert(list_CaseComments);
         List<String> list_ConsolidatedDMLErrors = new List<String>();
         if (!list_CaseCommentsToUpdate.isEmpty()) {
@@ -79,7 +79,7 @@ public class DEL_CaseCommentTriggerHelper {
             map_UserById,
             map_CaseById,
             map_CaseCollaboratorsByCaseId,
-            objEmailAlertConfiguration,
+            objCaseCollaborationConfiguration,
             map_ContentVersionIdsByCaseCommentId
         ));
     }
@@ -204,7 +204,7 @@ public class DEL_CaseCommentTriggerHelper {
         
         // Query Cases
         String strCaseQuery = 'SELECT Id, OwnerId, DEL_CcAddress__c, SuppliedEmail, ContactEmail, Contact.Preferred_Language__c, Language__c, ' + 
-            + objEmailAlertConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
+            + objCaseCollaborationConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
         List<Case> list_Cases = Database.query(strCaseQuery);
         map_CaseById = new Map<Id, Case>(list_Cases);
         for (Case objCase : map_CaseById.values()) {
@@ -246,7 +246,7 @@ public class DEL_CaseCommentTriggerHelper {
     * @ params       :  list_CaseComments - List of CaseComment records
     **/
     public static void processCaseCommentsWithAttachments(List<DEL_CaseComment__c> list_CaseComments) {
-        objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+        objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
         list_CaseCommentsToUpdate = new List<DEL_CaseComment__c>();
         createCollectionsAfterInsert(list_CaseComments);
         processAfterInsertAysnc(list_CaseCommentsToUpdate);

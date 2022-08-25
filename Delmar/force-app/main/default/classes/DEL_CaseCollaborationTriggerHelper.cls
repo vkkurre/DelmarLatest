@@ -13,7 +13,7 @@
 *  18-07-2022       |  dinesh.chandra@absyz.com     |  1.0          |  Initial version
 *******************************************************************************************************/
 public class DEL_CaseCollaborationTriggerHelper {
-    public static DEL_EmailAlertConfiguration__c objEmailAlertConfiguration;
+    public static DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration;
     public static Boolean blnSkipTrigger = false;
     
     /**
@@ -64,7 +64,7 @@ public class DEL_CaseCollaborationTriggerHelper {
     public static void populateFields(List<DEL_CaseCollaborator__c> list_CaseCollaborators) {
         String strCommnunityURL = '';
         try {
-            objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+            objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
             String strSFURL = URL.getSalesforceBaseUrl().toExternalForm();
             if (Test.isRunningTest()) {
                 if (DEL_CaseCollaborationTriggerHelperTest.blnThrowException) {
@@ -76,7 +76,7 @@ public class DEL_CaseCollaborationTriggerHelper {
                 Site objSite = [SELECT 
                                 Id
                                 FROM Site 
-                                WHERE Name = :objEmailAlertConfiguration.SiteName__c
+                                WHERE Name = :objCaseCollaborationConfiguration.SiteName__c
                                ];
                 SiteDetail objSiteDetail = [SELECT
                                             SecureURL 

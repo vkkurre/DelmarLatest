@@ -21,7 +21,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
     public Map<Id, User> map_UserById;
     // Map of Cases by Id
     public Map<Id, Case> map_CaseById;
-    public DEL_EmailAlertConfiguration__c objEmailAlertConfiguration;
+    public DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration;
     // Map of ContentVersion Ids by Case Comment Id
     public Map<Id, List<String>> map_ContentVersionIdsByCaseCommentId;
     
@@ -31,13 +31,13 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
         Map<Id, User> map_UserById,
         Map<Id, Case> map_CaseById,
         Map<Id, List<DEL_CaseCollaborator__c>> map_CaseCollaboratorsByCaseId,
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration,
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration,
         Map<Id, List<String>> map_ContentVersionIdsByCaseCommentId
     ) {
         this.list_CaseComments = list_CaseComments;
         this.map_EmailMessageByCaseId = map_EmailMessageByCaseId;
         this.map_UserById = map_UserById;
-        this.objEmailAlertConfiguration = objEmailAlertConfiguration;
+        this.objCaseCollaborationConfiguration = objCaseCollaborationConfiguration;
         this.map_CaseById = map_CaseById;
         this.map_CaseCollaboratorsByCaseId = map_CaseCollaboratorsByCaseId;
         this.map_ContentVersionIdsByCaseCommentId = map_ContentVersionIdsByCaseCommentId;
@@ -46,9 +46,9 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
     public void execute(QueueableContext context) {
         List<Messaging.SingleEmailMessage> list_EmailMessages = new List<Messaging.SingleEmailMessage>();
         Set<String> set_EmailTemplateNames = new Set<String> {
-            objEmailAlertConfiguration.CaseCommentEmailTemplateEnglish__c,
-                objEmailAlertConfiguration.CaseCommentsEmailTemplateFrench__c,
-                objEmailAlertConfiguration.CaseCommentsEmailTemplateSpanish__c
+            objCaseCollaborationConfiguration.CaseCommentEmailTemplateEnglish__c,
+                objCaseCollaborationConfiguration.CaseCommentsEmailTemplateFrench__c,
+                objCaseCollaborationConfiguration.CaseCommentsEmailTemplateSpanish__c
                 };
         Map<String, EmailTemplate> map_EmailTemplateByName = new Map<String, EmailTemplate>();
         Map<String, EmailTemplate> map_EmailTemplateByLanguage = new Map<String, EmailTemplate>();
@@ -59,7 +59,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                                                                     Address, 
                                                                     DisplayName 
                                                                     FROM OrgWideEmailAddress 
-                                                                    WHERE Address = :objEmailAlertConfiguration.OrgWideAddress__c
+                                                                    WHERE Address = :objCaseCollaborationConfiguration.OrgWideAddress__c
                                                                    ];
             
             for (EmailTemplate objTemplate : [SELECT 
@@ -76,22 +76,22 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
             
             map_EmailTemplateByLanguage.put(
                 'English', 
-                map_EmailTemplateByName.get(objEmailAlertConfiguration.CaseCommentEmailTemplateEnglish__c)
+                map_EmailTemplateByName.get(objCaseCollaborationConfiguration.CaseCommentEmailTemplateEnglish__c)
             );
             map_EmailTemplateByLanguage.put(
                 'French', 
-                map_EmailTemplateByName.get(objEmailAlertConfiguration.CaseCommentsEmailTemplateFrench__c)
+                map_EmailTemplateByName.get(objCaseCollaborationConfiguration.CaseCommentsEmailTemplateFrench__c)
             );
             map_EmailTemplateByLanguage.put(
                 'Spanish', 
-                map_EmailTemplateByName.get(objEmailAlertConfiguration.CaseCommentsEmailTemplateSpanish__c)
+                map_EmailTemplateByName.get(objCaseCollaborationConfiguration.CaseCommentsEmailTemplateSpanish__c)
             );
             
             String strSiteURL = '';
             if (Test.isRunningTest()) {
                 strSiteURL = DEL_CaseCommentTriggerHelperTest.getSiteLink();
             } else {
-                List<Site> list_Sites = [SELECT Id FROM Site WHERE Name = :objEmailAlertConfiguration.SiteName__c];
+                List<Site> list_Sites = [SELECT Id FROM Site WHERE Name = :objCaseCollaborationConfiguration.SiteName__c];
                 if (!list_Sites.isEmpty()) {
                     List<SiteDetail> list_SiteDetails = [SELECT SecureURL FROM SiteDetail WHERE DurableId = :list_Sites[0].Id];
                     if (!list_SiteDetails.isEmpty()) {
@@ -100,7 +100,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                 }
             }
             
-            List<String> list_MergeFields = objEmailAlertConfiguration.MergeFields__c.split(',');
+            List<String> list_MergeFields = objCaseCollaborationConfiguration.MergeFields__c.split(',');
             for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
                 Messaging.SingleEmailMessage objSingleMessageForCustomers = new Messaging.SingleEmailMessage();
                 Messaging.SingleEmailMessage objSingleMessageForAgents = new Messaging.SingleEmailMessage();
@@ -167,7 +167,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                             list_CustomerToAddresses.add(objCase.SuppliedEmail);
                         }
 
-                        if (objEmailAlertConfiguration.CCAddressSwitch__c && String.isNotBlank(objCase.DEL_CcAddress__c)) {
+                        if (objCaseCollaborationConfiguration.CCAddressSwitch__c && String.isNotBlank(objCase.DEL_CcAddress__c)) {
                             // Adding the CC Emails
                             list_CustomerToAddresses.addAll(objCase.DEL_CcAddress__c.split(';'));
                         }
