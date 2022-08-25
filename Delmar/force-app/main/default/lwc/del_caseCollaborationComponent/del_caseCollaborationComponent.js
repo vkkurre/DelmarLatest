@@ -46,6 +46,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     blnCheckboxVisible = false;
     blnVisibleToCustomer = true;
     blnIsRendered = false;
+    blnVisibleToCustomerSwitch = false;
 
     /**
      * @ author      : Rakesh Nayak & Vinaykant
@@ -57,6 +58,10 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
+                if (data.objEmailAlertConfiguration) {
+                    this.blnVisibleToCustomerSwitch = data.objEmailAlertConfiguration.VisibleToCustomerSwitch__c;
+                }
+                
                 let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));
 
                 this.blnCheckboxVisible = !objCurrentUser.IsPortalEnabled;

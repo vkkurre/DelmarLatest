@@ -24,6 +24,7 @@ public class DEL_CaseCollaborationController {
         @AuraEnabled public List<DEL_CaseComment__c> list_CaseComments;
         @AuraEnabled public Map<Id, List<ContentVersion>> map_AttachmentsByCaseCommentId;
         @AuraEnabled public User objCurrentUser;
+        @AuraEnabled public DEL_EmailAlertConfiguration__c objEmailAlertConfiguration;
         
         public ResponseWrapper() {
             this.blnIsSuccess = true;
@@ -49,6 +50,7 @@ public class DEL_CaseCollaborationController {
         Id idCurrentUser = UserInfo.getUserId();
         String strQueryCurrentUser = 'Select Id, Name, IsPortalEnabled From User WHERE Id = :idCurrentUser';
         try {
+            objResponseWrapper.objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
             User objUser = Database.query(strQueryCurrentUser);
             String strQueryCaseComments = 'SELECT CreatedDate, LastModifiedDate, CreatedById, ' 
                 + ' CreatedBy.SmallPhotoUrl, CreatedBy.Name, Body__c, CommentCreatedName__c, CreatedByEmail__c, '

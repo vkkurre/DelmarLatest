@@ -36,12 +36,14 @@
 
                     <lightning-layout multiple-rows="true" horizontal-align="spread" vertical-align="center"
                         class="slds-var-p-vertical_medium">
-                        <template if:true={blnCheckboxVisible}>
-                            <lightning-layout-item class="slds-var-p-vertical_x-small">
-                                <lightning-input type="checkbox" label={strVisibleToCustomerLabel}
-                                    onchange={handleVisibleToCustomer} checked={blnVisibleToCustomer}>
-                                </lightning-input>
-                            </lightning-layout-item>
+                        <template if:true={blnVisibleToCustomerSwitch}>
+                            <template if:true={blnCheckboxVisible}>
+                                <lightning-layout-item class="slds-var-p-vertical_x-small">
+                                    <lightning-input type="checkbox" label={strVisibleToCustomerLabel}
+                                        onchange={handleVisibleToCustomer} checked={blnVisibleToCustomer}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                            </template>
                         </template>
                         <lightning-layout-item class="slds-var-p-vertical_x-small">
                             <lightning-file-upload label="Attach Files" name="fileUploader" record-id={recordId}
@@ -95,6 +97,13 @@
                                                     year="numeric" day="2-digit" month="long" hour="2-digit"
                                                     minute="2-digit">
                                                 </lightning-formatted-date-time>
+                                                <template if:true={blnVisibleToCustomerSwitch}>
+                                                    <template if:true={objCaseComment.VisibleToCustomer__c}>
+                                                        <template if:true={blnCheckboxVisible}>
+                                                            &#8194; &#8226; {strVisibleToCustomerLabel}
+                                                        </template>
+                                                    </template>
+                                                </template>
                                             </div>
                                         </lightning-layout-item>
                                         <lightning-layout-item size="12" small-device-size="1" medium-device-size="1"

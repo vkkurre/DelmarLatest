@@ -4,31 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
     <label>User</label>
-    <lookupFilter>
-        <active>true</active>
-        <booleanFilter>(1 AND 2) OR (3 AND 4)</booleanFilter>
-        <filterItems>
-            <field>$Profile.Name</field>
-            <operation>equals</operation>
-            <value>Customer Community Plus User, Customer Community User, CustomerPlus, System Administrator</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Profile.Name</field>
-            <operation>equals</operation>
-            <value>Customer Community Plus User, Customer Community User, CustomerPlus</value>
-        </filterItems>
-        <filterItems>
-            <field>$Profile.Name</field>
-            <operation>equals</operation>
-            <value>Standard User, System Administrator</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Profile.Name</field>
-            <operation>equals</operation>
-            <value>Standard User, System Administrator</value>
-        </filterItems>
-        <isOptional>false</isOptional>
-    </lookupFilter>
     <referenceTo>User</referenceTo>
     <relationshipName>Case_Collaborators</relationshipName>
     <required>false</required>
