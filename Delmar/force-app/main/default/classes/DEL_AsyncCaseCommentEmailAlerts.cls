@@ -113,7 +113,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                     // Adding the Case Comment Created By Email
                     if (map_UserById.get(objCaseComment.CreatedById).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
                         list_CustomerToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
-                    } else {
+                    } else if(!map_UserById.get(objCaseComment.CreatedById).IsPortalEnabled) {
                         list_AgentToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
                     }
                 }
@@ -124,7 +124,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                         if (map_UserById.containsKey(objCollaborator.User__c)) {
                             if (map_UserById.get(objCollaborator.User__c).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
                                 list_CustomerToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
-                            } else {
+                            } else if(!map_UserById.get(objCollaborator.User__c).IsPortalEnabled) {
                                 list_AgentToAddresses.add(map_UserById.get(objCollaborator.User__c).Email);
                             }
                         }
@@ -153,7 +153,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                         // Adding the Case Owner Email
                         if (map_UserById.get(objCase.OwnerId).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
                             list_CustomerToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
-                        } else {
+                        } else if (!map_UserById.get(objCase.OwnerId).IsPortalEnabled) {
                             list_AgentToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
                         }
                     }

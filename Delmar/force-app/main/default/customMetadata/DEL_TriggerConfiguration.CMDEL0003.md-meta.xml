@@ -8,6 +8,6 @@
     </values>
     <values>
         <field>TriggerName__c</field>
-        <value xsi:type="xsd:string">DEL_ContentDocumentLinksTrigger</value>
+        <value xsi:type="xsd:string">DEL_ContentDocumentLinkTrigger</value>
     </values>
 </CustomMetadata>
