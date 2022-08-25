@@ -34,29 +34,25 @@
                         valid={blnValid}>
                     </lightning-input-rich-text>
 
-                    <lightning-layout multiple-rows="false" horizontal-align="spread" vertical-align="center"
+                    <lightning-layout multiple-rows="true" horizontal-align="spread" vertical-align="center"
                         class="slds-var-p-vertical_medium">
-                        <!--<lightning-layout-item size="1" small-device-size="1" medium-device-size="1" large-device-size="1"
-                            class="del-avatar-width">
-                        </lightning-layout-item>-->
-                        <lightning-layout-item size="5" small-device-size="5" medium-device-size="5" large-device-size="5"
-                            class="slds-var-p-vertical_medium" alignment-bump="right">
-                                <template if:true={blnCheckboxVisible}>
-                                    <lightning-input type="checkbox" label={strVisibleToCustomerLabel} onchange={handleVisibleToCustomer}
-                                        checked={blnVisibleToCustomer}>
-                                    </lightning-input>
-                                </template>
+                        <template if:true={blnCheckboxVisible}>
+                            <lightning-layout-item class="slds-var-p-vertical_x-small">
+                                <lightning-input type="checkbox" label={strVisibleToCustomerLabel}
+                                    onchange={handleVisibleToCustomer} checked={blnVisibleToCustomer}>
+                                </lightning-input>
                             </lightning-layout-item>
-                        <lightning-layout-item class="slds-var-p-right_x-small">
-                            <lightning-file-upload name="fileUploader" record-id={recordId}
-                                onuploadfinished={handleUploadFinished} multiple></lightning-file-upload>
+                        </template>
+                        <lightning-layout-item class="slds-var-p-vertical_x-small">
+                            <lightning-file-upload label="Attach Files" name="fileUploader" record-id={recordId}
+                                onuploadfinished={handleUploadFinished} class="del-file-upload-css" multiple>
+                            </lightning-file-upload>
                         </lightning-layout-item>
-                        <lightning-layout-item class="slds-var-p-top_x-small">
+                        <lightning-layout-item class="slds-var-p-vertical_x-small">
                             <lightning-button variant="brand" label={strPlaceHolderText} title={strPlaceHolderText}
                                 onclick={handleOnClick}>
                             </lightning-button>
                         </lightning-layout-item>
-
                     </lightning-layout>
 
                     <template if:true={list_SelectedFiles}>

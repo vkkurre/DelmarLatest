@@ -1,80 +1,64 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>DEL_CaseCollaborationController</members>
-        <members>DEL_ContentDocumentLinkTriggerHelper</members>
-        <members>DEL_ContentDocumentLinkTriggerTest</members>
-        <members>DEL_CaseCollaborationControllerTest</members>
-        <members>DEL_EmailMessagesTriggerHelper</members>
-        <members>DEL_EmailMessagesTriggerHelperTest</members>
-        <members>DEL_Utils</members>
-        <members>DEL_UtilsTest</members>
-        <members>DEL_TestUtility</members>
-        <members>DEL_CaseCollaborationTriggerHelperTest</members>
-        <members>DEL_CaseCollaborationTriggerHelper</members>
-        <members>DEL_ContactCollaborationControllerTest</members>
-        <members>DEL_ContactCollaborationController</members>
+        <members>DEL_AsyncCaseCommentEmailAlerts</members>
         <members>DEL_CaseCollabaoratorUtility</members>
+        <members>DEL_CaseCollaborationController</members>
+        <members>DEL_CaseCollaborationControllerTest</members>
+        <members>DEL_CaseCollaborationTriggerHelper</members>
+        <members>DEL_CaseCollaborationTriggerHelperTest</members>
         <members>DEL_CaseCommentTriggerHelper</members>
         <members>DEL_CaseCommentTriggerHelperTest</members>
+        <members>DEL_ContactCollaborationController</members>
+        <members>DEL_ContactCollaborationControllerTest</members>
+        <members>DEL_ContentDocumentLinkTriggerHelper</members>
+        <members>DEL_ContentDocumentLinkTriggerTest</members>
+        <members>DEL_EmailMessagesTriggerHelper</members>
+        <members>DEL_EmailMessagesTriggerHelperTest</members>
+        <members>DEL_TestUtility</members>
+        <members>DEL_Utils</members>
+        <members>DEL_UtilsTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>DEL_CaseCollaborationEmailTemplates</members>
-        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailEnglish</members>
-        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailFrench</members>
-        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailSpanish</members>
-        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateEnglish</members>
-        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateFrench</members>
-        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateSpanish</members>
-        <name>EmailTemplate</name>
-    </types>
-    <types>
-        <members>DEL_CaseComment__c</members>
-        <members>DEL_TriggerConfiguration__mdt</members>
-        <members>DEL_CaseCollaborator__c</members>
-        <members>DEL_ExceptionLog__c</members>
-        <members>DEL_EmailAlertConfiguration__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
-        <members>DEL_TriggerConfiguration.CMDEL0001</members>
-        <members>DEL_TriggerConfiguration.CMDEL0002</members>
-        <members>DEL_TriggerConfiguration.CMDEL0003</members>
-        <members>DEL_TriggerConfiguration.CMDEL0004</members>
-        <name>CustomMetadata</name>
-    </types>
-    <types>
-        <members>DEL_EmailMessagesTrigger</members>
-        <members>DEL_ContentDocumentLinkTrigger</members>
         <members>DEL_CaseCollaborationTrigger</members>
         <members>DEL_CaseCommentTrigger</members>
+        <members>DEL_ContentDocumentLinkTrigger</members>
+        <members>DEL_EmailMessagesTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
-        <members>DEL_CaseCollaborator__c-Case Collaborator Layout</members>
-        <members>DEL_TriggerConfiguration__mdt-Trigger Configuration Layout</members>
-        <members>DEL_CaseComment__c-Case Comment Layout</members>
-        <members>DEL_ExceptionLog__c-Exception Log Layout</members>
-        <name>Layout</name>
-    </types>
-    <types>
-        <members>DEL_ChatTranscriptToCaseCommentFlow</members>
-        <members>DEL_CaseCollaborationFlow</members>
-        <name>Flow</name>
-    </types>
-    <types>
-        <members>DEL_ExceptionLog__c</members>
-        <name>CustomTab</name>
-    </types>
-    <types>
-        <members>del_caseCollaborationComponent</members>
-        <members>del_addCaseCollaboratorComponent</members>
-        <name>LightningComponentBundle</name>
-    </types>
-    <types>
-        <members>DEL_CaseCollaborationNotification</members>
-        <name>CustomNotificationType</name>
+        <members>Case.DEL_CcAddress__c</members>
+        <members>Case.DEL_ToAddress__c</members>
+        <members>Case.Language__c</members>
+        <members>Case.Visible_in_Community__c</members>
+        <members>Contact.Preferred_Language__c</members>
+        <members>DEL_CaseCollaborator__c.CaseUrl__c</members>
+        <members>DEL_CaseCollaborator__c.Case__c</members>
+        <members>DEL_CaseCollaborator__c.User__c</members>
+        <members>DEL_CaseComment__c.Body__c</members>
+        <members>DEL_CaseComment__c.Case__c</members>
+        <members>DEL_CaseComment__c.CommentCreatedName__c</members>
+        <members>DEL_CaseComment__c.CreatedByEmail__c</members>
+        <members>DEL_CaseComment__c.EmailMessageId__c</members>
+        <members>DEL_CaseComment__c.HasAttachment__c</members>
+        <members>DEL_CaseComment__c.VisibleToCustomer__c</members>
+        <members>DEL_EmailAlertConfiguration__c.CaseCommentEmailTemplateEnglish__c</members>
+        <members>DEL_EmailAlertConfiguration__c.CaseCommentsEmailTemplateFrench__c</members>
+        <members>DEL_EmailAlertConfiguration__c.CaseCommentsEmailTemplateSpanish__c</members>
+        <members>DEL_EmailAlertConfiguration__c.CaseQueryFields__c</members>
+        <members>DEL_EmailAlertConfiguration__c.EmailReplyBreakPattern__c</members>
+        <members>DEL_EmailAlertConfiguration__c.MergeFields__c</members>
+        <members>DEL_EmailAlertConfiguration__c.OrgWideAddress__c</members>
+        <members>DEL_EmailAlertConfiguration__c.SiteName__c</members>
+        <members>DEL_ExceptionLog__c.ClassName__c</members>
+        <members>DEL_ExceptionLog__c.ErrorMessage__c</members>
+        <members>DEL_ExceptionLog__c.ExceptionType__c</members>
+        <members>DEL_ExceptionLog__c.MethodName__c</members>
+        <members>DEL_ExceptionLog__c.StackTrace__c</members>
+        <members>DEL_TriggerConfiguration__mdt.IsActive__c</members>
+        <members>DEL_TriggerConfiguration__mdt.TriggerName__c</members>
+        <name>CustomField</name>
     </types>
     <types>
         <members>CLDEL00001</members>
@@ -94,19 +78,75 @@
         <name>CustomLabel</name>
     </types>
     <types>
-        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertEnglish</members>
-        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertFrench</members>
-        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertSpanish</members>
-        <name>WorkflowAlert</name>
+        <members>DEL_TriggerConfiguration.CMDEL0001</members>
+        <members>DEL_TriggerConfiguration.CMDEL0002</members>
+        <members>DEL_TriggerConfiguration.CMDEL0003</members>
+        <members>DEL_TriggerConfiguration.CMDEL0004</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborationNotification</members>
+        <name>CustomNotificationType</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborator__c</members>
+        <members>DEL_CaseComment__c</members>
+        <members>DEL_EmailAlertConfiguration__c</members>
+        <members>DEL_ExceptionLog__c</members>
+        <members>DEL_TriggerConfiguration__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>DEL_ExceptionLog__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborationEmailTemplates</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailEnglish</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailFrench</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCollaborationEmailSpanish</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateEnglish</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateFrench</members>
+        <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateSpanish</members>
+        <name>EmailTemplate</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborationFlow</members>
+        <members>DEL_ChatTranscriptToCaseCommentFlow</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborator__c-Case Collaborator Layout</members>
+        <members>DEL_CaseComment__c-Case Comment Layout</members>
+        <members>DEL_ExceptionLog__c-Exception Log Layout</members>
+        <members>DEL_TriggerConfiguration__mdt-Trigger Configuration Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>del_addCaseCollaboratorComponent</members>
+        <members>del_caseCollaborationComponent</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborator__c.All</members>
+        <members>DEL_CaseComment__c.All</members>
+        <members>DEL_ExceptionLog__c.All</members>
+        <name>ListView</name>
     </types>
     <types>
         <members>Admin</members>
         <name>Profile</name>
     </types>
     <types>
-        <members>Contact.Preferred_Language__c</members>
-        <members>Case.Language__c</members>
-        <name>CustomField</name>
+        <members>DEL_CaseCollaborator__c.RestrictCaseCreatedBy</members>
+        <members>DEL_CaseCollaborator__c.RestrictCaseOwnerAsCollaborator</members>
+        <name>ValidationRule</name>
+    </types>
+    <types>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertEnglish</members>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertFrench</members>
+        <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertSpanish</members>
+        <name>WorkflowAlert</name>
     </types>
     <version>55.0</version>
 </Package>

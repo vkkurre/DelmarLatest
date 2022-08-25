@@ -61,12 +61,12 @@ public class DEL_CaseCommentTriggerHelper {
                 list_ConsolidatedDMLErrors
             );
         }
-
+        
         if (!list_CaseCommentsWithoutAttachments.isEmpty()) {
             processAfterInsertAysnc(list_CaseCommentsWithoutAttachments);
         }
     }
-
+    
     /**
     * @ author       :  Ankit C
     * @ description  :  This method contains logic that can be processed in asynchronous context
@@ -101,12 +101,11 @@ public class DEL_CaseCommentTriggerHelper {
         if (String.isBlank(objCaseComment.CreatedByEmail__c)) {   
             objCaseComment.CreatedByEmail__c = map_UserById.get(objCaseComment.CreatedById).Email;
         }
-
+        
         if (Test.isRunningTest() && DEL_CaseCommentTriggerHelperTest.blnThrowException) {
             throw new DMLException();
         }
     }
-
     
     /**
     * @ author       :  Ankit C
@@ -137,11 +136,11 @@ public class DEL_CaseCommentTriggerHelper {
                                      VisibleToCustomer__c,
                                      HasAttachment__c,
                                      (
-                                        SELECT 
-                                        Id,
-                                        LinkedEntityId,
-                                        ContentDocumentId
-                                        FROM ContentDocumentLinks
+                                         SELECT
+                                         Id,
+                                         LinkedEntityId,
+                                         ContentDocumentId
+                                         FROM ContentDocumentLinks
                                      )
                                      FROM DEL_CaseComment__c
                                      WHERE Id IN :list_CaseComments
@@ -150,7 +149,7 @@ public class DEL_CaseCommentTriggerHelper {
         for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
             set_CaseIds.add(objCaseComment.Case__c);
             set_UserIds.add(objCaseComment.CreatedById);
-
+            
             if (!objCaseComment.ContentDocumentLinks.isEmpty()) {
                 for (ContentDocumentLink objContentDocumentLink : objCaseComment.ContentDocumentLinks) {
                     map_CaseCommentIdByContentDocumentId.put(
@@ -160,7 +159,7 @@ public class DEL_CaseCommentTriggerHelper {
                 }
             }
         }
-
+        
         //Get ContenVersionIds By Case Comment
         if (!map_CaseCommentIdByContentDocumentId.keySet().isEmpty()) {
             for (ContentVersion objContentVersion : [SELECT 
@@ -170,16 +169,16 @@ public class DEL_CaseCommentTriggerHelper {
                                                      ContentVersion
                                                      WHERE ContentDocumentId IN :map_CaseCommentIdByContentDocumentId.keySet()
                                                     ]
-            ) {
-                if (!map_ContentVersionIdsByCaseCommentId.containsKey(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId))) {
-                    map_ContentVersionIdsByCaseCommentId.put(
-                        map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId), 
-                        new List<String> { objContentVersion.Id }
-                    );
-                } else {
-                   map_ContentVersionIdsByCaseCommentId.get(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId)).add(objContentVersion.Id);
+                ) {
+                    if (!map_ContentVersionIdsByCaseCommentId.containsKey(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId))) {
+                        map_ContentVersionIdsByCaseCommentId.put(
+                            map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId),
+                            new List<String> { objContentVersion.Id }
+                        );
+                    } else {
+                        map_ContentVersionIdsByCaseCommentId.get(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId)).add(objContentVersion.Id);
+                    }
                 }
-            }
         }
         
         // Query the Case Collaborators related the Case
@@ -240,7 +239,7 @@ public class DEL_CaseCommentTriggerHelper {
                 }
             }
     }
-
+    
     /**
     * @ author       :  Ankit C
     * @ description  :  This method sends email alerts when Case Comments are created with attachments.

@@ -2,10 +2,10 @@
 * 
 * @ Name            :   DEL_CaseCollabaoratorUtility
 * @ Purpose         :   Utility Class for DEL_ContactCollaborationController which will run in 
-                        without sharing mode.
+*                       without sharing mode.
 * @ Author          :   Dinesh Chandra
 * @ Usage           :   1)Querying users under an Account for the Case
-                        2)Inserting case collaborators.
+*                       2)Inserting case collaborators.
 * @ Test Class Name :   DEL_ContactCollaborationControllerTest
 *
 *   Date            |  Developer Name               |  Version      |  Changes
@@ -37,12 +37,12 @@ public without sharing class DEL_CaseCollabaoratorUtility {
                                                             User__c 
                                                             FROM DEL_CaseCollaborator__c 
                                                             WHERE Case__c = :idCaseId]
-        ) {
-            set_UserIdsToExclude.add(objCaseCollaborator.User__c);
-        }
+            ) {
+                set_UserIdsToExclude.add(objCaseCollaborator.User__c);
+            }
 
-        /*Excluding the logged-in User (Case-Owner) to not to be visible in
-          the list of potential collaborators.*/
+        // Excluding the logged-in User (Case-Owner) to not to be visible in
+        // the list of potential collaborators.
         set_UserIdsToExclude.add(UserInfo.getUserId());
 
         list_Users = [SELECT 

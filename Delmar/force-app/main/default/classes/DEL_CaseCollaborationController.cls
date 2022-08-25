@@ -53,16 +53,16 @@ public class DEL_CaseCollaborationController {
             String strQueryCaseComments = 'SELECT CreatedDate, LastModifiedDate, CreatedById, ' 
                 + ' CreatedBy.SmallPhotoUrl, CreatedBy.Name, Body__c, CommentCreatedName__c, CreatedByEmail__c, '
                 + ' EmailMessageId__c, VisibleToCustomer__c FROM DEL_CaseComment__c WHERE Case__c = :strRecordId';
-
+            
             if (objUser.IsPortalEnabled) {
                 strQueryCaseComments += ' AND VisibleToCustomer__c = true';
             }
-
+            
             strQueryCaseComments += ' ORDER BY CreatedDate DESC';
-
+            
             objResponseWrapper.objCurrentUser = objUser;
             objResponseWrapper.list_CaseComments = Database.query(strQueryCaseComments);
-
+            
             if (!objResponseWrapper.list_CaseComments.isEmpty()) {
                 for (DEL_CaseComment__c objCaseComment : objResponseWrapper.list_CaseComments) {
                     list_caseCommentIds.add(objCaseComment.Id);
@@ -91,6 +91,7 @@ public class DEL_CaseCollaborationController {
                                                                  WHERE ContentDocumentId 
                                                                  IN :map_ContentDocumentLinkByContentDocumentId.KeySet()
                                                                  ORDER BY Title];
+                    
                     for (ContentVersion objContentVersion : list_contentVersions) {
                         String strCommentId = map_ContentDocumentLinkByContentDocumentId.get(objContentVersion.ContentDocumentId).LinkedEntityId;
                         if (map_ContentVersionsByCaseCommentId.containsKey(strCommentId)) {
@@ -120,8 +121,8 @@ public class DEL_CaseCollaborationController {
     * @ description  :  This method is used to create new Case Comment record using comment body 'strBody' and case ID 'strRecordId'
     * @ params       :  'strRecordId' - Record Id of the Case
     *                   'strBody'     - Body of the comment
-                        'blnVisibleToCustomer - flag to specify if comment should be visible to Customers.
-                        list_ContentDocumentIds -  List of ContentDocumentIds that were uploaded
+    *                   'blnVisibleToCustomer - flag to specify if comment should be visible to Customers.
+    *                   list_ContentDocumentIds -  List of ContentDocumentIds that were uploaded
     * @ return       :  objResponseWrapper - instance of ResponseWrapper class
     **/
     @AuraEnabled
@@ -141,12 +142,12 @@ public class DEL_CaseCollaborationController {
             if (!list_ContentDocumentIds.isEmpty()) {
                 objCaseComment.HasAttachment__c = true;
             }
-
+            
             insert objCaseComment;
             if (!list_ContentDocumentIds.isEmpty()) {
                 createContentDocumentLink(objCaseComment.Id, list_ContentDocumentIds);
             }
-
+            
             // Throw an exception from test class                                        
             if (Test.isRunningTest() && DEL_CaseCollaborationControllerTest.blnThrowException) {
                 throwException();
@@ -157,13 +158,13 @@ public class DEL_CaseCollaborationController {
         }
         return objResponseWrapper;
     }
-
+    
     /**
     * @ author       :  Deeksha Suvarna
     * @ description  :  This method is used to create ContentDocumentLink for the ContentVersion
     * @ params       :  'strRecordId' - Record Id of the Case
     *                   'strBody'     - Body of the comment
-                        'list_ContentDocumentIds' - List of ContentDocument Ids
+    *                   'list_ContentDocumentIds' - List of ContentDocument Ids
     * @ return       :  objResponseWrapper - instance of ResponseWrapper class
     **/
     @AuraEnabled
@@ -178,7 +179,7 @@ public class DEL_CaseCollaborationController {
             objNewContentDocumentLink.LinkedEntityId = idCaseCommentId;
             list_ContentDocumentLinks.add(objNewContentDocumentLink);   
         }
-
+        
         if (!list_ContentDocumentLinks.isEmpty()) {
             List<Database.SaveResult> list_InsertResults = Database.insert(list_ContentDocumentLinks, false);
             list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_InsertResults, 'Insert'));
@@ -192,7 +193,7 @@ public class DEL_CaseCollaborationController {
             );
         }
     }
-
+    
     /**
     * @ author       :  Ankit
     * @ description  :  This method should be called to force an exception which 

@@ -24,7 +24,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
     public DEL_EmailAlertConfiguration__c objEmailAlertConfiguration;
     // Map of ContentVersion Ids by Case Comment Id
     public Map<Id, List<String>> map_ContentVersionIdsByCaseCommentId;
-
+    
     public DEL_AsyncCaseCommentEmailAlerts(
         List<DEL_CaseComment__c> list_CaseComments,
         Map<Id, EmailMessage> map_EmailMessageByCaseId,
@@ -42,14 +42,14 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
         this.map_CaseCollaboratorsByCaseId = map_CaseCollaboratorsByCaseId;
         this.map_ContentVersionIdsByCaseCommentId = map_ContentVersionIdsByCaseCommentId;
     }
-
+    
     public void execute(QueueableContext context) {
         List<Messaging.SingleEmailMessage> list_EmailMessages = new List<Messaging.SingleEmailMessage>();
         Set<String> set_EmailTemplateNames = new Set<String> {
             objEmailAlertConfiguration.CaseCommentEmailTemplateEnglish__c,
-            objEmailAlertConfiguration.CaseCommentsEmailTemplateFrench__c,
-            objEmailAlertConfiguration.CaseCommentsEmailTemplateSpanish__c
-            };
+                objEmailAlertConfiguration.CaseCommentsEmailTemplateFrench__c,
+                objEmailAlertConfiguration.CaseCommentsEmailTemplateSpanish__c
+                };
         Map<String, EmailTemplate> map_EmailTemplateByName = new Map<String, EmailTemplate>();
         Map<String, EmailTemplate> map_EmailTemplateByLanguage = new Map<String, EmailTemplate>();
         
@@ -259,7 +259,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
             );
         }
     }
-
+    
     /**
     * @ author       :  Ankit C
     * @ description  :  This method gets the default language for the Case.
@@ -276,19 +276,19 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
         } else if (String.isNotBlank(objCase.Language__c)) {
             strDefaultLanguage = objCase.Language__c;
         }
-
+        
         return strDefaultLanguage;
     }
-
+    
     /**
     * @ author       :  Ankit C
     * @ description  :  This method forms the Html Body of the email that needs to be sent
     * @ params       :  objCaseComment - DEL_CaseComment__c record
-                        objCase - related Case
-                        list_MergeFields - list of merge fields that are included in the email template.
-                        strHtml - HtmlBody from the email template.
-                        strSiteURL - Community Page Url.
-                        strUsertype - Defines if the User is Agent/Customer
+    *                   objCase - related Case
+    *                   list_MergeFields - list of merge fields that are included in the email template.
+    *                   strHtml - HtmlBody from the email template.
+    *                   strSiteURL - Community Page Url.
+    *                   strUsertype - Defines if the User is Agent/Customer
     **/
     public String getHtmlBody(
         DEL_CaseComment__c objCaseComment, 

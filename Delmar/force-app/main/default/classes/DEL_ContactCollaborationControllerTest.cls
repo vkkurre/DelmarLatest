@@ -141,10 +141,8 @@ private class DEL_ContactCollaborationControllerTest {
         // Assert if the methods encountered exceptions in them
         List<DEL_ExceptionLog__c> list_ExceptionLogs = [SELECT
                                                         Id
-                                                        FROM
-                                                        DEL_ExceptionLog__c
-                                                        WHERE
-                                                        ClassName__c = 'DEL_ContactCollaborationController'];
+                                                        FROM DEL_ExceptionLog__c
+                                                        WHERE ClassName__c = 'DEL_ContactCollaborationController'];
         System.assert(!list_ExceptionLogs.isEmpty());
         System.assert(!objResponseWrapper2.blnIsSuccess);
     }

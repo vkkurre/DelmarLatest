@@ -1,7 +1,7 @@
 import { LightningElement, api, track, wire } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { NavigationMixin } from "lightning/navigation";
-import { deleteRecord } from 'lightning/uiRecordApi';
+import { deleteRecord } from "lightning/uiRecordApi";
 import { refreshApex } from "@salesforce/apex";
 import fetchComments from "@salesforce/apex/DEL_CaseCollaborationController.fetchComments";
 import insertComment from "@salesforce/apex/DEL_CaseCollaborationController.insertComment";
@@ -27,24 +27,25 @@ import CLDEL00013 from "@salesforce/label/c.CLDEL00013";
 import CLDEL00014 from "@salesforce/label/c.CLDEL00014";
 
 export default class Del_caseCollaborationComponent extends NavigationMixin(LightningElement) {
-    idCaseCommentId;
-    strBody = "";
     @api recordId;
-    blnValid = true;
-    blnVisibleToCustomer = true;
-    blnCheckboxVisible = false;
-    strErrorMessageCommentInput;
     @track list_Comments = [];
-    objCurrentUserDetails;
-    strPlaceHolderText = CLDEL00002;
-    strViewFullMessageMenuLabel = CLDEL00012;
-    strVisibleToCustomerLabel = CLDEL00013;
-    blnIsLoading = false;
     // List that contains retrieved data and errors from fetchComments(). Used to refresh apex data after insertion
     @track list_WiredComments;
     // List of files that were uploaded
     @track list_SelectedFiles = [];
+    objCurrentUserDetails;
+    idCaseCommentId;
+    strBody = "";
+    strErrorMessageCommentInput;
+    strPlaceHolderText = CLDEL00002;
+    strViewFullMessageMenuLabel = CLDEL00012;
+    strVisibleToCustomerLabel = CLDEL00013;
+    blnIsLoading = false;
+    blnValid = true;
     blnVisibleToCustomer = true;
+    blnCheckboxVisible = false;
+    blnVisibleToCustomer = true;
+    blnIsRendered = false;
 
     /**
      * @ author      : Rakesh Nayak & Vinaykant
@@ -56,11 +57,9 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
-                let objCurrentUser = JSON.parse(
-                    JSON.stringify(data.objCurrentUser)
-                );
+                let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));
 
-                this.blnCheckboxVisible = !(objCurrentUser.IsPortalEnabled);
+                this.blnCheckboxVisible = !objCurrentUser.IsPortalEnabled;
 
                 let list_Attachments = JSON.parse(
                     JSON.stringify(data.map_AttachmentsByCaseCommentId)
@@ -130,10 +129,10 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     }
 
     /**
-    * @ author      : Rakesh Nayak
-    * @ description : This method is invoked on the click of submit button and 
-                      used to insert the entered comment and refresh the updated comment list
-    **/
+     * @ author      : Rakesh Nayak
+     * @ description : This method is invoked on the click of submit button and
+     *                 used to insert the entered comment and refresh the updated comment list
+     **/
     handleOnClick() {
         this.blnValid = this.validateComment();
         if (this.blnValid) {
@@ -144,33 +143,33 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
             }
 
             /**
-            * @ author      : Rakesh Nayak
-            * @ description : This method is used to create new Case Comment record using comment 
-                              body 'strBody' and case ID 'strRecordId'
-            **/
+             * @ author      : Rakesh Nayak
+             * @ description : This method is used to create new Case Comment record using comment
+             *                 body 'strBody' and case ID 'strRecordId'
+             **/
             insertComment({
                 strRecordId: this.recordId,
                 strBody: this.strBody,
                 blnVisibleToCustomer: this.blnVisibleToCustomer,
                 list_ContentDocumentIds: list_DocumentIds
             })
-            .then((result) => {
-                if (result.blnIsSuccess) {
-                    // Nullifying the comment input box after comment is submitted.
-                    this.strBody = "";
-                    this.blnVisibleToCustomer = true;
-                    this.list_SelectedFiles = [];
-                    // Refreshing the comment list.
-                    this.updateRecordView();
-                    this.showToastMessage(CLDEL00007, "success", CLDEL00006);
-                } else {
-                    this.showToastMessage(CLDEL00001, "error", result.strErrorMessage);
-                }
-                this.handleIsLoading(false);
-            })
-            .catch((error) => {
-                this.handleErrors(error, CLDEL00001);
-            });
+                .then((result) => {
+                    if (result.blnIsSuccess) {
+                        // Nullifying the comment input box after comment is submitted.
+                        this.strBody = "";
+                        this.blnVisibleToCustomer = true;
+                        this.list_SelectedFiles = [];
+                        // Refreshing the comment list.
+                        this.updateRecordView();
+                        this.showToastMessage(CLDEL00007, "success", CLDEL00006);
+                    } else {
+                        this.showToastMessage(CLDEL00001, "error", result.strErrorMessage);
+                    }
+                    this.handleIsLoading(false);
+                })
+                .catch((error) => {
+                    this.handleErrors(error, CLDEL00001);
+                });
         }
     }
 
@@ -217,7 +216,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
      * @ description   : This method is used to update all the comments after insertion of new comment
      **/
     updateRecordView() {
-        refreshApex(this.list_WiredComments); 
+        refreshApex(this.list_WiredComments);
     }
 
     /**
@@ -237,7 +236,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     /**
      * @ author        : Ankit C
      * @ description   : This method handles the logic to be performed after files are uploaded
-    **/
+     **/
     handleUploadFinished(event) {
         // Get the list of uploaded files
         this.handleIsLoading(true);
@@ -266,13 +265,13 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                 for (let i = 0; i < list_Temp.length; i++) {
                     if (list_Temp[i].documentId === idRemovedDocumentId) {
                         list_Temp.splice(i, 1);
-                    }  
+                    }
                 }
-        
+
                 this.list_SelectedFiles = list_Temp;
                 this.handleIsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 this.handleIsLoading(false);
                 this.handleErrors(error, CLDEL00001);
             });
@@ -291,6 +290,31 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
             this.showToastMessage(strTitle, "error", error.body.message);
         } else {
             this.showToastMessage(strTitle, "error", "Unknown Error");
+        }
+    }
+
+    /**
+     * @ author        : Rakesh Nayak
+     * @ description   : This method is used to align the label of file-upload component
+     **/
+    renderedCallback() {
+        if (this.blnIsRendered) {
+            return;
+        }
+
+        this.blnIsRendered = true;
+        const objStyle = document.createElement("style");
+        objStyle.innerText = `
+            .del-file-upload-css .slds-form-element__label {
+                display: none;
+            }
+        `;
+
+        let list_Templates = this.template.querySelectorAll("lightning-file-upload");
+        if (list_Templates && list_Templates.length) {
+            list_Templates.forEach((objCurrent) => {
+                objCurrent.appendChild(objStyle);
+            });
         }
     }
 }

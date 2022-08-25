@@ -31,7 +31,10 @@ public class DEL_ContentDocumentLinkTriggerHelper {
                     if (map_ListOfContentDocumentLinksByLinkedEntityId.containsKey(objContentDocumentLink.LinkedEntityId)) {
                         map_ListOfContentDocumentLinksByLinkedEntityId.get(objContentDocumentLink.LinkedEntityId).add(objContentDocumentLink);
                     } else {
-                        map_ListOfContentDocumentLinksByLinkedEntityId.put(objContentDocumentLink.LinkedEntityId, new List<ContentDocumentLink> {objContentDocumentLink});
+                        map_ListOfContentDocumentLinksByLinkedEntityId.put(
+                            objContentDocumentLink.LinkedEntityId, 
+                            new List<ContentDocumentLink> {objContentDocumentLink}
+                        );
                     }
                 } else if (objContentDocumentLink.LinkedEntityId.getSObjectType().getDescribe().getName() == 'DEL_CaseComment__c') {
                     set_CaseCommentIds.add(objContentDocumentLink.LinkedEntityId);
@@ -77,15 +80,14 @@ public class DEL_ContentDocumentLinkTriggerHelper {
                     'handleContentDocumentLinksOnInsert',
                     list_ConsolidatedDMLErrors
                 );
-                
             }
-
+            
             if (!set_CaseCommentIds.isEmpty()) {
                 List<DEL_CaseComment__c> list_CaseComments = [SELECT
                                                               Id
                                                               FROM DEL_CaseComment__c
                                                               WHERE Id IN :set_CaseCommentIds
-                                                              ];
+                                                             ];
                 DEL_CaseCommentTriggerHelper.processCaseCommentsWithAttachments(list_CaseComments);
             }
         } catch(Exception objException) {
