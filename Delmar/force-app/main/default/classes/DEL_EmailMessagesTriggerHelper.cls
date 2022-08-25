@@ -73,30 +73,33 @@ public class DEL_EmailMessagesTriggerHelper {
                        if (String.isBlank(objCase.DEL_ToAddress__c)) {
                            objCase.DEL_ToAddress__c = objEmailMessage.ToAddress;
                        }
-                       
-                       String strCcAddresses = '';
-                       Set<String> set_CcAddresses = new Set<String>();
-                       if (String.isNotBlank(objCase.DEL_CcAddress__c)) {
-                           set_CCAddresses.addAll(objCase.DEL_CcAddress__c.split(';'));
+
+                       if (objEmailAlertConfiguration.CCAddressSwitch__c) {
+                            String strCcAddresses = '';
+                            Set<String> set_CcAddresses = new Set<String>();
+                            if (String.isNotBlank(objCase.DEL_CcAddress__c)) {
+                                set_CCAddresses.addAll(objCase.DEL_CcAddress__c.split(';'));
+                            }
+                            
+                            if (String.isNotBlank(objEmailMessage.CCAddress)) {
+                                set_CCAddresses.addAll(objEmailMessage.CCAddress.split('; '));
+                            }
+                            
+                            for (String strCcAddress : set_CcAddresses) {
+                                if ((strCcAddresses.length() + strCcAddress.length()) < 255) {
+                                    if (String.isBlank(strCcAddresses)) {
+                                        strCcAddresses = strCcAddresses + strCcAddress;
+                                    } else {
+                                        strCCAddresses = strCcAddresses + ';' + strCcAddress;
+                                    }
+                                } else {
+                                    break;
+                                }
+                            }
+                            
+                            objCase.DEL_CcAddress__c = strCcAddresses;
                        }
                        
-                       if (String.isNotBlank(objEmailMessage.CCAddress)) {
-                           set_CCAddresses.addAll(objEmailMessage.CCAddress.split('; '));
-                       }
-                       
-                       for (String strCcAddress : set_CcAddresses) {
-                           if ((strCcAddresses.length() + strCcAddress.length()) < 255) {
-                               if (String.isBlank(strCcAddresses)) {
-                                   strCcAddresses = strCcAddresses + strCcAddress;
-                               } else {
-                                   strCCAddresses = strCcAddresses + ';' + strCcAddress;
-                               }
-                           } else {
-                               break;
-                           }
-                       }
-                       
-                       objCase.DEL_CcAddress__c = strCcAddresses;
                        list_CasesToUpdate.add(objCase);
                    }
             }

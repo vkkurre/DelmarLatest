@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>VisibleToCustomerSwitch__c</fullName>
     <defaultValue>false</defaultValue>
-    <description>This is used to control the Visible to Customer checkbox on the component.</description>
+    <description>This is used to control the visibility of the Visible to Customer checkbox on the Case Comments page.</description>
     <externalId>false</externalId>
     <label>Visible To Customer Switch</label>
     <trackTrending>false</trackTrending>

@@ -143,7 +143,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                         }
                     }
                     
-                    String strSubjectForAgents =objTemplateForAgents.Subject;
+                    String strSubjectForAgents = objTemplateForAgents.Subject;
                     if (strSubjectForAgents.contains('{!Case.Subject}')) {
                         strSubjectForAgents = strSubjectForAgents.replace('{!Case.Subject}', objCase.Subject);
                         objSingleMessageForAgents.setSubject(strSubjectForAgents);
@@ -166,8 +166,8 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                             // Adding the Case Web Email
                             list_CustomerToAddresses.add(objCase.SuppliedEmail);
                         }
-                        
-                        if (String.isNotBlank(objCase.DEL_CcAddress__c)) {
+
+                        if (objEmailAlertConfiguration.CCAddressSwitch__c && String.isNotBlank(objCase.DEL_CcAddress__c)) {
                             // Adding the CC Emails
                             list_CustomerToAddresses.addAll(objCase.DEL_CcAddress__c.split(';'));
                         }
