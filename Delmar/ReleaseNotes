@@ -45,6 +45,7 @@
     - DEL_ContentDocumentLinkTriggerHelper
     - DEL_EmailMessagesTriggerHelper
     - DEL_Utils
+    - DEL_AsyncCaseCommentEmailAlerts
 5. Turn on the Email Deliverability.
 
 
