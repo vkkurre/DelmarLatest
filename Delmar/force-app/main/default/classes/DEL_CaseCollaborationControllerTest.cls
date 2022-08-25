@@ -70,7 +70,7 @@ public class DEL_CaseCollaborationControllerTest {
             + '{!CaseComment.CreatedDate},SiteLink';
         
         OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_TestUtility.CaseCollaborationConfigurationBuilder()
             .setMergeFields(strMergeFields)
             .setCaseQueryFields('Subject,CaseNumber,Description')
             .setSiteName('CaseComments')
@@ -78,7 +78,7 @@ public class DEL_CaseCollaborationControllerTest {
             .setOwnerId(UserInfo.getOrganizationId())
             .setOrgWideAddress(objOrgWideAddress.Address)
             .createConfiguration();
-        insert objEmailAlertConfiguration;
+        insert objCaseCollaborationConfiguration;
         
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
             .setName('Case Comment Email Alert')

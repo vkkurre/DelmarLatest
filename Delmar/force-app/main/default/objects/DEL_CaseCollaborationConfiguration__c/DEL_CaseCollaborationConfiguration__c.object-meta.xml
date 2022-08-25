@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <customSettingsType>Hierarchy</customSettingsType>
-    <description>This is used to manage the Merge Fields and Email Template used for email notification when Case Comments are created.</description>
+    <description>This is used to configure various settings for Case Collaboration.</description>
     <enableFeeds>false</enableFeeds>
-    <label>Email Alert Configuration</label>
+    <label>Case Collaboration Configuration</label>
     <visibility>Public</visibility>
 </CustomObject>

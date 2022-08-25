@@ -31,16 +31,15 @@ public class DEL_ContentDocumentLinkTriggerTest {
         String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
             +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
             + '{!CaseComment.CreatedDate},SiteLink';
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_TestUtility.CaseCollaborationConfigurationBuilder()
             .setMergeFields(strMergeFields)
             .setCaseQueryFields('Subject,CaseNumber,Description')
             .setSiteName('CaseComments')
             .setEmailTemplateName('DEL_CaseCommentAlert')
             .setOwnerId(UserInfo.getOrganizationId())
             .setOrgWideAddress(objOrgWideAddress.Address)
-            .setEmailBreakPattern('(<br><div class="gmail_quote">){1}')
             .createConfiguration();
-        insert objEmailAlertConfiguration;
+        insert objCaseCollaborationConfiguration;
         
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
             .setName('Case Comment Email Alert')
@@ -61,7 +60,7 @@ public class DEL_ContentDocumentLinkTriggerTest {
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
-            .setToAddress(objEmailAlertConfiguration.OrgWideAddress__c)
+            .setToAddress(objCaseCollaborationConfiguration.OrgWideAddress__c)
             .setThreadIdentifier('qwerty')
             .setMessageIdentifier('1cwicjn')
             .setParentId(objCase.Id)

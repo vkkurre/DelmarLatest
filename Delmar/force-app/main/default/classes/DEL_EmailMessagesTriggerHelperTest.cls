@@ -33,16 +33,15 @@ public class DEL_EmailMessagesTriggerHelperTest {
             + '{!CaseComment.CreatedDate},SiteLink';
         
         OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_TestUtility.EmailAlertConfigurationBuilder()
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_TestUtility.CaseCollaborationConfigurationBuilder()
             .setMergeFields(strMergeFields)
             .setCaseQueryFields('Subject,CaseNumber,Description')
             .setSiteName('CaseComments')
             .setEmailTemplateName('DEL_CaseCommentAlert')
             .setOwnerId(UserInfo.getOrganizationId())
             .setOrgWideAddress(objOrgWideAddress.Address)
-            .setEmailBreakPattern('(<br><div class="gmail_quote">){1}')
             .createConfiguration();
-        insert objEmailAlertConfiguration;
+        insert objCaseCollaborationConfiguration;
         
         EmailTemplate objEmailTemplate = new DEL_TestUtility.EmailTemplateBuilder()
             .setName('Case Comment Email Alert')
@@ -64,7 +63,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
     **/
     @isTest
     private static void testEmailMessageCreation() {
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = [SELECT OrgWideAddress__c FROM DEL_EmailAlertConfiguration__c LIMIT 1];
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = [SELECT OrgWideAddress__c FROM DEL_CaseCollaborationConfiguration__c LIMIT 1];
         Case objCase = [SELECT Id FROM Case LIMIT 1];
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
@@ -72,7 +71,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
-            .setToAddress(objEmailAlertConfiguration.OrgWideAddress__c)
+            .setToAddress(objCaseCollaborationConfiguration.OrgWideAddress__c)
             .setThreadIdentifier('qwerty')
             .setMessageIdentifier('1cwicjn')
             .setCcAddress('TestUser1@test.com; TestUser2@test.com; TestUser1@test.com')
@@ -97,7 +96,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
                            ];
         List<String> list_CcAddresses = objNewCase.DEL_CcAddress__c.split(';');
         // Assert if the Support Address is stored in Case
-        System.assertEquals(objEmailAlertConfiguration.OrgWideAddress__c, objNewCase.DEL_ToAddress__c);
+        System.assertEquals(objCaseCollaborationConfiguration.OrgWideAddress__c, objNewCase.DEL_ToAddress__c);
         // Assert if unique email addresses in CC field are getting inserted to  DEL_CcAddress__c field in Case
         System.assertEquals(2, list_CcAddresses.size());
         // Assert if a case comment was created successfully from the email message.                                     
@@ -112,7 +111,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
     @isTest
     private static void handleExceptions() {
         Case objCase = [SELECT Id FROM Case LIMIT 1];
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = [SELECT OrgWideAddress__c FROM DEL_EmailAlertConfiguration__c LIMIT 1];
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = [SELECT OrgWideAddress__c FROM DEL_CaseCollaborationConfiguration__c LIMIT 1];
         
         EmailMessage objEmailMessage = new DEL_TestUtility.EmailMessageBuilder()
             .setTextBody('This is textbody')
@@ -120,7 +119,7 @@ public class DEL_EmailMessagesTriggerHelperTest {
             .setIncoming(true)
             .setFromAddress('abc@xyz.com')
             .setFromName('Test User')
-            .setToAddress(objEmailAlertConfiguration.OrgWideAddress__c)
+            .setToAddress(objCaseCollaborationConfiguration.OrgWideAddress__c)
             .setThreadIdentifier('qwerty')
             .setMessageIdentifier('1cwicjn')
             .setParentId(objCase.Id)

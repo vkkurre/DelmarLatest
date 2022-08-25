@@ -26,7 +26,7 @@ public class DEL_EmailMessagesTriggerHelper {
         List<String> list_ConsolidatedDMLErrors = new List<String>();
         // List of DEL_CaseComment__c records to insert
         List<DEL_CaseComment__c> list_CaseComments = new List<DEL_CaseComment__c>();
-        DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = DEL_EmailAlertConfiguration__c.getOrgDefaults();
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
         
         for (EmailMessage objEmailMessage : list_EmailMessages) {
             set_ParentIds.add(objEmailMessage.ParentId);
@@ -48,7 +48,7 @@ public class DEL_EmailMessagesTriggerHelper {
                 if (
                     (map_CasesById.containsKey(objEmailMessage.ParentId) && 
                      map_CasesById.get(objEmailMessage.ParentId).Visible_in_Community__c) || 
-                    (objEmailMessage.ToAddress == objEmailAlertConfiguration.OrgWideAddress__c)
+                    (objEmailMessage.ToAddress == objCaseCollaborationConfiguration.OrgWideAddress__c)
                 ) {
                     if ((objEmailMessage.ThreadIdentifier <> objEmailMessage.MessageIdentifier) && objEmailMessage.Incoming) {
                         if (String.isNotBlank(objEmailMessage.ParentId)) {
@@ -74,7 +74,7 @@ public class DEL_EmailMessagesTriggerHelper {
                            objCase.DEL_ToAddress__c = objEmailMessage.ToAddress;
                        }
 
-                       if (objEmailAlertConfiguration.CCAddressSwitch__c) {
+                       if (objCaseCollaborationConfiguration.CCAddressSwitch__c) {
                             String strCcAddresses = '';
                             Set<String> set_CcAddresses = new Set<String>();
                             if (String.isNotBlank(objCase.DEL_CcAddress__c)) {

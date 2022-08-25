@@ -58,8 +58,8 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
-                if (data.objEmailAlertConfiguration) {
-                    this.blnVisibleToCustomerSwitch = data.objEmailAlertConfiguration.VisibleToCustomerSwitch__c;
+                if (data.objCaseCollaborationConfiguration) {
+                    this.blnVisibleToCustomerSwitch = data.objCaseCollaborationConfiguration.VisibleToCustomerSwitch__c;
                 }
                 
                 let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));

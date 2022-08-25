@@ -51,15 +51,14 @@
 /********************************************************************
 * Script to create Email Alert Configuration custom setting
 
-DEL_EmailAlertConfiguration__c objEmailAlertConfiguration = new DEL_EmailAlertConfiguration__c();
-objEmailAlertConfiguration.MergeFields__c = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},{!CaseComment.CreatedDate},SiteLink';
-objEmailAlertConfiguration.CaseQueryFields__c = 'Subject,CaseNumber,Description';
-objEmailAlertConfiguration.SiteName__c = '';
-objEmailAlertConfiguration.CaseCommentEmailTemplateEnglish__c = 'DEL_CaseCommentEmailTemplateEnglish';
-objEmailAlertConfiguration.CaseCommentsEmailTemplateSpanish__c = 'DEL_CaseCommentEmailTemplateSpanish';
-objEmailAlertConfiguration.CaseCommentsEmailTemplateFrench__c = 'DEL_CaseCommentEmailTemplateFrench';
-objEmailAlertConfiguration.OrgWideAddress__c = '';
-objEmailAlertConfiguration.EmailReplyBreakPattern__c = '(<br><div class="gmail_quote">){1}';
-insert objEmailAlertConfiguration;
+DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_CaseCollaborationConfiguration__c();
+objCaseCollaborationConfiguration.MergeFields__c = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},{!CaseComment.CreatedDate},SiteLink';
+objCaseCollaborationConfiguration.CaseQueryFields__c = 'Subject,CaseNumber,Description';
+objCaseCollaborationConfiguration.SiteName__c = '';
+objCaseCollaborationConfiguration.CaseCommentEmailTemplateEnglish__c = 'DEL_CaseCommentEmailTemplateEnglish';
+objCaseCollaborationConfiguration.CaseCommentsEmailTemplateSpanish__c = 'DEL_CaseCommentEmailTemplateSpanish';
+objCaseCollaborationConfiguration.CaseCommentsEmailTemplateFrench__c = 'DEL_CaseCommentEmailTemplateFrench';
+objCaseCollaborationConfiguration.OrgWideAddress__c = '';
+insert objCaseCollaborationConfiguration;
 
 *********************************************************************/

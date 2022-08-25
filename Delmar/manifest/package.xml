@@ -43,14 +43,13 @@
         <members>DEL_CaseComment__c.EmailMessageId__c</members>
         <members>DEL_CaseComment__c.HasAttachment__c</members>
         <members>DEL_CaseComment__c.VisibleToCustomer__c</members>
-        <members>DEL_EmailAlertConfiguration__c.CaseCommentEmailTemplateEnglish__c</members>
-        <members>DEL_EmailAlertConfiguration__c.CaseCommentsEmailTemplateFrench__c</members>
-        <members>DEL_EmailAlertConfiguration__c.CaseCommentsEmailTemplateSpanish__c</members>
-        <members>DEL_EmailAlertConfiguration__c.CaseQueryFields__c</members>
-        <members>DEL_EmailAlertConfiguration__c.EmailReplyBreakPattern__c</members>
-        <members>DEL_EmailAlertConfiguration__c.MergeFields__c</members>
-        <members>DEL_EmailAlertConfiguration__c.OrgWideAddress__c</members>
-        <members>DEL_EmailAlertConfiguration__c.SiteName__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentEmailTemplateEnglish__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentsEmailTemplateFrench__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentsEmailTemplateSpanish__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseQueryFields__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.MergeFields__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.OrgWideAddress__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.SiteName__c</members>
         <members>DEL_ExceptionLog__c.ClassName__c</members>
         <members>DEL_ExceptionLog__c.ErrorMessage__c</members>
         <members>DEL_ExceptionLog__c.ExceptionType__c</members>
@@ -91,7 +90,7 @@
     <types>
         <members>DEL_CaseCollaborator__c</members>
         <members>DEL_CaseComment__c</members>
-        <members>DEL_EmailAlertConfiguration__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c</members>
         <members>DEL_ExceptionLog__c</members>
         <members>DEL_TriggerConfiguration__mdt</members>
         <name>CustomObject</name>

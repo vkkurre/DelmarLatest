@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>CCAddressSwitch__c</fullName>
-    <defaultValue>true</defaultValue>
+    <defaultValue>false</defaultValue>
     <description>This Checkbox determines whether email notifications should be sent to the people added in CC while replying to Case Comment email notification.</description>
     <externalId>false</externalId>
     <label>CC Address Switch</label>
