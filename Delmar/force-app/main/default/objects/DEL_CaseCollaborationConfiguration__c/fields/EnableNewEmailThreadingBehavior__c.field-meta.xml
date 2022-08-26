@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EnableNewEmailThreadingBehavior__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This is to identify if the new Salesforce email threading behavior has been enabled or not.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Check this box if the new Salesforce email threading behavior has been enabled.</inlineHelpText>
+    <label>Enable New Email Threading Behavior?</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

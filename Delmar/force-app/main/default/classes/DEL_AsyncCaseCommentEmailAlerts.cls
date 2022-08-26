@@ -108,6 +108,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                 List<String> list_AgentToAddresses = new List<String>();
                 EmailTemplate objTemplateForCustomers;
                 EmailTemplate objTemplateForAgents = map_EmailTemplateByLanguage.get('English');
+                String strCaseEmailThreadId = '';
                 
                 if (map_UserById.containsKey(objCaseComment.CreatedById)) {
                     // Adding the Case Comment Created By Email
@@ -134,11 +135,16 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                 if (map_CaseById.containsKey(objCaseComment.Case__c)) {
                     Case objCase = map_CaseById.get(objCaseComment.Case__c);
                     String strLanguage = getDefaultLanguage(objCase);
+                    strCaseEmailThreadId = objCase.Case_Thread_ID__c;
                     objTemplateForCustomers = map_EmailTemplateByLanguage.get(strLanguage);
                     if (objCaseComment.VisibleToCustomer__c) {
                         String strSubjectForCustomers = objTemplateForCustomers.Subject;
                         if (strSubjectForCustomers.contains('{!Case.Subject}')) {
                             strSubjectForCustomers = strSubjectForCustomers.replace('{!Case.Subject}', objCase.Subject);
+                            if (!objCaseCollaborationConfiguration.EnableNewEmailThreadingBehavior__c) {
+                                strSubjectForCustomers = strSubjectForCustomers + ' ' + strCaseEmailThreadId;
+                            }
+
                             objSingleMessageForCustomers.setSubject(strSubjectForCustomers);
                         }
                     }
@@ -146,6 +152,9 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                     String strSubjectForAgents = objTemplateForAgents.Subject;
                     if (strSubjectForAgents.contains('{!Case.Subject}')) {
                         strSubjectForAgents = strSubjectForAgents.replace('{!Case.Subject}', objCase.Subject);
+                        if (!objCaseCollaborationConfiguration.EnableNewEmailThreadingBehavior__c) {
+                            strSubjectForAgents = strSubjectForAgents + ' ' + strCaseEmailThreadId;
+                        }
                         objSingleMessageForAgents.setSubject(strSubjectForAgents);
                     }
                     
@@ -205,7 +214,10 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                         strSiteURL, 
                         'Customer'
                     );
-                    
+
+                    if (!objCaseCollaborationConfiguration.EnableNewEmailThreadingBehavior__c) {
+                        strHtmlBodyForCustomers = strHtmlBodyForCustomers + '<br/>' + strCaseEmailThreadId;
+                    }
                     objSingleMessageForCustomers.setToAddresses(list_CustomerToAddresses);
                     objSingleMessageForCustomers.setHtmlBody(strHtmlBodyForCustomers);
                 }
@@ -220,6 +232,10 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                     strSiteURL, 
                     'Agent'
                 );
+
+                if (!objCaseCollaborationConfiguration.EnableNewEmailThreadingBehavior__c) {
+                    strHtmlBodyForAgents = strHtmlBodyForAgents + '<br/>' + strCaseEmailThreadId;
+                }
                 
                 objSingleMessageForAgents.setHtmlBody(strHtmlBodyForAgents);
                 objSingleMessageForAgents.setToAddresses(list_AgentToAddresses);
@@ -241,12 +257,14 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                     }
                 }
                 
-                if(objCaseComment.VisibleToCustomer__c) {
+                if (objCaseComment.VisibleToCustomer__c && !list_CustomerToAddresses.isEmpty()) {
                     list_EmailMessages.add(objSingleMessageForCustomers);
                 }
                 
                 objSingleMessageForAgents.setHtmlBody(strHtmlBodyForAgents);
-                list_EmailMessages.add(objSingleMessageForAgents); 
+                if (!list_AgentToAddresses.isEmpty()) {
+                    list_EmailMessages.add(objSingleMessageForAgents);
+                }
             }
             
             Messaging.SendEmailResult[] list_Results = Messaging.sendEmail(list_EmailMessages);

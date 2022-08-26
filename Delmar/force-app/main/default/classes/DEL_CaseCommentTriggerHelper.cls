@@ -203,8 +203,8 @@ public class DEL_CaseCommentTriggerHelper {
             }
         
         // Query Cases
-        String strCaseQuery = 'SELECT Id, OwnerId, DEL_CcAddress__c, SuppliedEmail, ContactEmail, Contact.Preferred_Language__c, Language__c, ' + 
-            + objCaseCollaborationConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
+        String strCaseQuery = 'SELECT Id, OwnerId, DEL_CcAddress__c, SuppliedEmail, ContactEmail, Contact.Preferred_Language__c, Language__c, ' 
+            + 'Case_Thread_ID__c, ' + objCaseCollaborationConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
         List<Case> list_Cases = Database.query(strCaseQuery);
         map_CaseById = new Map<Id, Case>(list_Cases);
         for (Case objCase : map_CaseById.values()) {

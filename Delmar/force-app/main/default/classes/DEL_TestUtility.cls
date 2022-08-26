@@ -31,6 +31,7 @@ public class DEL_TestUtility {
         public Account createAccount() {
             Account objAccount = new Account();
             objAccount.Name = this.strName;
+            objAccount.Website = 'https://www.delmarcargo.com/en';
             
             return objAccount;
         }
@@ -514,7 +515,9 @@ public class DEL_TestUtility {
                 SetupOwnerId = this.idSetupOwnerId,
                 OrgWideAddress__c = this.strOrgWideAddress,
                 CaseCommentsEmailTemplateFrench__c = this.strTemplateNameFrench,
-                CaseCommentsEmailTemplateSpanish__c = this.strTemplateNameSpanish
+                CaseCommentsEmailTemplateSpanish__c = this.strTemplateNameSpanish,
+                CCAddressSwitch__c = true,
+                VisibleToCustomerSwitch__c = true
             );
             
             return objCaseCollaborationConfiguration;

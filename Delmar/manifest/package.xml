@@ -50,6 +50,9 @@
         <members>DEL_CaseCollaborationConfiguration__c.MergeFields__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.OrgWideAddress__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.SiteName__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.EnableNewEmailThreadingBehavior__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CCAddressSwitch__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.VisibleToCustomerSwitch__c</members>
         <members>DEL_ExceptionLog__c.ClassName__c</members>
         <members>DEL_ExceptionLog__c.ErrorMessage__c</members>
         <members>DEL_ExceptionLog__c.ExceptionType__c</members>
@@ -111,7 +114,6 @@
     </types>
     <types>
         <members>DEL_CaseCollaborationFlow</members>
-        <members>DEL_ChatTranscriptToCaseCommentFlow</members>
         <name>Flow</name>
     </types>
     <types>
