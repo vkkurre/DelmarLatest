@@ -3,7 +3,7 @@
     <fullName>User__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <label>User</label>
+    <label>Collaborator Name</label>
     <referenceTo>User</referenceTo>
     <relationshipName>Case_Collaborators</relationshipName>
     <required>false</required>
