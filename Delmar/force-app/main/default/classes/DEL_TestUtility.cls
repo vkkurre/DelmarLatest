@@ -455,6 +455,7 @@ public class DEL_TestUtility {
         private Id idSetupOwnerId;
         private String strTemplateNameSpanish;
         private String strTemplateNameFrench;
+        private String strFieldSetName;
         
         public CaseCollaborationConfigurationBuilder() {
             this.strMergeFields = '';
@@ -464,6 +465,7 @@ public class DEL_TestUtility {
             this.strOrgWideAddress = '';
             this.strTemplateNameSpanish = '';
             this.strTemplateNameFrench = '';
+            this.strFieldSetName = '';
         }
         
         public CaseCollaborationConfigurationBuilder setMergeFields(String strValue) {
@@ -505,6 +507,11 @@ public class DEL_TestUtility {
             this.strTemplateNameFrench = strValue;
             return this;
         }
+
+        public CaseCollaborationConfigurationBuilder setFieldSetName(String strValue) {
+            this.strFieldSetName = strValue;
+            return this;
+        }
         
         public DEL_CaseCollaborationConfiguration__c createConfiguration() {
             DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_CaseCollaborationConfiguration__c(
@@ -517,7 +524,8 @@ public class DEL_TestUtility {
                 CaseCommentsEmailTemplateFrench__c = this.strTemplateNameFrench,
                 CaseCommentsEmailTemplateSpanish__c = this.strTemplateNameSpanish,
                 CCAddressSwitch__c = true,
-                VisibleToCustomerSwitch__c = true
+                VisibleToCustomerSwitch__c = true,
+                CollaboratorsFieldSet__c = this.strFieldSetName
             );
             
             return objCaseCollaborationConfiguration;

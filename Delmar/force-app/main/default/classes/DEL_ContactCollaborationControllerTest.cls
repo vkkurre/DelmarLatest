@@ -17,6 +17,23 @@ private class DEL_ContactCollaborationControllerTest {
     **/
     @TestSetup
     static void setupData() {
+        String strMergeFields = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},'
+            +  '{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},'
+            + '{!CaseComment.CreatedDate},SiteLink';
+        OrgWideEmailAddress objOrgWideAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress LIMIT 1];
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_TestUtility.CaseCollaborationConfigurationBuilder()
+            .setMergeFields(strMergeFields)
+            .setCaseQueryFields('Subject,CaseNumber,Description')
+            .setSiteName('CaseComments')
+            .setEmailTemplateName('DEL_CaseCommentAlert')
+            .setSpanishTemplateName('DEL_CaseCommentAlertSpanish')
+            .setFrenchTemplateName('DEL_CaseCommentAlertFrench')
+            .setOwnerId(UserInfo.getOrganizationId())
+            .setOrgWideAddress(objOrgWideAddress.Address)
+            .setFieldSetName('DEL_CaseCollaboratorsFields')
+            .createConfiguration();
+        insert objCaseCollaborationConfiguration;
+
         Account objAccount = new DEL_TestUtility.AccountBuilder()
             .setName('Test Account Delmar')
             .createAccount();

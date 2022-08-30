@@ -126,4 +126,26 @@ public class DEL_Utils {
 
         return strLatestReply;
     }
+
+    /**
+    * @ author       :  Ankit C
+    * @ description  :  This method is used to get the fields from a FieldSet
+    * @ params       :  strObjectName - Object API Name
+    *                   strFieldSetName - FieldSet Name
+    * @ return       :  
+    **/
+    public static List<Schema.SObjectField> getFieldsFromFieldSet(String strObjectName, String strFieldSetName) {
+        List<Schema.SObjectField> list_Fields = new List<Schema.SObjectField>();
+        if (String.isNotBlank(strObjectName)) {
+            Schema.DescribeSObjectResult objObjectResult = Schema.getGlobalDescribe().get(strObjectName).getDescribe();
+            Map<String, Schema.FieldSet> map_FieldsetByName = objObjectResult.fieldSets.getMap();
+            if (map_FieldsetByName.containsKey(strFieldSetName)) {
+                for (Schema.FieldSetMember objFieldSetMember : map_FieldsetByName.get(strFieldSetName).getFields()) {
+                    list_Fields.add(objFieldSetMember.getSObjectField());
+                }
+            }
+        }
+
+        return list_Fields;
+    }
 }

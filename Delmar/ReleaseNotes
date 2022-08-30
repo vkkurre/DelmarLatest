@@ -60,6 +60,7 @@ objCaseCollaborationConfiguration.CaseCommentEmailTemplateEnglish__c = 'DEL_Case
 objCaseCollaborationConfiguration.CaseCommentsEmailTemplateSpanish__c = 'DEL_CaseCommentEmailTemplateSpanish';
 objCaseCollaborationConfiguration.CaseCommentsEmailTemplateFrench__c = 'DEL_CaseCommentEmailTemplateFrench';
 objCaseCollaborationConfiguration.OrgWideAddress__c = '';
+objCaseCollaborationConfiguration.CollaboratorsFieldSet__c = 'DEL_CaseCollaboratorsFields';
 insert objCaseCollaborationConfiguration;
 
 *********************************************************************/

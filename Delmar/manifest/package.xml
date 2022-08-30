@@ -53,6 +53,7 @@
         <members>DEL_CaseCollaborationConfiguration__c.EnableNewEmailThreadingBehavior__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.CCAddressSwitch__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.VisibleToCustomerSwitch__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CollaboratorsFieldSet__c</members>
         <members>DEL_ExceptionLog__c.ClassName__c</members>
         <members>DEL_ExceptionLog__c.ErrorMessage__c</members>
         <members>DEL_ExceptionLog__c.ExceptionType__c</members>
@@ -148,6 +149,10 @@
         <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertFrench</members>
         <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertSpanish</members>
         <name>WorkflowAlert</name>
+    </types>
+    <types>
+        <members>User.DEL_CaseCollaboratorsFields</members>
+        <name>FieldSet</name>
     </types>
     <version>55.0</version>
 </Package>

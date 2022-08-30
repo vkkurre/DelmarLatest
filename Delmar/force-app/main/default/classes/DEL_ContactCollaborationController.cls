@@ -20,11 +20,30 @@ public with sharing class DEL_ContactCollaborationController {
         @AuraEnabled public Boolean blnIsSuccess;
         @AuraEnabled public String strErrorMessage;
         @AuraEnabled public List<User> list_Users;
+        @AuraEnabled public List<FieldsWrapper> list_FieldsWrappers;
         
         public ResponseWrapper() {
             this.blnIsSuccess = true;
             this.strErrorMessage = '';
             this.list_Users = new List<User>();
+            this.list_FieldsWrappers = new List<FieldsWrapper>();
+        }
+    }
+
+    /**
+    * @ name     :  FieldsWrapper
+    * @ purpose  :  Wrapper class to send field attributes for data table columns
+    * @ author   :  Ankit C
+    **/
+    public class FieldsWrapper {
+        @AuraEnabled public String strLabel;
+        @AuraEnabled public String strName;
+        @AuraEnabled public String strType;
+        
+        public FieldsWrapper() {
+            this.strLabel = '';
+            this.strName = '';
+            this.strType = '';
         }
     }
     
@@ -38,11 +57,38 @@ public with sharing class DEL_ContactCollaborationController {
     @AuraEnabled(cacheable = true)
     public static ResponseWrapper fetchUsers(Id idCaseId, String strUserName) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
         try {
             objResponseWrapper.list_Users = DEL_CaseCollabaoratorUtility.queryUsers(
                 idCaseId, 
                 strUserName
             );
+
+            List<Schema.SObjectField> list_Fields = DEL_Utils.getFieldsFromFieldSet('User', objCaseCollaborationConfiguration.CollaboratorsFieldSet__c);
+            for (Schema.SObjectField objField : list_Fields) {
+                FieldsWrapper objFieldsWrapper = new FieldsWrapper();
+                Schema.DescribeFieldResult objFieldResult = objField.getDescribe();
+                objFieldsWrapper.strLabel = objFieldResult.getLabel();
+                objFieldsWrapper.strName = objFieldResult.getName();
+                if (String.valueOf(objFieldResult.getType()) == 'String') {
+                    objFieldsWrapper.strType = 'text';
+                } else if (
+                    String.valueOf(objFieldResult.getType()) == 'Date' || 
+                    String.valueOf(objFieldResult.getType()) == 'DateTime'
+                ) {
+                    objFieldsWrapper.strType = 'date';
+                } else if (
+                    String.valueOf(objFieldResult.getType()) == 'Double' || 
+                    String.valueOf(objFieldResult.getType()) == 'Integer' || 
+                    String.valueOf(objFieldResult.getType()) == 'Long'
+                ) {
+                    objFieldsWrapper.strType = 'number';
+                } else {
+                    objFieldsWrapper.strType = String.valueOf(objFieldResult.getType()).toLowerCase();
+                }
+
+                objResponseWrapper.list_FieldsWrappers.add(objFieldsWrapper);
+            }
         } catch(Exception objException) {
             objResponseWrapper.blnIsSuccess = false;
             objResponseWrapper.strErrorMessage = objException.getMessage();

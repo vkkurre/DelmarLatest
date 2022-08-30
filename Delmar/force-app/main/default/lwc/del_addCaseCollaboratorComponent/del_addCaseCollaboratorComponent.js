@@ -26,23 +26,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
     blnIsLoading = false;
     @track objWiredResult;
     // Columns to be display for the datatable.
-    list_Columns = [
-        {
-            label: "Name",
-            fieldName: "Name",
-            type: "text"
-        },
-        {
-            label: "User Name",
-            fieldName: "Username",
-            type: "text"
-        },
-        {
-            label: "Email",
-            fieldName: "Email",
-            type: "email"
-        }
-    ];
+    @track list_Columns = [];
 
     /**
      * @ author      : Dinesh Chandra
@@ -58,6 +42,21 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         if (result.data) {
             let objResponse = result.data;
             if (objResponse.blnIsSuccess) {
+                let list_Columns = [];
+                if (objResponse.list_FieldsWrappers) {
+                    for (let objField of objResponse.list_FieldsWrappers) {
+                        list_Columns.push(
+                            {
+                                label: objField.strLabel,
+                                fieldName: objField.strName,
+                                type: objField.strType
+                            }
+                        );
+                    }
+
+                    this.list_Columns = list_Columns;
+                }
+
                 this.list_Users = result.data.list_Users;
                 this.blnIsLoading = false;
             } else {
