@@ -112,4 +112,28 @@
         <shortDescription>Success message when a file is uploaded</shortDescription>
         <value>Selected files have been added to the comment</value>
     </labels>
+    <labels>
+        <fullName>CLDEL00015</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This is a title for Case Collaborator Section in the Case Collaborator Component</shortDescription>
+        <value>Collaborators</value>
+    </labels>
+    <labels>
+        <fullName>CLDEL00016</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This is a label Value for Remove Button in the Case Collaborator Component</shortDescription>
+        <value>Remove</value>
+    </labels>
+    <labels>
+        <fullName>CLDEL00017</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This is Success Message after successfull removal of Case Collaborator</shortDescription>
+        <value>Successfully removed selected collaborators from this Case.</value>
+    </labels>
 </CustomLabels>

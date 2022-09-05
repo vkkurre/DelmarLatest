@@ -21,12 +21,14 @@ public with sharing class DEL_ContactCollaborationController {
         @AuraEnabled public String strErrorMessage;
         @AuraEnabled public List<User> list_Users;
         @AuraEnabled public List<FieldsWrapper> list_FieldsWrappers;
+        @AuraEnabled public List<DEL_CaseCollaborator__c> list_CaseCollaborators;
         
         public ResponseWrapper() {
             this.blnIsSuccess = true;
             this.strErrorMessage = '';
             this.list_Users = new List<User>();
             this.list_FieldsWrappers = new List<FieldsWrapper>();
+            this.list_CaseCollaborators = new List<DEL_CaseCollaborator__c>();
         }
     }
 
@@ -57,17 +59,15 @@ public with sharing class DEL_ContactCollaborationController {
     @AuraEnabled(cacheable = true)
     public static ResponseWrapper fetchUsers(Id idCaseId, String strUserName) {
         ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        //Api names of fields to query from User.
+        List<String> list_FieldApiNames = new List<String>();
         DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
         try {
-            objResponseWrapper.list_Users = DEL_CaseCollabaoratorUtility.queryUsers(
-                idCaseId, 
-                strUserName
-            );
-
             List<Schema.SObjectField> list_Fields = DEL_Utils.getFieldsFromFieldSet('User', objCaseCollaborationConfiguration.CollaboratorsFieldSet__c);
             for (Schema.SObjectField objField : list_Fields) {
                 FieldsWrapper objFieldsWrapper = new FieldsWrapper();
                 Schema.DescribeFieldResult objFieldResult = objField.getDescribe();
+                list_FieldApiNames.add(String.valueOf(objFieldResult.getName()));
                 objFieldsWrapper.strLabel = objFieldResult.getLabel();
                 objFieldsWrapper.strName = objFieldResult.getName();
                 if (String.valueOf(objFieldResult.getType()) == 'String') {
@@ -89,6 +89,14 @@ public with sharing class DEL_ContactCollaborationController {
 
                 objResponseWrapper.list_FieldsWrappers.add(objFieldsWrapper);
             }
+
+            objResponseWrapper.list_Users = DEL_CaseCollabaoratorUtility.queryUsers(
+                idCaseId, 
+                strUserName,
+                list_FieldApiNames
+            );
+
+            objResponseWrapper.list_CaseCollaborators = DEL_CaseCollabaoratorUtility.queryCaseCollaborators(idCaseId, list_FieldApiNames);
         } catch(Exception objException) {
             objResponseWrapper.blnIsSuccess = false;
             objResponseWrapper.strErrorMessage = objException.getMessage();
@@ -126,6 +134,31 @@ public with sharing class DEL_ContactCollaborationController {
             ); 
         }
 
+        return objResponseWrapper; 
+    }
+
+    /**
+    * @ author       :  Vinay kant
+    * @ description  :  This method will delete all Case Collaborators present in the list of Ids - 'list_CollaboratorIds'.
+    * @ params       :  'list_CollaboratorIds' - list of Selected Case Collaborators
+    * @ return       :  objResponseWrapper - instance of the ResponseWrapper class
+    **/
+    @AuraEnabled
+    public static ResponseWrapper deleteCaseCollaborators(List<Id> list_CollaboratorIds) {
+        ResponseWrapper objResponseWrapper = new ResponseWrapper();
+        try {
+            DEL_CaseCollabaoratorUtility.deleteCollaborators(list_CollaboratorIds);
+        } catch(Exception objException) {
+            objResponseWrapper.blnIsSuccess = false;
+            objResponseWrapper.strErrorMessage = objException.getMessage();
+            DEL_Utils.logException(
+                'DEL_ContactCollaborationController',
+                'deleteCaseCollaborator',
+                objException,
+                true
+            ); 
+        }
+        
         return objResponseWrapper; 
     }
 }

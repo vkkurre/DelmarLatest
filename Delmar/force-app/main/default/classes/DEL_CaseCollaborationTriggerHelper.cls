@@ -56,6 +56,53 @@ public class DEL_CaseCollaborationTriggerHelper {
         }
     }
     
+    public static void deleteSharedCases(List<DEL_CaseCollaborator__c> list_CaseCollaborators) {
+        List<CaseShare> list_CaseShares = new List<CaseShare>(); 
+        List<CaseShare> list_DeleteCaseShares = new List<CaseShare>(); 
+        Set<Id> set_CaseIds = new Set<Id>();
+        Set<Id> set_UserIds = new Set<Id>();
+        Map<Id, CaseShare> map_CaseShareByUserId = new Map<Id, CaseShare>();
+
+        try {
+            for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
+                set_CaseIds.add(objCaseCollaborator.Case__c);
+                set_UserIds.add(objCaseCollaborator.User__c);
+            }
+
+            list_CaseShares = [SELECT 
+                               Id, 
+                               CaseId, 
+                               UserOrGroupId 
+                               FROM CaseShare 
+                               WHERE CaseId IN :set_CaseIds];
+            for (CaseShare objCaseShare : list_CaseShares) {
+                map_CaseShareByUserId.put(objCaseShare.UserOrGroupId, objCaseShare);
+            }
+
+            for (Id idUserId : set_UserIds) {
+                if (map_CaseShareByUserId.containsKey(idUserId)) {
+                    CaseShare objCaseShare = map_CaseShareByUserId.get(idUserId);
+                    Id idCaseId = objCaseShare.CaseId;
+                    if (set_CaseIds.contains(idCaseId)) {
+                        list_DeleteCaseShares.add(objCaseShare);
+                    }
+                }
+            }
+            if (!list_DeleteCaseShares.isEmpty()) {
+                delete list_DeleteCaseShares;
+            }
+
+        } catch (Exception objException) {
+            DEL_Utils.logException(
+                'DEL_CaseCollaborationTriggerHelper',
+                'deleteSharedCases',
+                objException,
+                true
+            );
+        }
+    }
+
+
     /**
     * @ author      : Dinesh Chandra
     * @ description : This method handles creation of URL's for Community Portal for Customers and Salesforce Login for Agents.

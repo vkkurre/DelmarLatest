@@ -10,7 +10,7 @@
 *  05-08-2022       |  ankit.c@absyz.com             |  1.0          |  Initial version
 *******************************************************************************************************/
 
-trigger DEL_CaseCollaborationTrigger on DEL_CaseCollaborator__c (after insert, before insert) {
+trigger DEL_CaseCollaborationTrigger on DEL_CaseCollaborator__c (after insert, before insert, after delete) {
     /* Skip this trigger when DEL_CaseCollaborationTriggerHelper.blnSkipTrigger is true
        or the IsActive__c is false in the DEL_TriggerConfiguration__mdt metadata for this trigger.
        CMDEL0002 is the name of the record used for this trigger.
@@ -30,5 +30,9 @@ trigger DEL_CaseCollaborationTrigger on DEL_CaseCollaborator__c (after insert, b
     
     if (Trigger.isInsert && Trigger.isAfter) {
         DEL_CaseCollaborationTriggerHelper.shareCases(trigger.new);     
+    }
+
+    if (Trigger.isAfter && Trigger.isDelete) {
+        DEL_CaseCollaborationTriggerHelper.deleteSharedCases(trigger.old);
     }
 }

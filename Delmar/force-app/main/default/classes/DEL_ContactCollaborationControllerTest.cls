@@ -107,7 +107,8 @@ private class DEL_ContactCollaborationControllerTest {
     * @ description  :  This method is used to test the 'fetchUsers' and 'addCaseCollaborators'methods on DEL_ContactCollaborationController
     **/
     @isTest
-    private static void testCaseCollaboration() {  
+    private static void testCaseCollaboration() {
+        List<DEL_CaseCollaborator__c> list_CaseCollaborators = new List<DEL_CaseCollaborator__c>();
         Case objCase = [SELECT 
                         Id 
                         FROM Case 
@@ -119,19 +120,27 @@ private class DEL_ContactCollaborationControllerTest {
                         LIMIT 1];
         String strUserNameSearchKey = 'ram';
         List<Id> list_UserIds = new List<Id>();
+        list<Id> list_CollaboratorIds = new List<Id>();
         list_UserIds.add(objUser.Id);
         
         DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper = new DEL_ContactCollaborationController.ResponseWrapper();
         DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper2 = new DEL_ContactCollaborationController.ResponseWrapper();
+        DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper3 = new DEL_ContactCollaborationController.ResponseWrapper();
         //Test Methods
         Test.startTest();
         objResponseWrapper = DEL_ContactCollaborationController.addCaseCollaborators(list_UserIds, objCase.Id);
         objResponseWrapper2 = DEL_ContactCollaborationController.fetchUsers(objCase.Id, strUserNameSearchKey);
+        list_CaseCollaborators = objResponseWrapper2.list_CaseCollaborators;
+        for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
+            list_CollaboratorIds.add(objCaseCollaborator.Id);
+        }
+        objResponseWrapper3 = DEL_ContactCollaborationController.deleteCaseCollaborators(list_CollaboratorIds);
         Test.stopTest();
         
         //  Assert results
         System.assertEquals(true, objResponseWrapper.blnIsSuccess, objResponseWrapper.strErrorMessage);
         System.assertEquals(1, objResponseWrapper2.list_Users.size(), 'Atleast: One User should be fetched.');
+        System.assertEquals(true, objResponseWrapper3.blnIsSuccess, objResponseWrapper.strErrorMessage);
     }
     
     /**
@@ -142,6 +151,8 @@ private class DEL_ContactCollaborationControllerTest {
     private static void testExceptions() {
         DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper = new DEL_ContactCollaborationController.ResponseWrapper();
         DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper2 = new DEL_ContactCollaborationController.ResponseWrapper();
+        DEL_ContactCollaborationController.ResponseWrapper objResponseWrapper3 = new DEL_ContactCollaborationController.ResponseWrapper();
+        
         List<User> objUser = [SELECT 
                               Id
                               FROM User 
@@ -153,6 +164,7 @@ private class DEL_ContactCollaborationControllerTest {
         Test.startTest();
         objResponseWrapper = DEL_ContactCollaborationController.addCaseCollaborators(list_UserIds, null);
         objResponseWrapper2 = DEL_ContactCollaborationController.fetchUsers(null, 'ram');
+        objResponseWrapper3 = DEL_ContactCollaborationController.deleteCaseCollaborators(null);
         Test.stopTest();
         
         // Assert if the methods encountered exceptions in them
@@ -162,5 +174,6 @@ private class DEL_ContactCollaborationControllerTest {
                                                         WHERE ClassName__c = 'DEL_ContactCollaborationController'];
         System.assert(!list_ExceptionLogs.isEmpty());
         System.assert(!objResponseWrapper2.blnIsSuccess);
+        System.assert(!objResponseWrapper3.blnIsSuccess);
     }
 }

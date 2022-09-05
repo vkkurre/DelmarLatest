@@ -15,12 +15,13 @@
 public without sharing class DEL_CaseCollabaoratorUtility {
     /**
      * @ author       :  Dinesh Chandra
-     * @ description  :  To query all the user details of the case collaborators.
+     * @ description  :  To query all the user details of the potential case collaborators.
      * @ params       :  'idCaseId' - Case Id
      *                   'strUserName' - User name entered in the search
+     *                   'list_FieldNames' - List of field names to query
      * @ return       :  list_Users - list of Users
     **/
-    public static List<User> queryUsers(Id idCaseId, String strUserName) {
+    public static List<User> queryUsers(Id idCaseId, String strUserName, List<String> list_FieldNames) {
         List<User> list_Users = new List<User>();
         Set<Id> set_UserIdsToExclude = new Set<Id>();
         Case objCase = [SELECT 
@@ -45,18 +46,10 @@ public without sharing class DEL_CaseCollabaoratorUtility {
         // the list of potential collaborators.
         set_UserIdsToExclude.add(UserInfo.getUserId());
 
-        list_Users = [SELECT 
-                      AccountId, 
-                      ContactId, 
-                      Id, 
-                      Name, 
-                      Username, 
-                      Email 
-                      FROM User 
-                      WHERE Name LIKE :strpattern 
-                      AND Id NOT IN :set_UserIdsToExclude
-                      AND AccountId = :objCase.AccountId 
-                      AND IsActive = true];
+        String strQuery = 'SELECT Id, ';
+        strQuery += String.join(list_FieldNames, ',') + ' FROM User WHERE Name LIKE :strpattern AND Id NOT IN :set_UserIdsToExclude '
+            + 'AND AccountId = \'' + objCase.AccountId + '\' AND IsActive = true';
+        list_Users = Database.query(strQuery);
         
         return list_Users;
     }
@@ -82,4 +75,41 @@ public without sharing class DEL_CaseCollabaoratorUtility {
             insert list_CaseCollaborators;
         }
     }
+
+    /**
+     * @ author       :  Vinay kant
+     * @ description  :  To query all the user details of the case collaborators.
+     * @ params       :  'idCaseId' - Case Id
+     *                   'list_UserFields' - List of field names from User
+     * @ return       :  list_CaseCollaborators - list of Case Collaborators
+    **/
+    public static List<DEL_CaseCollaborator__c> queryCaseCollaborators(Id idCaseId, List<String> list_UserFields) {
+        String strQuery = 'SELECT Id, ';
+        String strUserFields = '';
+        for (String strFieldName : list_UserFields) {
+            strUserFields += 'User__r.' + strFieldName + ',';
+        }
+
+        strQuery += strUserFields + 'Case__c FROM DEL_CaseCollaborator__c WHERE Case__c = :idCaseId AND User__r.IsPortalEnabled = true';
+        List<DEL_CaseCollaborator__c> list_CaseCollaborators = Database.query(strQuery);
+        return list_CaseCollaborators;
+    }
+
+    /**
+     * @ author       :  Vinay kant
+     * @ description  :  To delete case collaborators.
+     * @ params       :  'list_CollaboratorIds' - List of Case Collaborator Ids.
+    **/
+    public static void deleteCollaborators(List<Id> list_CollaboratorIds) {
+        List<DEL_CaseCollaborator__c> list_CaseCollaborators = [SELECT 
+                                                                Id 
+                                                                FROM 
+                                                                DEL_CaseCollaborator__c 
+                                                                WHERE Id IN :list_CollaboratorIds];
+
+        if (!list_CaseCollaborators.isEmpty()) {
+            delete list_CaseCollaborators;
+        }
+    }
+
 }

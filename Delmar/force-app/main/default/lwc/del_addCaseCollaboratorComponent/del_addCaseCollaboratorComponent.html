@@ -32,10 +32,29 @@
 		</lightning-layout>
 		<lightning-layout multiple-rows="true" vertical-align="end">
 			<lightning-layout-item size="12" padding="around-small">
-				<!--List Of Contact Using data Tabel-->
-				<lightning-datatable key-field="Id" data={list_Users} columns={list_Columns}>
-				</lightning-datatable>
+				<div class="slds-scrollable_y contacts-section">
+					<!--List Of Contact Using data Tabel-->
+					<lightning-datatable key-field="Id" data={list_Users} columns={list_Columns} class="dataTableUsers">
+					</lightning-datatable>
+				</div>
 			</lightning-layout-item>
 		</lightning-layout>
 	</lightning-card>
+	<!-- Displaying existing Collaborators for the Case -->
+	<template if:true={blnCollaboratorsAvailable}>
+		<lightning-card variant="Narrow" title={strCollaboratorTitle}>
+			<lightning-button label={strRemoveButtonLabel} variant="neutral" onclick={removeCollaboratorHandler}
+				class="removeButton" slot="actions" disabled>
+			</lightning-button>
+			<lightning-layout multiple-rows="false">
+				<lightning-layout-item size="12" padding="around-small">
+					<div class="slds-scrollable_y del-scrollable-style">
+						<lightning-datatable key-field="Id" data={list_CaseCollaborators} columns={list_Columns}
+							onrowselection={handleSelectedCollaborators} class="dataTableCollaborators">
+						</lightning-datatable>
+					</div>
+				</lightning-layout-item>
+			</lightning-layout>
+		</lightning-card>
+	</template>
 </template>
