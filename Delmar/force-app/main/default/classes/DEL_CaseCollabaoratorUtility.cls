@@ -30,6 +30,11 @@ public without sharing class DEL_CaseCollabaoratorUtility {
                         ContactId 
                         FROM Case
                         WHERE Id = :idCaseId];
+        User objUser = [SELECT 
+                        Id, 
+                        ContactId 
+                        FROM User
+                        WHERE ContactId = :objCase.ContactId];
         
         String strPattern = '%' + String.escapeSingleQuotes(strUserName) + '%';
         //Excluding users who are already collaborators for the Case.
@@ -45,6 +50,7 @@ public without sharing class DEL_CaseCollabaoratorUtility {
         // Excluding the logged-in User (Case-Owner) to not to be visible in
         // the list of potential collaborators.
         set_UserIdsToExclude.add(UserInfo.getUserId());
+        set_UserIdsToExclude.add(objUser.Id);
 
         String strQuery = 'SELECT Id, ';
         strQuery += String.join(list_FieldNames, ',') + ' FROM User WHERE Name LIKE :strpattern AND Id NOT IN :set_UserIdsToExclude '

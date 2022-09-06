@@ -53,6 +53,13 @@ private class DEL_ContactCollaborationControllerTest {
             .setAccountId(objAccount.Id)
             .createContact();
         list_Contacts.add(objContact2);
+        
+        Contact objContact3 = new DEL_TestUtility.ContactBuilder()
+            .setFirstName('Third')
+            .setLastName('User')
+            .setAccountId(objAccount.Id)
+            .createContact();
+        list_Contacts.add(objContact3);
         insert list_Contacts;
         
         Case objCase = new DEL_TestUtility.CaseBuilder()
@@ -91,6 +98,17 @@ private class DEL_ContactCollaborationControllerTest {
             .createUser();
         list_Users.add(objUser2);
         
+        User objUser3 = new DEL_TestUtility.UserBuilder()
+            .setFirstName('Test')
+            .setLastName('Customer User 3')
+            .setEmail('customer3@delmar.com')
+            .setUsername('customer3@delmar.com')
+            .setContactId(objContact3.Id)
+            .setProfileId(objProfile.Id)
+            .setAlias('deltest3')
+            .createUser();
+        list_Users.add(objUser3);
+        
         insert list_Users;
         
         CaseShare objCaseShare = new CaseShare(
@@ -118,7 +136,6 @@ private class DEL_ContactCollaborationControllerTest {
                         FROM User 
                         WHERE Username = 'customer@delmar.com'
                         LIMIT 1];
-        String strUserNameSearchKey = 'ram';
         List<Id> list_UserIds = new List<Id>();
         list<Id> list_CollaboratorIds = new List<Id>();
         list_UserIds.add(objUser.Id);
@@ -129,7 +146,7 @@ private class DEL_ContactCollaborationControllerTest {
         //Test Methods
         Test.startTest();
         objResponseWrapper = DEL_ContactCollaborationController.addCaseCollaborators(list_UserIds, objCase.Id);
-        objResponseWrapper2 = DEL_ContactCollaborationController.fetchUsers(objCase.Id, strUserNameSearchKey);
+        objResponseWrapper2 = DEL_ContactCollaborationController.fetchUsers(objCase.Id, '');
         list_CaseCollaborators = objResponseWrapper2.list_CaseCollaborators;
         for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
             list_CollaboratorIds.add(objCaseCollaborator.Id);
