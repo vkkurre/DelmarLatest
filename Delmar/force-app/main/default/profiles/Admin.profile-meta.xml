@@ -68,6 +68,14 @@
         <apexClass>DEL_AsyncCaseCommentEmailAlerts</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>DEL_FeedItemDeleteEventTriggerHelper</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>DEL_FeedItemDeleteEventTriggerHelperTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <custom>false</custom>
     <fieldPermissions>
         <editable>true</editable>

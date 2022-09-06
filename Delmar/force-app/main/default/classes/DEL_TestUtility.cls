@@ -690,4 +690,72 @@ public class DEL_TestUtility {
             return objContentDocumentLink;
         }
     }
+
+    /**
+    * @ Name     :  FeedItemBuilder
+    * @ Purpose  :  To create FeedItem record
+    * @ Author   :  Rakesh Nayak
+    **/
+    public class FeedItemBuilder {
+        private Id idParentId;
+        private String strType;
+        private String strBody;
+
+        public FeedItemBuilder() {
+            this.strType = '';
+            this.strBody = '';
+        }
+        
+        public FeedItemBuilder setParentId(Id idValue) {
+            this.idParentId = idValue;
+            return this;
+        }
+        
+        public FeedItemBuilder setType(String strValue) {
+            this.strType = strValue;
+            return this;
+        }
+
+        public FeedItemBuilder setBody(String strValue) {
+            this.strBody = strValue;
+            return this;
+        }
+        
+        public FeedItem createFeedItem() {
+            FeedItem objFeedItem = new FeedItem();
+            objFeedItem.ParentId = this.idParentId;
+            objFeedItem.Type = this.strType;
+            objFeedItem.Body = this.strBody;
+            
+            return objFeedItem;
+        }
+    }
+
+    /**
+    * @ Name     :  FeedItemDeleteEventBuilder
+    * @ Purpose  :  To create DEL_FeedItemDeleteEvent__e record
+    * @ Author   :  Rakesh Nayak
+    **/
+    public class FeedItemDeleteEventBuilder {
+        private Id idCaseId;
+        private Boolean blnIncomingEmail;
+        
+        public FeedItemDeleteEventBuilder setCaseId(Id idValue) {
+            this.idCaseId = idValue;
+            return this;
+        }
+        
+        public FeedItemDeleteEventBuilder setIncomingEmail(Boolean blnValue) {
+            this.blnIncomingEmail = blnValue;
+            return this;
+        }
+        
+        public DEL_FeedItemDeleteEvent__e createFeedItemDeleteEvent() {
+            DEL_FeedItemDeleteEvent__e objFeedItemDeleteEvent = new DEL_FeedItemDeleteEvent__e();
+            objFeedItemDeleteEvent.CaseId__c = this.idCaseId;
+            objFeedItemDeleteEvent.IncomingEmail__c = this.blnIncomingemail;
+            
+            return objFeedItemDeleteEvent;
+        }
+    }
 }

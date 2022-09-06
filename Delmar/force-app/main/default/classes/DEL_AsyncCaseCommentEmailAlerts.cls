@@ -24,36 +24,130 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
     public DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration;
     // Map of ContentVersion Ids by Case Comment Id
     public Map<Id, List<String>> map_ContentVersionIdsByCaseCommentId;
+    //Boolean variable to check if the Case Comment is created from incoming email message
+    public Boolean blnIsIncomingEmailMessage;
     
-    public DEL_AsyncCaseCommentEmailAlerts(
-        List<DEL_CaseComment__c> list_CaseComments,
-        Map<Id, EmailMessage> map_EmailMessageByCaseId,
-        Map<Id, User> map_UserById,
-        Map<Id, Case> map_CaseById,
-        Map<Id, List<DEL_CaseCollaborator__c>> map_CaseCollaboratorsByCaseId,
-        DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration,
-        Map<Id, List<String>> map_ContentVersionIdsByCaseCommentId
-    ) {
+    public DEL_AsyncCaseCommentEmailAlerts(List<DEL_CaseComment__c> list_CaseComments, Boolean blnIsIncomingEmailMessage) {
         this.list_CaseComments = list_CaseComments;
-        this.map_EmailMessageByCaseId = map_EmailMessageByCaseId;
-        this.map_UserById = map_UserById;
-        this.objCaseCollaborationConfiguration = objCaseCollaborationConfiguration;
-        this.map_CaseById = map_CaseById;
-        this.map_CaseCollaboratorsByCaseId = map_CaseCollaboratorsByCaseId;
-        this.map_ContentVersionIdsByCaseCommentId = map_ContentVersionIdsByCaseCommentId;
+        this.map_EmailMessageByCaseId = new Map<Id, EmailMessage>();
+        this.map_UserById = new Map<Id, User>();
+        this.objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
+        this.map_CaseById = new Map<Id, Case>();
+        this.map_CaseCollaboratorsByCaseId = new Map<Id, List<DEL_CaseCollaborator__c>>();
+        this.map_ContentVersionIdsByCaseCommentId = new Map<Id, List<String>>();
+        this.blnIsIncomingEmailMessage = blnIsIncomingEmailMessage;
     }
     
     public void execute(QueueableContext context) {
-        List<Messaging.SingleEmailMessage> list_EmailMessages = new List<Messaging.SingleEmailMessage>();
         Set<String> set_EmailTemplateNames = new Set<String> {
             objCaseCollaborationConfiguration.CaseCommentEmailTemplateEnglish__c,
-                objCaseCollaborationConfiguration.CaseCommentsEmailTemplateFrench__c,
-                objCaseCollaborationConfiguration.CaseCommentsEmailTemplateSpanish__c
-                };
+            objCaseCollaborationConfiguration.CaseCommentsEmailTemplateFrench__c,
+            objCaseCollaborationConfiguration.CaseCommentsEmailTemplateSpanish__c
+        };
+        Set<Id> set_CaseIds = new Set<Id>();
+        Set<Id> set_UserIds = new Set<Id>();
+        Set<Id> set_QueueIds = new Set<Id>();
+        List<Messaging.SingleEmailMessage> list_EmailMessages = new List<Messaging.SingleEmailMessage>();
+        //Map of CaseComment Id by ContentDocumentId
+        Map<Id, Id> map_CaseCommentIdByContentDocumentId = new Map<Id, Id>();
         Map<String, EmailTemplate> map_EmailTemplateByName = new Map<String, EmailTemplate>();
         Map<String, EmailTemplate> map_EmailTemplateByLanguage = new Map<String, EmailTemplate>();
-        
+        Map<Id, Group> map_GroupById = new Map<Id, Group>();
+
         try {
+            for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
+                set_CaseIds.add(objCaseComment.Case__c);
+                set_UserIds.add(objCaseComment.CreatedById);
+            
+                if (!objCaseComment.ContentDocumentLinks.isEmpty()) {
+                    for (ContentDocumentLink objContentDocumentLink : objCaseComment.ContentDocumentLinks) {
+                        map_CaseCommentIdByContentDocumentId.put(
+                            objContentDocumentLink.ContentDocumentId, 
+                            objContentDocumentLink.LinkedEntityId
+                        );
+                    }
+                }
+            }
+        
+            //Get ContenVersionIds By Case Comment
+            if (!map_CaseCommentIdByContentDocumentId.keySet().isEmpty()) {
+                map_ContentVersionIdsByCaseCommentId = DEL_Utils.queryContentVersionsByCaseComment(map_CaseCommentIdByContentDocumentId);
+            }
+        
+            // Query the Case Collaborators related the Case
+            if (!set_CaseIds.isEmpty()) {
+                for (DEL_CaseCollaborator__c objCollaborator : [SELECT 
+                                                                Id,
+                                                                Case__c,
+                                                                User__c
+                                                                FROM DEL_CaseCollaborator__c
+                                                                WHERE Case__c IN :set_CaseIds
+                                                               ]
+                ) {
+                    if (map_CaseCollaboratorsByCaseId.containsKey(objCollaborator.Case__c)) {
+                        map_CaseCollaboratorsByCaseId.get(objCollaborator.Case__c).add(objCollaborator);
+                    } else { 
+                        map_CaseCollaboratorsByCaseId.put(
+                            objCollaborator.Case__c,
+                            new List<DEL_CaseCollaborator__c> { objCollaborator }
+                        );
+                    }
+            
+                    set_UserIds.add(objCollaborator.User__c);
+                }
+            }
+        
+            // Query Cases
+            String strCaseQuery = 'SELECT Id, OwnerId, DEL_CcAddress__c, SuppliedEmail, ContactEmail, Contact.Preferred_Language__c, Language__c, ' 
+                + 'Case_Thread_ID__c, ' + objCaseCollaborationConfiguration.CaseQueryFields__c + ' FROM Case WHERE Id IN :set_CaseIds';
+            List<Case> list_Cases = Database.query(strCaseQuery);
+            map_CaseById = new Map<Id, Case>(list_Cases);
+            for (Case objCase : map_CaseById.values()) {
+                if (String.valueOf(objCase.OwnerId).startsWith('00G')) {
+                    set_QueueIds.add(objCase.OwnerId);
+                } else {
+                    set_UserIds.add(objCase.OwnerId);
+                }
+            }
+
+            if (!set_QueueIds.isEmpty()) {
+                map_GroupById = DEL_Utils.queryQueues(set_QueueIds);
+                for (Group objGroup : map_GroupById.values()) {
+                    if (!objGroup.GroupMembers.isEmpty()) {
+                        for (GroupMember objgroupMember : objGroup.GroupMembers) {
+                            set_UserIds.add(objgroupMember.UserOrGroupId);
+                        }
+                    }
+                }
+            }
+        
+            // Query Users
+            map_UserById = new Map<Id, User>([SELECT  
+                                              Id,
+                                              Name,
+                                              IsPortalEnabled,
+                                              Email
+                                              FROM User
+                                              WHERE Id IN :set_UserIds
+                                            ]);
+
+            for (EmailMessage objEmailMessage : [SELECT 
+                                                 Id,
+                                                 ParentId,
+                                                 Headers
+                                                 FROM EmailMessage
+                                                 WHERE ParentId IN :set_CaseIds
+                                                 ORDER BY ParentId, CreatedDate DESC
+                                                ]
+            ) {
+                if (
+                    String.isNotBlank(objEmailMessage.Headers) && 
+                    !map_EmailMessageByCaseId.containsKey(objEmailMessage.ParentId)
+                ) {
+                    map_EmailMessageByCaseId.put(objEmailMessage.ParentId, objEmailMessage);
+                }
+            }
+
             List<OrgWideEmailAddress> list_OrgWideEmailAddresses = [SELECT 
                                                                     Id, 
                                                                     Address, 
@@ -165,6 +259,19 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                         } else if (!map_UserById.get(objCase.OwnerId).IsPortalEnabled) {
                             list_AgentToAddresses.add(map_UserById.get(objCase.OwnerId).Email);
                         }
+                    } else if (map_GroupById.containsKey(objCase.OwnerId)) {
+                        Group objGroup = map_GroupById.get(objCase.OwnerId);
+                        if (String.isNotBlank(objGroup.Email)) {
+                            //Add Queue Email if present
+                            list_AgentToAddresses.add(objGroup.Email);
+                        } else if (objGroup.DoesSendEmailToMembers && !objGroup.GroupMembers.isEmpty()) {
+                            //If Send Email to Members is true add Emails of Group Members
+                            for (GroupMember objGroupMember : objGroup.GroupMembers) {
+                                if (map_UserById.containsKey(objGroupMember.UserOrGroupId)) {
+                                    list_AgentToAddresses.add(map_UserById.get(objGroupMember.UserOrGroupId).Email);
+                                }
+                            }
+                        }
                     }
                     
                     if (objCaseComment.VisibleToCustomer__c) {
@@ -268,6 +375,23 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
             }
             
             Messaging.SendEmailResult[] list_Results = Messaging.sendEmail(list_EmailMessages);
+            Boolean blnIsSendEmailSuccess = true;
+            for (Messaging.SendEmailResult objSendEmailResult : list_Results) {
+                if (!objSendEmailResult.isSuccess()) {
+                    blnIsSendEmailSuccess = false;
+                }
+            }
+
+            List<DEL_FeedItemDeleteEvent__e> list_FeedItemDeleteEvents = new List<DEL_FeedItemDeleteEvent__e>();
+
+            if (blnIsSendEmailSuccess) {
+                for (Case objCase : map_CaseById.values()) {
+                    list_FeedItemDeleteEvents.add(new DEL_FeedItemDeleteEvent__e(CaseId__c = objCase.Id, IncomingEmail__c = blnIsIncomingEmailMessage));
+                }
+    
+                // Call method to publish events
+                List<Database.SaveResult> list_SaveResults = EventBus.publish(list_FeedItemDeleteEvents);
+            }
         } catch (Exception objException) {
             DEL_Utils.logException(
                 'DEL_AsyncCaseCommentEmailAlerts',

@@ -148,4 +148,66 @@ public class DEL_Utils {
 
         return list_Fields;
     }
+
+    /**
+    * @ author       :  Ankit C
+    * @ description  :  This method queries the Queues and related Queue Members based on a set of Queue Ids.
+    * @ params       :  set_QueueIds - Set of Queue Ids
+    * @ return       :  map_GroupById - Map of Group by Id.
+    **/
+    public static Map<Id, Group> queryQueues(Set<Id> set_QueueIds) {
+        Map<Id, Group> map_GroupById = new Map<Id, Group>(
+            [SELECT
+             Id,
+             Name,
+             DeveloperName,
+             Email,
+             DoesSendEmailToMembers,
+            (
+                SELECT
+                Id,
+                GroupId,
+                UserOrGroupId
+                FROM 
+                GroupMembers
+            ) 
+             FROM 
+             Group
+             WHERE
+             Id IN :set_QueueIds
+             AND Type = 'Queue'   
+            ]
+        );
+
+        return map_GroupById;
+    }
+
+    /**
+    * @ author       :  Ankit C
+    * @ description  :  This method queries the ContentVersions by Case Comment
+    * @ params       :  map_CaseCommentIdByContentDocumentId - Map of CaseComment Id by ContentDocument Id
+    * @ return       :  map_ContentVersionIdsByCaseCommentId - List of ContentVersion Ids by Case Comment
+    **/
+    public static Map<Id, List<String>> queryContentVersionsByCaseComment(Map<Id, Id> map_CaseCommentIdByContentDocumentId) {
+        Map<Id, List<String>> map_ContentVersionIdsByCaseCommentId = new Map<Id, List<String>>();
+        for (ContentVersion objContentVersion : [SELECT 
+                                                 Id,
+                                                 ContentDocumentId
+                                                 FROM
+                                                 ContentVersion
+                                                 WHERE ContentDocumentId IN :map_CaseCommentIdByContentDocumentId.keySet()
+                                                ]
+        ) {
+            if (!map_ContentVersionIdsByCaseCommentId.containsKey(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId))) {
+                map_ContentVersionIdsByCaseCommentId.put(
+                    map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId),
+                    new List<String> { objContentVersion.Id }
+                );
+            } else {
+                map_ContentVersionIdsByCaseCommentId.get(map_CaseCommentIdByContentDocumentId.get(objContentVersion.ContentDocumentId)).add(objContentVersion.Id);
+            }
+        }
+
+        return map_ContentVersionIdsByCaseCommentId;
+    }
 }

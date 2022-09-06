@@ -25,22 +25,6 @@
         <value>Please add a comment here</value>
     </labels>
     <labels>
-        <fullName>CLDEL00004</fullName>
-        <categories>DEL Case Collaboration</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>It stores the url for downloading of the file.</shortDescription>
-        <value>/sfc/servlet.shepherd/document/download/</value>
-    </labels>
-    <labels>
-        <fullName>CLDEL00005</fullName>
-        <categories>DEL Case Collaboration</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>It stores the url for previewing of the file.</shortDescription>
-        <value>/sfc/servlet.shepherd/version/download/{!FileId}?asInline=true</value>
-    </labels>
-    <labels>
         <fullName>CLDEL00006</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>

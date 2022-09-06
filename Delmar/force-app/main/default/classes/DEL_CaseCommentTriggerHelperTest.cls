@@ -12,7 +12,7 @@
 public class DEL_CaseCommentTriggerHelperTest {
     public static Boolean blnThrowException = false;
     /**
-    * @ author       :  Anit C
+    * @ author       :  Ankit C
     * @ description  :  Method to setup test data
     **/
     @TestSetup
@@ -29,6 +29,7 @@ public class DEL_CaseCommentTriggerHelperTest {
             .createContact();
         insert objContact;
 
+        List<Case> list_Cases = new List<Case>();
         Case objCase = new DEL_TestUtility.CaseBuilder()
             .setSubject('Case with Power Failure')
             .setDescription('Power failure happens after 4 hour work')
@@ -37,7 +38,19 @@ public class DEL_CaseCommentTriggerHelperTest {
             .setSuppliedEmail('test@delmar.com')
             .setLanguage('French')
             .createCase();
-        insert objCase;
+        list_Cases.add(objCase);
+
+        Case objCase2 = new DEL_TestUtility.CaseBuilder()
+            .setSubject('Case assigned to a Queue')
+            .setDescription('Case assigned to a Queue')
+            .setStatus('New')
+            .setOrigin('Email')
+            .setSuppliedEmail('test@delmar.com')
+            .setLanguage('English')
+            .createCase();
+        list_Cases.add(objCase2);
+
+        insert list_Cases;
 
         ContentVersion objContentVersion = new DEL_TestUtility.ContentVersionBuilder()
             .setTitle('Test')
@@ -127,11 +140,33 @@ public class DEL_CaseCommentTriggerHelperTest {
         User objCurrentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         System.runAs(objCurrentUser) {
             insert list_EmailTemplates;
+            
+            Group objGroup = new Group(
+                Name = 'Test Delmar Queue',
+                DeveloperName = 'DEL_TestDelmarQueue',
+                Type = 'Queue',
+                DoesSendEmailToMembers = true
+            );
+
+            insert objGroup;
+
+            QueueSObject objQueueSObject = new QueueSObject(
+                QueueId = objGroup.Id,
+                SObjectType = 'Case'
+            );
+            insert objQueueSObject;
+
+            GroupMember objGroupMember = new GroupMember(
+                GroupId = objGroup.Id,
+                UserOrGroupId = objCurrentUser.Id
+            );
+
+            insert objGroupMember;
         }
     }
 
     /**
-    * @ author       :  Anit C
+    * @ author       :  Ankit C
     * @ description  :  test method to test the logic in processAfterInsert()
     **/
     @isTest
@@ -162,7 +197,7 @@ public class DEL_CaseCommentTriggerHelperTest {
     }
 
     /**
-    * @ author       :  Anit C
+    * @ author       :  Ankit C
     * @ description  :  Test Case Comment creation with Attachments
     **/
     @isTest
@@ -204,7 +239,28 @@ public class DEL_CaseCommentTriggerHelperTest {
     }
 
     /**
-    * @ author       :  Anit C
+    * @ author       :  Ankit C
+    * @ description  :  Test Case Comment creation when associated Case is asssigned to a Queue
+    **/
+    @isTest
+    static void testCaseOwnerQueue() {
+        Case objCase = [SELECT Id, OwnerId FROM Case WHERE Subject = 'Case assigned to a Queue' LIMIT 1];
+        Group objGroup = [SELECT Id, Name FROM Group WHERE DeveloperName = 'DEL_TestDelmarQueue' LIMIT 1];
+        objCase.OwnerId = objGroup.Id;
+        update objCase;
+        DEL_CaseComment__c objCaseComment = new DEL_TestUtility.CaseCommentBuilder()
+            .setBody('Hi, can I get an update?')
+            .setCaseId(objCase.Id)
+            .setHasAttachment(false)
+            .setVisibleToCustomer(true)
+            .createCaseComment();
+        Test.startTest();
+        insert objCaseComment;
+        Test.stopTest();
+    }
+
+    /**
+    * @ author       :  Ankit C
     * @ description  :  Test method to cover catch blocks
     **/
     @isTest

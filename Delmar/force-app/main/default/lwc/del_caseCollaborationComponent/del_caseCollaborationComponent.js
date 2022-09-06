@@ -11,10 +11,6 @@ import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
 import CLDEL00002 from "@salesforce/label/c.CLDEL00002";
 //CLDEL00003 - "Please add a comment here" (Custom label for the message to indiciate that the comment input field is blank)
 import CLDEL00003 from "@salesforce/label/c.CLDEL00003";
-//CLDEL00004 - "/sfc/servlet.shepherd/document/download/" (Custom label for file download url)
-import CLDEL00004 from "@salesforce/label/c.CLDEL00004";
-//CLDEL00005 - "/sfc/servlet.shepherd/version/download/{!FileId}?asInline=true" (Custom label for file preview url)
-import CLDEL00005 from "@salesforce/label/c.CLDEL00005";
 //CLDEL00006 - "Your comment has been added successfully." (Custom label for the success message when comment is added)
 import CLDEL00006 from "@salesforce/label/c.CLDEL00006";
 //CLDEL00007 - "Success" (Custom label success message title)
@@ -58,8 +54,10 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
+                let objCaseCollaborationConfiguration;
                 if (data.objCaseCollaborationConfiguration) {
-                    this.blnVisibleToCustomerSwitch = data.objCaseCollaborationConfiguration.VisibleToCustomerSwitch__c;
+                    objCaseCollaborationConfiguration = data.objCaseCollaborationConfiguration;
+                    this.blnVisibleToCustomerSwitch = objCaseCollaborationConfiguration.VisibleToCustomerSwitch__c;
                 }
                 
                 let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));
@@ -76,8 +74,8 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                     let list_AttachmentsTemp = list_Attachments[idCaseCommentId];
                     for (let objAttachment of list_AttachmentsTemp) {
                         objAttachment["strDownloadURL"] =
-                            CLDEL00004 + objAttachment.ContentDocumentId;
-                        objAttachment["strFileURL"] = CLDEL00005.replace(
+                            objCaseCollaborationConfiguration.FileDownloadURL__c + objAttachment.ContentDocumentId;
+                        objAttachment["strFileURL"] = objCaseCollaborationConfiguration.FilePreviewURL__c.replace(
                             "{!FileId}",
                             objAttachment.Id
                         );

@@ -57,6 +57,7 @@ public class DEL_EmailMessagesTriggerHelper {
                             objCaseComment.EmailMessageId__c = objEmailMessage.Id;
                             objCaseComment.CreatedByEmail__c = objEmailMessage.FromAddress;
                             objCaseComment.CommentCreatedName__c = objEmailMessage.FromName;
+                            DEL_CaseCommentTriggerHelper.blnIsIncomingEmailMessage = true;
                             if (String.isNotBlank(objEmailMessage.HtmlBody)) {
                                 objCaseComment.Body__c = DEL_Utils.handleHtmlBody(objEmailMessage.HtmlBody);
                             }

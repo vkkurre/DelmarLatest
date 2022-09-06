@@ -31,9 +31,9 @@
 
 -- POST-DEPLOYMENT STEPS --
 
-1. Place the component del_commentsCollaborationComponent under Community and Service Cloud Case Record Page
+1. Place the component "Case Comments Component" under Community and Service Cloud Case Record Page
     - Update Record Id property on the componet - {!recordId}
-2. Place the component del_addCaseCollaboratorComponent under the Communnity page.
+2. Place the component "Add Case Collaborators Component" under the Communnity page.
     - Update Record Id property on the componet - {!recordId}
 3. Create a Default Organization Level Value in the Email Alert Configuration custom setting.(Run the script below in anonymous window)
 4. Check Apex Class access under the Profile Customer Community Plus Login User
@@ -60,6 +60,8 @@ objCaseCollaborationConfiguration.CaseCommentEmailTemplateEnglish__c = 'DEL_Case
 objCaseCollaborationConfiguration.CaseCommentsEmailTemplateSpanish__c = 'DEL_CaseCommentEmailTemplateSpanish';
 objCaseCollaborationConfiguration.CaseCommentsEmailTemplateFrench__c = 'DEL_CaseCommentEmailTemplateFrench';
 objCaseCollaborationConfiguration.OrgWideAddress__c = '';
+objCaseCollaborationConfiguration.FileDownloadURL__c = '/sfc/servlet.shepherd/document/download/';
+objCaseCollaborationConfiguration.FilePreviewURL__c = '/sfc/servlet.shepherd/version/download/{!FileId}?asInline=true';
 objCaseCollaborationConfiguration.CollaboratorsFieldSet__c = 'DEL_CaseCollaboratorsFields';
 insert objCaseCollaborationConfiguration;
 

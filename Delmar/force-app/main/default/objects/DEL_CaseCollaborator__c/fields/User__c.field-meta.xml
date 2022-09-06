@@ -4,6 +4,15 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
     <label>Collaborator Name</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>User.Id</field>
+            <operation>notEqual</operation>
+            <valueField>$User.Id</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>User</referenceTo>
     <relationshipName>Case_Collaborators</relationshipName>
     <required>false</required>

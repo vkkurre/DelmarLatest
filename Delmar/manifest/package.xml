@@ -15,6 +15,8 @@
         <members>DEL_ContentDocumentLinkTriggerTest</members>
         <members>DEL_EmailMessagesTriggerHelper</members>
         <members>DEL_EmailMessagesTriggerHelperTest</members>
+        <members>DEL_FeedItemDeleteEventTriggerHelper</members>
+        <members>DEL_FeedItemDeleteEventTriggerHelperTest</members>
         <members>DEL_TestUtility</members>
         <members>DEL_Utils</members>
         <members>DEL_UtilsTest</members>
@@ -25,6 +27,7 @@
         <members>DEL_CaseCommentTrigger</members>
         <members>DEL_ContentDocumentLinkTrigger</members>
         <members>DEL_EmailMessagesTrigger</members>
+        <members>DEL_FeedItemDeleteEventTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -54,6 +57,8 @@
         <members>DEL_CaseCollaborationConfiguration__c.CCAddressSwitch__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.VisibleToCustomerSwitch__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.CollaboratorsFieldSet__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.FileDownloadURL__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.FilePreviewURL__c</members>
         <members>DEL_ExceptionLog__c.ClassName__c</members>
         <members>DEL_ExceptionLog__c.ErrorMessage__c</members>
         <members>DEL_ExceptionLog__c.ExceptionType__c</members>
@@ -67,8 +72,6 @@
         <members>CLDEL00001</members>
         <members>CLDEL00002</members>
         <members>CLDEL00003</members>
-        <members>CLDEL00004</members>
-        <members>CLDEL00005</members>
         <members>CLDEL00006</members>
         <members>CLDEL00007</members>
         <members>CLDEL00008</members>
@@ -88,6 +91,7 @@
         <members>DEL_TriggerConfiguration.CMDEL0002</members>
         <members>DEL_TriggerConfiguration.CMDEL0003</members>
         <members>DEL_TriggerConfiguration.CMDEL0004</members>
+        <members>DEL_TriggerConfiguration.CMDEL0005</members>
         <name>CustomMetadata</name>
     </types>
     <types>
@@ -100,6 +104,7 @@
         <members>DEL_CaseCollaborationConfiguration__c</members>
         <members>DEL_ExceptionLog__c</members>
         <members>DEL_TriggerConfiguration__mdt</members>
+        <members>DEL_FeedItemDeleteEvent__e</members>
         <name>CustomObject</name>
     </types>
     <types>
