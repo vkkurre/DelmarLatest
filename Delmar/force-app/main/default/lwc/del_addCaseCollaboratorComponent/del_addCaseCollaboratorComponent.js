@@ -3,7 +3,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { refreshApex } from "@salesforce/apex";
 import getUsers from "@salesforce/apex/DEL_ContactCollaborationController.fetchUsers";
 import createCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.addCaseCollaborators";
-import deleteCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.deleteCaseCollaborators"; 
+import deleteCaseCollaborators from "@salesforce/apex/DEL_ContactCollaborationController.deleteCaseCollaborators";
 //CLDEL00001 - "Error" (Custom label error message title)
 import CLDEL00001 from "@salesforce/label/c.CLDEL00001";
 //CLDEL00007 - "Success" (Custom label success message title)
@@ -22,7 +22,6 @@ import CLDEL00015 from "@salesforce/label/c.CLDEL00015";
 import CLDEL00016 from "@salesforce/label/c.CLDEL00016";
 //CLDEL00017 - "Successfully removed selected collaborators from this Case." (This is Success Message after successfull removal of Case Collaborator)
 import CLDEL00017 from "@salesforce/label/c.CLDEL00017";
-
 
 export default class Del_addCaseCollaboratorComponent extends LightningElement {
     @api recordId;
@@ -54,16 +53,18 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         if (result.data) {
             let objResponse = result.data;
             if (objResponse.blnIsSuccess) {
-
                 /*Fetching Case Collaborators and setting up data-table*/
                 let intCountCaseCollaborators = objResponse.list_CaseCollaborators.length;
-                this.strCollaboratorTitle = CLDEL00015 + ' (' + intCountCaseCollaborators + ')';
+                this.strCollaboratorTitle = CLDEL00015 + " (" + intCountCaseCollaborators + ")";
                 if (intCountCaseCollaborators > 0) {
                     this.blnCollaboratorsAvailable = true;
-                    this.list_CaseCollaborators = JSON.parse(JSON.stringify(objResponse.list_CaseCollaborators));
-                    this.list_CaseCollaborators.forEach(objCaseCollaborator => {
+                    this.list_CaseCollaborators = JSON.parse(
+                        JSON.stringify(objResponse.list_CaseCollaborators)
+                    );
+                    this.list_CaseCollaborators.forEach((objCaseCollaborator) => {
                         for (let objField of objResponse.list_FieldsWrappers) {
-                            objCaseCollaborator[objField.strName] = objCaseCollaborator.User__r[objField.strName];
+                            objCaseCollaborator[objField.strName] =
+                                objCaseCollaborator.User__r[objField.strName];
                         }
                     });
                 } else {
@@ -74,14 +75,12 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
                 let list_Columns = [];
                 if (objResponse.list_FieldsWrappers) {
                     for (let objField of objResponse.list_FieldsWrappers) {
-                        list_Columns.push(
-                            {
-                                label: objField.strLabel,
-                                fieldName: objField.strName,
-                                type: objField.strType,
-                                hideDefaultActions: true
-                            }
-                        );
+                        list_Columns.push({
+                            label: objField.strLabel,
+                            fieldName: objField.strName,
+                            type: objField.strType,
+                            hideDefaultActions: true
+                        });
                     }
                     this.list_Columns = list_Columns;
                 }
@@ -93,7 +92,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
                 } else {
                     objContactsSection.classList.add("del-scrollable-style");
                 }
-                
+
                 this.blnIsLoading = false;
             } else {
                 this.blnIsLoading = false;
@@ -128,7 +127,7 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
         ];
 
         let list_SelectedCollaboratorIds = [];
-        list_SelectedCollaborators.forEach( objSelectedCollaborator => {
+        list_SelectedCollaborators.forEach((objSelectedCollaborator) => {
             list_SelectedCollaboratorIds.push(objSelectedCollaborator.Id);
         });
         list_SelectedCollaboratorIds = [...new Set(list_SelectedCollaboratorIds)];
@@ -138,23 +137,25 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
             /**
              * @ author      : Vinay kant
              * @ description : This method will call Apex Method to delete Case Collaborators of this Case.
-             * @ params      : 'list_SelectedCollaboratorIds' - List of Selected Case Collaborator Ids. 
+             * @ params      : 'list_SelectedCollaboratorIds' - List of Selected Case Collaborator Ids.
              **/
-            deleteCaseCollaborators({ 
-                list_CollaboratorIds : list_SelectedCollaboratorIds 
-            }).then(result => {
-                if (result.blnIsSuccess) {
-                    refreshApex(this.objWiredResult);
+            deleteCaseCollaborators({
+                list_CollaboratorIds: list_SelectedCollaboratorIds
+            })
+                .then((result) => {
+                    if (result.blnIsSuccess) {
+                        refreshApex(this.objWiredResult);
+                        this.blnIsLoading = false;
+                        this.showToastMessage(CLDEL00007, CLDEL00017, "success");
+                    } else {
+                        this.blnIsLoading = false;
+                        this.showToastMessage(CLDEL00001, result.strErrorMessage, "error");
+                    }
+                })
+                .catch((error) => {
                     this.blnIsLoading = false;
-                    this.showToastMessage(CLDEL00007, CLDEL00017, "success");
-                } else {
-                    this.blnIsLoading = false;
-                    this.showToastMessage(CLDEL00001, result.strErrorMessage, "error");
-                }
-            }).catch(error => {
-                this.blnIsLoading = false;
-                this.showToastMessage(CLDEL00001, error.body.message, "error");
-            });
+                    this.showToastMessage(CLDEL00001, error.body.message, "error");
+                });
         }
     }
 

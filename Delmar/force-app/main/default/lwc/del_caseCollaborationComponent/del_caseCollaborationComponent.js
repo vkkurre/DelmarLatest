@@ -57,9 +57,10 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                 let objCaseCollaborationConfiguration;
                 if (data.objCaseCollaborationConfiguration) {
                     objCaseCollaborationConfiguration = data.objCaseCollaborationConfiguration;
-                    this.blnVisibleToCustomerSwitch = objCaseCollaborationConfiguration.VisibleToCustomerSwitch__c;
+                    this.blnVisibleToCustomerSwitch =
+                        objCaseCollaborationConfiguration.VisibleToCustomerSwitch__c;
                 }
-                
+
                 let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));
 
                 this.blnCheckboxVisible = !objCurrentUser.IsPortalEnabled;
@@ -74,8 +75,11 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                     let list_AttachmentsTemp = list_Attachments[idCaseCommentId];
                     for (let objAttachment of list_AttachmentsTemp) {
                         objAttachment["strDownloadURL"] =
-                            objCaseCollaborationConfiguration.FileDownloadURL__c + objAttachment.ContentDocumentId;
-                        objAttachment["strFileURL"] = objCaseCollaborationConfiguration.FilePreviewURL__c.replace(
+                            objCaseCollaborationConfiguration.FileDownloadURL__c +
+                            objAttachment.ContentDocumentId;
+                        objAttachment[
+                            "strFileURL"
+                        ] = objCaseCollaborationConfiguration.FilePreviewURL__c.replace(
                             "{!FileId}",
                             objAttachment.Id
                         );

@@ -36,6 +36,19 @@
         <members>Case.Language__c</members>
         <members>Case.Visible_in_Community__c</members>
         <members>Contact.Preferred_Language__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CCAddressSwitch__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentEmailTemplateEnglish__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentsEmailTemplateFrench__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentsEmailTemplateSpanish__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CaseQueryFields__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.CollaboratorsFieldSet__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.EnableNewEmailThreadingBehavior__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.FileDownloadURL__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.FilePreviewURL__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.MergeFields__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.OrgWideAddress__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.SiteName__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.VisibleToCustomerSwitch__c</members>
         <members>DEL_CaseCollaborator__c.CaseUrl__c</members>
         <members>DEL_CaseCollaborator__c.Case__c</members>
         <members>DEL_CaseCollaborator__c.User__c</members>
@@ -46,24 +59,13 @@
         <members>DEL_CaseComment__c.EmailMessageId__c</members>
         <members>DEL_CaseComment__c.HasAttachment__c</members>
         <members>DEL_CaseComment__c.VisibleToCustomer__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentEmailTemplateEnglish__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentsEmailTemplateFrench__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.CaseCommentsEmailTemplateSpanish__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.CaseQueryFields__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.MergeFields__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.OrgWideAddress__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.SiteName__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.EnableNewEmailThreadingBehavior__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.CCAddressSwitch__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.VisibleToCustomerSwitch__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.CollaboratorsFieldSet__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.FileDownloadURL__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c.FilePreviewURL__c</members>
         <members>DEL_ExceptionLog__c.ClassName__c</members>
         <members>DEL_ExceptionLog__c.ErrorMessage__c</members>
         <members>DEL_ExceptionLog__c.ExceptionType__c</members>
         <members>DEL_ExceptionLog__c.MethodName__c</members>
         <members>DEL_ExceptionLog__c.StackTrace__c</members>
+        <members>DEL_FeedItemDeleteEvent__e.CaseId__c</members>
+        <members>DEL_FeedItemDeleteEvent__e.IncomingEmail__c</members>
         <members>DEL_TriggerConfiguration__mdt.IsActive__c</members>
         <members>DEL_TriggerConfiguration__mdt.TriggerName__c</members>
         <name>CustomField</name>
@@ -99,12 +101,12 @@
         <name>CustomNotificationType</name>
     </types>
     <types>
+        <members>DEL_CaseCollaborationConfiguration__c</members>
         <members>DEL_CaseCollaborator__c</members>
         <members>DEL_CaseComment__c</members>
-        <members>DEL_CaseCollaborationConfiguration__c</members>
         <members>DEL_ExceptionLog__c</members>
-        <members>DEL_TriggerConfiguration__mdt</members>
         <members>DEL_FeedItemDeleteEvent__e</members>
+        <members>DEL_TriggerConfiguration__mdt</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -120,6 +122,10 @@
         <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateFrench</members>
         <members>DEL_CaseCollaborationEmailTemplates/DEL_CaseCommentEmailTemplateSpanish</members>
         <name>EmailTemplate</name>
+    </types>
+    <types>
+        <members>User.DEL_CaseCollaboratorsFields</members>
+        <name>FieldSet</name>
     </types>
     <types>
         <members>DEL_CaseCollaborationFlow</members>
@@ -157,10 +163,6 @@
         <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertFrench</members>
         <members>DEL_CaseCollaborator__c.CaseCollaboratorEmailAlertSpanish</members>
         <name>WorkflowAlert</name>
-    </types>
-    <types>
-        <members>User.DEL_CaseCollaboratorsFields</members>
-        <name>FieldSet</name>
     </types>
     <version>55.0</version>
 </Package>
