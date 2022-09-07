@@ -24,8 +24,39 @@ public class DEL_CaseCollaborationTriggerHelper {
     public static void shareCases(List<DEL_CaseCollaborator__c> list_CaseCollaborators) {    
         List<CaseShare> list_CaseShares = new List<CaseShare>();
         List<String> list_ConsolidatedDMLErrors = new List<String>();
-        try { 
+        Set<Id> set_UserIds = new Set<Id>();
+        Map<Id, User> map_UserById = new Map<Id, User>();
+        try {
+            EntityDefinition objEntityDefinition = [SELECT  
+                                                    DeveloperName, 
+                                                    ExternalSharingModel, 
+                                                    InternalSharingModel 
+                                                    FROM EntityDefinition 
+                                                    WHERE DeveloperName = 'Case'
+                                                    ]; 
             for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
+                set_UserIds.add(objCaseCollaborator.User__c);
+            }
+
+            map_UserById = new Map<Id, User>([
+                SELECT 
+                Id,
+                IsPortalEnabled
+                FROM 
+                User
+                WHERE Id IN :set_UserIds
+            ]);
+
+            for (DEL_CaseCollaborator__c objCaseCollaborator : list_CaseCollaborators) {
+                if (
+                    map_UserById.containsKey(objCaseCollaborator.User__c) &&
+                    !map_UserById.get(objCaseCollaborator.User__c).IsPortalEnabled &&
+                    objEntityDefinition.InternalSharingModel != 'Private' &&
+                    objEntityDefinition.InternalSharingModel != 'Read'
+                ) {
+                    continue;
+                }
+                
                 CaseShare objCaseShare = new CaseShare();
                 objCaseShare.UserOrGroupId = objCaseCollaborator.User__c ;
                 objCaseShare.CaseId = objCaseCollaborator.Case__c;
