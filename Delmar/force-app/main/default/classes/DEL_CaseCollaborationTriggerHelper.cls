@@ -105,7 +105,9 @@ public class DEL_CaseCollaborationTriggerHelper {
                                CaseId, 
                                UserOrGroupId 
                                FROM CaseShare 
-                               WHERE CaseId IN :set_CaseIds];
+                               WHERE CaseId IN :set_CaseIds
+                               AND UserOrGroupId IN :set_UserIds
+                               AND RowCause = 'Manual'];
             for (CaseShare objCaseShare : list_CaseShares) {
                 map_CaseShareByUserId.put(objCaseShare.UserOrGroupId, objCaseShare);
             }
