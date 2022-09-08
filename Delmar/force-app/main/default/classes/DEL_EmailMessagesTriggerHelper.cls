@@ -22,11 +22,15 @@ public class DEL_EmailMessagesTriggerHelper {
     public static void handleEmailsOnInsert(List<EmailMessage> list_EmailMessages) {
         // Set of Parent Ids from EmailMessage records
         Set<Id> set_ParentIds = new Set<Id>();
+        Set<Id> set_AccountIds = new Set<Id>();
+        Set<Id> set_ContactIds = new Set<Id>();
         List<Case> list_CasesToUpdate = new List<Case>();
         List<String> list_ConsolidatedDMLErrors = new List<String>();
         // List of DEL_CaseComment__c records to insert
         List<DEL_CaseComment__c> list_CaseComments = new List<DEL_CaseComment__c>();
         DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
+        //Map of Contact by Email
+        Map<String, User> map_UserByEmail = new Map<String, User>();
         
         for (EmailMessage objEmailMessage : list_EmailMessages) {
             set_ParentIds.add(objEmailMessage.ParentId);
@@ -36,12 +40,29 @@ public class DEL_EmailMessagesTriggerHelper {
         Map<Id, Case> map_CasesById = new Map<Id, Case>([SELECT  
                                                          Id,
                                                          ContactId,
+                                                         AccountId,
                                                          DEL_ToAddress__c,
                                                          DEL_CcAddress__c,
                                                          Visible_in_Community__c
                                                          FROM Case
                                                          WHERE Id IN :set_ParentIds
                                                         ]);
+        for (Case objCase : map_CasesById.values()) {
+            set_AccountIds.add(objCase.AccountId);
+            set_ContactIds.add(objCase.ContactId);
+        }
+
+        for (User objUser : [SELECT 
+                             Id, 
+                             Email 
+                             FROM User 
+                             WHERE AccountId IN :set_AccountIds 
+                             AND ContactId IN :set_ContactIds
+                             AND IsPortalEnabled = true
+                            ]
+        ) {
+            map_UserByEmail.put(objUser.Email, objUser);
+        }
         
         try {
             for (EmailMessage objEmailMessage : list_EmailMessages) {
@@ -55,7 +76,10 @@ public class DEL_EmailMessagesTriggerHelper {
                             DEL_CaseComment__c objCaseComment = new DEL_CaseComment__c();
                             objCaseComment.Case__c = objEmailMessage.ParentId;
                             objCaseComment.EmailMessageId__c = objEmailMessage.Id;
-                            objCaseComment.CreatedByEmail__c = objEmailMessage.FromAddress;
+                            if (map_UserByEmail.containsKey(objEmailMessage.FromAddress)) {
+                                objCaseComment.CommentCreatedBy__c = map_UserByEmail.get(objEmailMessage.FromAddress).Id;
+                            }
+
                             objCaseComment.CommentCreatedName__c = objEmailMessage.FromName;
                             DEL_CaseCommentTriggerHelper.blnIsIncomingEmailMessage = true;
                             if (String.isNotBlank(objEmailMessage.HtmlBody)) {

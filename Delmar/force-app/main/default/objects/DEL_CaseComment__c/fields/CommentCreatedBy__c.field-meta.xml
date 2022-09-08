@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CommentCreatedBy__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The Id of the User who has created the Case Comment</description>
+    <externalId>false</externalId>
+    <label>Comment Created By</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Case_Comments</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

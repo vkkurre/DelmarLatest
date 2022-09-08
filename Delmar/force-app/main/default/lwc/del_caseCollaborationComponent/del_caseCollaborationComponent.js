@@ -36,6 +36,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     strPlaceHolderText = CLDEL00002;
     strViewFullMessageMenuLabel = CLDEL00012;
     strVisibleToCustomerLabel = CLDEL00013;
+    strCurrentUserSmallPhotoUrl ="";
     blnIsLoading = false;
     blnValid = true;
     blnVisibleToCustomer = true;
@@ -54,6 +55,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
+                console.log(data.list_CaseComments);
                 let objCaseCollaborationConfiguration;
                 if (data.objCaseCollaborationConfiguration) {
                     objCaseCollaborationConfiguration = data.objCaseCollaborationConfiguration;
@@ -62,6 +64,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                 }
 
                 let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));
+                this.strCurrentUserSmallPhotoUrl = objCurrentUser.SmallPhotoUrl;
 
                 this.blnCheckboxVisible = !objCurrentUser.IsPortalEnabled;
 

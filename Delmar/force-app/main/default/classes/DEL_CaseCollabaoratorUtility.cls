@@ -118,4 +118,14 @@ public without sharing class DEL_CaseCollabaoratorUtility {
         }
     }
 
+    /**
+     * @ author       :  Ankit C
+     * @ description  :  Method to fetch Case Comments
+     * @ params       :  strQuery - Query String
+     *                   strRecordId - Case Id
+    **/
+    public static List<DEL_CaseComment__c> queryCaseComments(String strQuery, String strRecordId) {
+        List<DEL_CaseComment__c> list_CaseComments = Database.query(strQuery);
+        return list_CaseComments;
+    }
 }

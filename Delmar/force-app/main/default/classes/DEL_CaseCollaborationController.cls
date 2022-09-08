@@ -11,7 +11,7 @@
 * ======================================================================================================
 *  22-07-2022       |  rakesh.nayak@absyz.com       |  1.0          |  Initial version
 *******************************************************************************************************/
-public class DEL_CaseCollaborationController {
+public with sharing class DEL_CaseCollaborationController {
     /**
     * @ Name     :  ResponseWrapper
     * @ Purpose  :  Wrapper class to send response to the lwc.
@@ -48,12 +48,13 @@ public class DEL_CaseCollaborationController {
         Map<Id, List<ContentVersion>> map_ContentVersionsByCaseCommentId = new Map<Id, List<ContentVersion>>();
         List<Id> list_CaseCommentIds = new List<Id>();
         Id idCurrentUser = UserInfo.getUserId();
-        String strQueryCurrentUser = 'Select Id, Name, IsPortalEnabled From User WHERE Id = :idCurrentUser';
+        String strQueryCurrentUser = 'SELECT Id, Name, IsPortalEnabled,SmallPhotoUrl FROM User WHERE Id = :idCurrentUser';
         try {
             objResponseWrapper.objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
             User objUser = Database.query(strQueryCurrentUser);
             String strQueryCaseComments = 'SELECT CreatedDate, LastModifiedDate, CreatedById, ' 
-                + ' CreatedBy.SmallPhotoUrl, CreatedBy.Name, Body__c, CommentCreatedName__c, CreatedByEmail__c, '
+                + ' CommentCreatedBy__r.SmallPhotoUrl, CommentCreatedBy__r.Name, Body__c, '
+                + ' CommentCreatedBy__r.FirstName, CommentCreatedBy__r.LastName, '
                 + ' EmailMessageId__c, VisibleToCustomer__c FROM DEL_CaseComment__c WHERE Case__c = :strRecordId';
             
             if (objUser.IsPortalEnabled) {
@@ -63,7 +64,7 @@ public class DEL_CaseCollaborationController {
             strQueryCaseComments += ' ORDER BY CreatedDate DESC';
             
             objResponseWrapper.objCurrentUser = objUser;
-            objResponseWrapper.list_CaseComments = Database.query(strQueryCaseComments);
+            objResponseWrapper.list_CaseComments = DEL_CaseCollabaoratorUtility.queryCaseComments(strQueryCaseComments, strRecordId);
             
             if (!objResponseWrapper.list_CaseComments.isEmpty()) {
                 for (DEL_CaseComment__c objCaseComment : objResponseWrapper.list_CaseComments) {

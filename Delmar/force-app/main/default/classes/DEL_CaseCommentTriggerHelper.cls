@@ -73,16 +73,12 @@ public class DEL_CaseCommentTriggerHelper {
     * @ params       :  objCaseComment - DEL_CaseComment__c record to be updated.
     **/
     public static void populateFields(DEL_CaseComment__c objCaseComment) {
-        if (!map_UserById.containsKey(objCaseComment.CreatedById)) {
-            return;
+        if (String.isBlank(objCaseComment.CommentCreatedBy__c)) {
+            objCaseComment.CommentCreatedBy__c = objCaseComment.CreatedById;
         }
-        
+
         if (String.isBlank(objCaseComment.CommentCreatedName__c)) {
             objCaseComment.CommentCreatedName__c = map_UserById.get(objCaseComment.CreatedById).Name;
-        }
-        
-        if (String.isBlank(objCaseComment.CreatedByEmail__c)) {   
-            objCaseComment.CreatedByEmail__c = map_UserById.get(objCaseComment.CreatedById).Email;
         }
         
         if (Test.isRunningTest() && DEL_CaseCommentTriggerHelperTest.blnThrowException) {
@@ -98,12 +94,12 @@ public class DEL_CaseCommentTriggerHelper {
     public static void createCollectionsAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
         Set<Id> set_UserIds = new Set<Id>();
         map_UserById = new Map<Id, User>();
-        
         // Query to get the list of case comments that will be updated
         list_CaseCommentsToUpdate = [SELECT
                                      Id,
+                                     CommentCreatedBy__c,
                                      CommentCreatedName__c,
-                                     CreatedByEmail__c,
+                                     CommentCreatedBy__r.Name,
                                      CreatedById,
                                      Body__c,
                                      Case__c,
@@ -121,7 +117,7 @@ public class DEL_CaseCommentTriggerHelper {
                                      FROM DEL_CaseComment__c
                                      WHERE Id IN :list_CaseComments
                                     ];
-        
+
         for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
             set_UserIds.add(objCaseComment.CreatedById);
         }

@@ -57,7 +57,7 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
         try {
             for (DEL_CaseComment__c objCaseComment : list_CaseComments) {
                 set_CaseIds.add(objCaseComment.Case__c);
-                set_UserIds.add(objCaseComment.CreatedById);
+                set_UserIds.add(objCaseComment.CommentCreatedBy__c);
             
                 if (!objCaseComment.ContentDocumentLinks.isEmpty()) {
                     for (ContentDocumentLink objContentDocumentLink : objCaseComment.ContentDocumentLinks) {
@@ -204,12 +204,12 @@ public class DEL_AsyncCaseCommentEmailAlerts implements Queueable {
                 EmailTemplate objTemplateForAgents = map_EmailTemplateByLanguage.get('English');
                 String strCaseEmailThreadId = '';
                 
-                if (map_UserById.containsKey(objCaseComment.CreatedById)) {
+                if (map_UserById.containsKey(objCaseComment.CommentCreatedBy__c)) {
                     // Adding the Case Comment Created By Email
-                    if (map_UserById.get(objCaseComment.CreatedById).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
-                        list_CustomerToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
-                    } else if(!map_UserById.get(objCaseComment.CreatedById).IsPortalEnabled) {
-                        list_AgentToAddresses.add(map_UserById.get(objCaseComment.CreatedById).Email);
+                    if (map_UserById.get(objCaseComment.CommentCreatedBy__c).IsPortalEnabled && objCaseComment.VisibleToCustomer__c) {
+                        list_CustomerToAddresses.add(map_UserById.get(objCaseComment.CommentCreatedBy__c).Email);
+                    } else if(!map_UserById.get(objCaseComment.CommentCreatedBy__c).IsPortalEnabled) {
+                        list_AgentToAddresses.add(map_UserById.get(objCaseComment.CommentCreatedBy__c).Email);
                     }
                 }
                 

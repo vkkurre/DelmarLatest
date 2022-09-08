@@ -185,15 +185,15 @@ public class DEL_CaseCommentTriggerHelperTest {
         objCaseComment = [
             SELECT
             Id,
-            CommentCreatedName__c,
-            CreatedByEmail__c
+            CommentCreatedBy__c,
+            CommentCreatedName__c
             FROM 
             DEL_CaseComment__c
             WHERE Id = :objCaseComment.Id
         ];
         // Assert if the fields were populated
         System.assert(objCaseComment.CommentCreatedName__c != null);
-        System.assert(objCaseComment.CreatedByEmail__c != null);
+        System.assert(objCaseComment.CommentCreatedBy__c != null);
     }
 
     /**
@@ -227,15 +227,15 @@ public class DEL_CaseCommentTriggerHelperTest {
         objCaseComment = [
             SELECT
             Id,
-            CommentCreatedName__c,
-            CreatedByEmail__c
+            CommentCreatedBy__c,
+            CommentCreatedName__c
             FROM 
             DEL_CaseComment__c
             WHERE Id = :objCaseComment.Id
         ];
         // Assert if the fields were populated
         System.assert(objCaseComment.CommentCreatedName__c != null);
-        System.assert(objCaseComment.CreatedByEmail__c != null);
+        System.assert(objCaseComment.CommentCreatedBy__c != null);
     }
 
     /**

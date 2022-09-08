@@ -23,7 +23,7 @@
                 class="slds-var-p-bottom_medium slds-border_bottom">
                 <lightning-layout-item size="12" small-device-size="1" medium-device-size="1" large-device-size="1"
                     class="del-avatar-width">
-                    <lightning-avatar variant="circle" src="/bad/image/url.jpg" fallback-icon-name="standard:avatar"
+                    <lightning-avatar variant="circle" src={strCurrentUserSmallPhotoUrl} fallback-icon-name="standard:avatar"
                         alternative-text="avatar">
                     </lightning-avatar>
                 </lightning-layout-item>
@@ -81,15 +81,15 @@
                                     <lightning-layout multiple-rows="false" vertical-align="center">
                                         <lightning-layout-item size="12" small-device-size="1" medium-device-size="1"
                                             large-device-size="1" class="del-avatar-width">
-                                            <lightning-avatar variant="circle" src="/bad/image/url.jpg"
+                                            <lightning-avatar variant="circle" src={objCaseComment.CommentCreatedBy__r.SmallPhotoUrl}
                                                 fallback-icon-name="standard:avatar" alternative-text="avatar">
                                             </lightning-avatar>
                                         </lightning-layout-item>
                                         <lightning-layout-item size="10" small-device-size="10" medium-device-size="10"
                                             large-device-size="10">
                                             <div class="slds-var-p-bottom_none">
-                                                <a href=""
-                                                    class="del-style-username">{objCaseComment.CommentCreatedName__c}
+                                                <a href="" class="del-style-username">
+                                                    {objCaseComment.CommentCreatedBy__r.FirstName} {objCaseComment.CommentCreatedBy__r.LastName}
                                                 </a>
                                             </div>
                                             <div class="slds-var-p-top_none slds-text-body_small">
