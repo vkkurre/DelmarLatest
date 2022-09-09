@@ -120,4 +120,12 @@
         <shortDescription>This is Success Message after successfull removal of Case Collaborator</shortDescription>
         <value>Successfully removed selected collaborators from this Case.</value>
     </labels>
+    <labels>
+        <fullName>CLDEL00018</fullName>
+        <categories>DEL Case Collaboration</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>This stores the value for the title in &apos;Add Case Collaborators Component&apos;.</shortDescription>
+        <value>Search Contacts for this Case</value>
+    </labels>
 </CustomLabels>

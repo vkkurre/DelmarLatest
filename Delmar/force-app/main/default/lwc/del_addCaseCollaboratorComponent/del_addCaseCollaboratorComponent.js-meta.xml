@@ -11,7 +11,6 @@
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
             <property name="recordId" type="String"></property>
-            <property name="strCardTitle" type="String" default=" Search Contacts for this Case" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

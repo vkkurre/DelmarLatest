@@ -22,10 +22,12 @@ import CLDEL00015 from "@salesforce/label/c.CLDEL00015";
 import CLDEL00016 from "@salesforce/label/c.CLDEL00016";
 //CLDEL00017 - "Successfully removed selected collaborators from this Case." (This is Success Message after successfull removal of Case Collaborator)
 import CLDEL00017 from "@salesforce/label/c.CLDEL00017";
+//CLDEL00018 - "Search Contacts for this Case" (This is the value for the title in 'Add Case Collaborators Component')
+import CLDEL00018 from "@salesforce/label/c.CLDEL00018";
 
 export default class Del_addCaseCollaboratorComponent extends LightningElement {
     @api recordId;
-    @api strCardTitle;
+    strCardTitle = CLDEL00018;
     strSearchKey = "";
     strSearchLabelText = CLDEL00010;
     strPlaceHolderValue = CLDEL00011;
