@@ -8,7 +8,6 @@
 4. Go to Setup > Digital Experiences > Settings and select Allow using standard external profiles for self-registration, user creation, and login.
 5. Make sure the Admin has the Role assgined.
 
-
 -- DEPLOYMENT --
 
 1. For WINDOWS
@@ -32,8 +31,6 @@
     - Update Record Id property on the componet - {!recordId}
 3. Create a Default Organization Level Value in the Case Collaboration Configuration custom setting.(Run the script below in anonymous window)
 4. Turn on the Email Deliverability.
-5. Add the "Case Collaborators" to the related list of the Case page layout.
-
 
 /********************************************************************
 * Script to create Case Collaboration Configuration custom setting
