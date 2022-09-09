@@ -54,8 +54,8 @@
         <members>DEL_CaseCollaborator__c.User__c</members>
         <members>DEL_CaseComment__c.Body__c</members>
         <members>DEL_CaseComment__c.Case__c</members>
-        <members>DEL_CaseComment__c.CommentCreatedName__c</members>
         <members>DEL_CaseComment__c.CommentCreatedBy__c</members>
+        <members>DEL_CaseComment__c.CommentCreatedName__c</members>
         <members>DEL_CaseComment__c.EmailMessageId__c</members>
         <members>DEL_CaseComment__c.HasAttachment__c</members>
         <members>DEL_CaseComment__c.VisibleToCustomer__c</members>
@@ -86,6 +86,7 @@
         <members>CLDEL00015</members>
         <members>CLDEL00016</members>
         <members>CLDEL00017</members>
+        <members>CLDEL00018</members>
         <name>CustomLabel</name>
     </types>
     <types>

@@ -36,7 +36,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     strPlaceHolderText = CLDEL00002;
     strViewFullMessageMenuLabel = CLDEL00012;
     strVisibleToCustomerLabel = CLDEL00013;
-    strCurrentUserSmallPhotoUrl ="";
+    strCurrentUserSmallPhotoUrl = "";
     blnIsLoading = false;
     blnValid = true;
     blnVisibleToCustomer = true;
