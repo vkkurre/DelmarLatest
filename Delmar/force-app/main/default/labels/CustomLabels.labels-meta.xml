@@ -4,7 +4,7 @@
         <fullName>CLDEL00001</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the default title for error toast message.</shortDescription>
         <value>Error</value>
     </labels>
@@ -12,7 +12,7 @@
         <fullName>CLDEL00002</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the Placeholder Text used in Comment Input field.</shortDescription>
         <value>Add Comment</value>
     </labels>
@@ -20,7 +20,7 @@
         <fullName>CLDEL00003</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the error message to throw when comment input field is blank.</shortDescription>
         <value>Please add a comment here</value>
     </labels>
@@ -28,7 +28,7 @@
         <fullName>CLDEL00006</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the success message for comment insertion.</shortDescription>
         <value>Your comment has been added successfully.</value>
     </labels>
@@ -36,7 +36,7 @@
         <fullName>CLDEL00007</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the title for success toast message.</shortDescription>
         <value>Success</value>
     </labels>
@@ -44,7 +44,7 @@
         <fullName>CLDEL00008</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the toast message for success case collaborator insertion.</shortDescription>
         <value>The selected contacts have been added as collaborators for this Case.</value>
     </labels>
@@ -52,7 +52,7 @@
         <fullName>CLDEL00009</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the error message to have atleast one user selected.</shortDescription>
         <value>Please select atleast one User</value>
     </labels>
@@ -60,7 +60,7 @@
         <fullName>CLDEL00010</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the search input label value for Case Collaborator Search.</shortDescription>
         <value>Enter Contact Name To Search</value>
     </labels>
@@ -68,7 +68,7 @@
         <fullName>CLDEL00011</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the search input placeholder value for Case Collaborator Search.</shortDescription>
         <value>Search</value>
     </labels>
@@ -76,7 +76,7 @@
         <fullName>CLDEL00012</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the View Full Message Label for Menu Option in Case Comment.</shortDescription>
         <value>View Full Message</value>
     </labels>
@@ -84,7 +84,7 @@
         <fullName>CLDEL00013</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>It stores the Visible to Customer Label for Checkbox in Case Comment.</shortDescription>
         <value>Visible to Customer</value>
     </labels>
@@ -92,7 +92,7 @@
         <fullName>CLDEL00014</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>Success message when a file is uploaded</shortDescription>
         <value>Selected files have been added to the comment</value>
     </labels>
@@ -100,7 +100,7 @@
         <fullName>CLDEL00015</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>This is a title for Case Collaborator Section in the Case Collaborator Component</shortDescription>
         <value>Collaborators</value>
     </labels>
@@ -108,7 +108,7 @@
         <fullName>CLDEL00016</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>This is a label Value for Remove Button in the Case Collaborator Component</shortDescription>
         <value>Remove</value>
     </labels>
@@ -116,7 +116,7 @@
         <fullName>CLDEL00017</fullName>
         <categories>DEL Case Collaboration</categories>
         <language>en_US</language>
-        <protected>true</protected>
+        <protected>false</protected>
         <shortDescription>This is Success Message after successfull removal of Case Collaborator</shortDescription>
         <value>Successfully removed selected collaborators from this Case.</value>
     </labels>
