@@ -232,10 +232,14 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
      * @ description   : This method is used to display the errors in apex operations or Javascript
      **/
     handleErrors(error, strTitle) {
-        if (error.isArray(error.body)) {
+        if (Array.isArray(error.body)) {
             this.showToastMessage(strTitle, "error", error.body.map((e) => e.message).join(", "));
-        } else {
+        } else if (error.body.error) {
+            this.showToastMessage(strTitle, "error", error.body.error);
+        } else if (error.body.message) {
             this.showToastMessage(strTitle, "error", error.body.message);
+        } else {
+            this.showToastMessage(strTitle, "error", "Unknown Error");
         }
     }
 }
