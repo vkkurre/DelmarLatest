@@ -4,14 +4,9 @@
 
 1. Take backup.
 2. Turn off the Email Deliverability.
-3. Enable Chat
-    a. Go to Setup
-    b. Quick find Chat Settings
-    c. Enable Chat
-    d. Save
-4. Check if there's atleast one Organization-Wide Addresses created in the org.
-5. Go to Setup > Digital Experiences > Settings and select Allow using standard external profiles for self-registration, user creation, and login.
-6. Make sure the Admin has the Role assgined.
+3. Check if there's atleast one Organization-Wide Addresses created in the org.
+4. Go to Setup > Digital Experiences > Settings and select Allow using standard external profiles for self-registration, user creation, and login.
+5. Make sure the Admin has the Role assgined.
 
 
 -- DEPLOYMENT --
@@ -35,22 +30,13 @@
     - Update Record Id property on the componet - {!recordId}
 2. Place the component "Add Case Collaborators Component" under the Communnity page.
     - Update Record Id property on the componet - {!recordId}
-3. Create a Default Organization Level Value in the Email Alert Configuration custom setting.(Run the script below in anonymous window)
-4. Check Apex Class access under the Profile Customer Community Plus Login User
-    - DEL_CaseCollabaoratorUtility
-    - DEL_CaseCollaborationController
-    - DEL_CaseCollaborationTriggerHelper
-    - DEL_CaseCommentTriggerHelper
-    - DEL_ContactCollaborationController
-    - DEL_ContentDocumentLinkTriggerHelper
-    - DEL_EmailMessagesTriggerHelper
-    - DEL_Utils
-    - DEL_AsyncCaseCommentEmailAlerts
-5. Turn on the Email Deliverability.
+3. Create a Default Organization Level Value in the Case Collaboration Configuration custom setting.(Run the script below in anonymous window)
+4. Turn on the Email Deliverability.
+5. Add the "Case Collaborators" to the related list of the Case page layout.
 
 
 /********************************************************************
-* Script to create Email Alert Configuration custom setting
+* Script to create Case Collaboration Configuration custom setting
 
 DEL_CaseCollaborationConfiguration__c objCaseCollaborationConfiguration = new DEL_CaseCollaborationConfiguration__c();
 objCaseCollaborationConfiguration.MergeFields__c = '{!Case.Subject},{!Case.CaseNumber},{!Case.Description},{!CaseComment.CommentCreatedName__c},{!CaseComment.Body__c},{!CaseComment.CreatedDate},SiteLink';
