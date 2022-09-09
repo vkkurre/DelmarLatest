@@ -30,11 +30,16 @@ public without sharing class DEL_CaseCollabaoratorUtility {
                         ContactId 
                         FROM Case
                         WHERE Id = :idCaseId];
-        User objUser = [SELECT 
-                        Id, 
-                        ContactId 
-                        FROM User
-                        WHERE ContactId = :objCase.ContactId];
+        if (String.isNotBlank(objCase.ContactId)) {
+            List<User> list_ContactUsers = [SELECT 
+                                            Id, 
+                                            ContactId 
+                                            FROM User
+                                            WHERE ContactId = :objCase.ContactId];
+            if (!list_ContactUsers.isEmpty()) {
+                set_UserIdsToExclude.add(list_ContactUsers[0].Id);
+            }
+        }
         
         String strPattern = '%' + String.escapeSingleQuotes(strUserName) + '%';
         //Excluding users who are already collaborators for the Case.
@@ -50,12 +55,13 @@ public without sharing class DEL_CaseCollabaoratorUtility {
         // Excluding the logged-in User (Case-Owner) to not to be visible in
         // the list of potential collaborators.
         set_UserIdsToExclude.add(UserInfo.getUserId());
-        set_UserIdsToExclude.add(objUser.Id);
 
         String strQuery = 'SELECT Id, ';
         strQuery += String.join(list_FieldNames, ',') + ' FROM User WHERE Name LIKE :strpattern AND Id NOT IN :set_UserIdsToExclude '
             + 'AND AccountId = \'' + objCase.AccountId + '\' AND IsActive = true';
-        list_Users = Database.query(strQuery);
+        if (String.isNotBlank(objCase.AccountId)) {
+            list_Users = Database.query(strQuery);
+        }
         
         return list_Users;
     }

@@ -22,10 +22,12 @@ import CLDEL00015 from "@salesforce/label/c.CLDEL00015";
 import CLDEL00016 from "@salesforce/label/c.CLDEL00016";
 //CLDEL00017 - "Successfully removed selected collaborators from this Case." (This is Success Message after successfull removal of Case Collaborator)
 import CLDEL00017 from "@salesforce/label/c.CLDEL00017";
+//CLDEL00018 - "Search Contacts for this Case" (This is the value for the title in 'Add Case Collaborators Component')
+import CLDEL00018 from "@salesforce/label/c.CLDEL00018";
 
 export default class Del_addCaseCollaboratorComponent extends LightningElement {
     @api recordId;
-    @api strCardTitle;
+    strCardTitle = CLDEL00018;
     strSearchKey = "";
     strSearchLabelText = CLDEL00010;
     strPlaceHolderValue = CLDEL00011;
@@ -230,10 +232,14 @@ export default class Del_addCaseCollaboratorComponent extends LightningElement {
      * @ description   : This method is used to display the errors in apex operations or Javascript
      **/
     handleErrors(error, strTitle) {
-        if (error.isArray(error.body)) {
+        if (Array.isArray(error.body)) {
             this.showToastMessage(strTitle, "error", error.body.map((e) => e.message).join(", "));
-        } else {
+        } else if (error.body.error) {
+            this.showToastMessage(strTitle, "error", error.body.error);
+        } else if (error.body.message) {
             this.showToastMessage(strTitle, "error", error.body.message);
+        } else {
+            this.showToastMessage(strTitle, "error", "Unknown Error");
         }
     }
 }

@@ -151,6 +151,18 @@
     </types>
     <types>
         <members>Admin</members>
+        <members>Delmar - BDM</members>
+        <members>Delmar - CRM</members>
+        <members>Delmar - Non Sales</members>
+        <members>Delmar - Support</members>
+        <members>Delmar - Trade</members>
+        <members>MarketingProfile</members>
+        <members>myDelmar Admin - Occasional</members>
+        <members>myDelmar Admin - Permanent</members>
+        <members>myDelmar Manager - Occasional</members>
+        <members>myDelmar Manager - Permanent</members>
+        <members>myDelmar User - Occasional</members>
+        <members>myDelmar User - Permanent</members>
         <name>Profile</name>
     </types>
     <types>
