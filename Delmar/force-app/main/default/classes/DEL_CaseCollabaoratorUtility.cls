@@ -31,14 +31,15 @@ public without sharing class DEL_CaseCollabaoratorUtility {
                         FROM Case
                         WHERE Id = :idCaseId];
         if (String.isNotBlank(objCase.ContactId)) {
-            User objUser = [SELECT 
-                            Id, 
-                            ContactId 
-                            FROM User
-                            WHERE ContactId = :objCase.ContactId];
-            set_UserIdsToExclude.add(objUser.Id);
+            List<User> list_ContactUsers = [SELECT 
+                                            Id, 
+                                            ContactId 
+                                            FROM User
+                                            WHERE ContactId = :objCase.ContactId];
+            if (!list_ContactUsers.isEmpty()) {
+                set_UserIdsToExclude.add(list_ContactUsers[0].Id);
+            }
         }
-        
         
         String strPattern = '%' + String.escapeSingleQuotes(strUserName) + '%';
         //Excluding users who are already collaborators for the Case.

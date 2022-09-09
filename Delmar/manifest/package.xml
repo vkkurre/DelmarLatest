@@ -132,7 +132,6 @@
         <name>Flow</name>
     </types>
     <types>
-        <members>Case-Case Layout</members>
         <members>DEL_CaseCollaborator__c-Case Collaborator Layout</members>
         <members>DEL_CaseComment__c-Case Comment Layout</members>
         <members>DEL_ExceptionLog__c-Exception Log Layout</members>

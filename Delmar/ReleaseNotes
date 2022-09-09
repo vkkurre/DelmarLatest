@@ -31,6 +31,7 @@
     - Update Record Id property on the componet - {!recordId}
 3. Create a Default Organization Level Value in the Case Collaboration Configuration custom setting.(Run the script below in anonymous window)
 4. Turn on the Email Deliverability.
+5. Add Case Collaborators & Case Comments as related lists for the Case page layout and exclude "New" & "Change Owner" buttons for Case Comments related list.
 
 /********************************************************************
 * Script to create Case Collaboration Configuration custom setting
