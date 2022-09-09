@@ -132,7 +132,7 @@
         <name>Flow</name>
     </types>
     <types>
-		<members>Case-Case Layout</members>
+        <members>Case-Case Layout</members>
         <members>DEL_CaseCollaborator__c-Case Collaborator Layout</members>
         <members>DEL_CaseComment__c-Case Comment Layout</members>
         <members>DEL_ExceptionLog__c-Exception Log Layout</members>
@@ -152,18 +152,18 @@
     </types>
     <types>
         <members>Admin</members>
-		<members>Delmar - BDM</members>
-		<members>Delmar - CRM</members>
-		<members>Delmar - Non Sales</members>
-		<members>Delmar - Support</members>
-		<members>Delmar - Trade</members>
-		<members>MarketingProfile</members>
-		<members>myDelmar Admin - Occasional</members>
-		<members>myDelmar Admin - Permanent</members>
-		<members>myDelmar Manager - Occasional</members>
-		<members>myDelmar Manager - Permanent</members>
-		<members>myDelmar User - Occasional</members>
-		<members>myDelmar User - Permanent</members>
+        <members>Delmar - BDM</members>
+        <members>Delmar - CRM</members>
+        <members>Delmar - Non Sales</members>
+        <members>Delmar - Support</members>
+        <members>Delmar - Trade</members>
+        <members>MarketingProfile</members>
+        <members>myDelmar Admin - Occasional</members>
+        <members>myDelmar Admin - Permanent</members>
+        <members>myDelmar Manager - Occasional</members>
+        <members>myDelmar Manager - Permanent</members>
+        <members>myDelmar User - Occasional</members>
+        <members>myDelmar User - Permanent</members>
         <name>Profile</name>
     </types>
     <types>
