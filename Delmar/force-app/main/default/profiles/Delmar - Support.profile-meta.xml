@@ -88,6 +88,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>DEL_CaseComment__c.HasAttachment__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>DEL_CaseComment__c.VisibleToCustomer__c</field>
         <readable>true</readable>
