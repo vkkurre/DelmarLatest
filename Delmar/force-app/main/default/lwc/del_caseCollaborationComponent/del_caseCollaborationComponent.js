@@ -37,6 +37,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     strViewFullMessageMenuLabel = CLDEL00012;
     strVisibleToCustomerLabel = CLDEL00013;
     strCurrentUserSmallPhotoUrl = "";
+    idCurrentUserId;
     blnIsLoading = false;
     blnValid = true;
     blnVisibleToCustomer = true;
@@ -65,6 +66,12 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
 
                 let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));
                 this.strCurrentUserSmallPhotoUrl = objCurrentUser.SmallPhotoUrl;
+                /** Adding an attribute to the Case Comment to navigate to the details of Agent/Customer*/
+                if (objCurrentUser.IsPortalEnabled) {
+                    this.idCurrentUserId = objCurrentUser.ContactId;
+                } else {
+                    this.idCurrentUserId = objCurrentUser.Id;
+                }
 
                 this.blnCheckboxVisible = !objCurrentUser.IsPortalEnabled;
 
@@ -107,6 +114,13 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                     /** Adding one attribute to each of the Case Comment whether to show View Full
                     Message Menu Option*/
                     objComment["blnMenuOption"] = objComment.hasOwnProperty("EmailMessageId__c");
+
+                    /** Adding an attribute to the Case Comment to navigate to the details of Agent/Customer*/
+                    if (objComment.CommentCreatedBy__r && objComment.CommentCreatedBy__r.IsPortalEnabled) {
+                        objComment["idNavigateId"] = objComment.CommentCreatedBy__r.ContactId;
+                    } else {
+                        objComment["idNavigateId"] = objComment.CommentCreatedBy__r.Id;
+                    }
                 }
 
                 this.list_Comments = list_CommentsTemp;
@@ -301,6 +315,23 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         } else {
             this.showToastMessage(strTitle, "error", "Unknown Error");
         }
+    }
+
+    navigateToUser(event) {
+        if (!event.target.dataset.id) {
+                return;
+        }
+
+        // View a custom object record.
+        this[NavigationMixin.GenerateUrl]({
+            type: "standard__recordPage",
+            attributes: {
+                recordId: event.target.dataset.id,
+                actionName: "view"
+            }
+        }).then((url) => {
+            window.open(url);
+        });
     }
 
     /**

@@ -48,13 +48,13 @@ public with sharing class DEL_CaseCollaborationController {
         Map<Id, List<ContentVersion>> map_ContentVersionsByCaseCommentId = new Map<Id, List<ContentVersion>>();
         List<Id> list_CaseCommentIds = new List<Id>();
         Id idCurrentUser = UserInfo.getUserId();
-        String strQueryCurrentUser = 'SELECT Id, Name, IsPortalEnabled,SmallPhotoUrl FROM User WHERE Id = :idCurrentUser';
+        String strQueryCurrentUser = 'SELECT Id, Name, IsPortalEnabled, SmallPhotoUrl, ContactId FROM User WHERE Id = :idCurrentUser';
         try {
             objResponseWrapper.objCaseCollaborationConfiguration = DEL_CaseCollaborationConfiguration__c.getOrgDefaults();
             User objUser = Database.query(strQueryCurrentUser);
             String strQueryCaseComments = 'SELECT CreatedDate, LastModifiedDate, CreatedById, ' 
-                + ' CommentCreatedBy__r.SmallPhotoUrl, CommentCreatedBy__r.Name, Body__c, '
-                + ' CommentCreatedBy__r.FirstName, CommentCreatedBy__r.LastName, '
+                + ' CommentCreatedBy__r.SmallPhotoUrl, CommentCreatedBy__r.ContactId, CommentCreatedBy__r.Name, Body__c, '
+                + ' CommentCreatedBy__r.FirstName, CommentCreatedBy__r.LastName, CommentCreatedBy__r.IsPortalEnabled, '
                 + ' EmailMessageId__c, VisibleToCustomer__c FROM DEL_CaseComment__c WHERE Case__c = :strRecordId';
             
             if (objUser.IsPortalEnabled) {
