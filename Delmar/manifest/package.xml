@@ -45,6 +45,7 @@
         <members>DEL_CaseCollaborationConfiguration__c.EnableNewEmailThreadingBehavior__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.FileDownloadURL__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.FilePreviewURL__c</members>
+        <members>DEL_CaseCollaborationConfiguration__c.DefaultImageURL__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.MergeFields__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.OrgWideAddress__c</members>
         <members>DEL_CaseCollaborationConfiguration__c.SiteName__c</members>

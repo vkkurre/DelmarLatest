@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DefaultImageURL__c</fullName>
+    <description>This field stores the Document Url of the image to be used as a default image in community.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Enter the Document Url of the image which should be used as a default image in community.</inlineHelpText>
+    <label>Default Image URL</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

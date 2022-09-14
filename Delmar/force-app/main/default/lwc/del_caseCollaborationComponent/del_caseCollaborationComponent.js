@@ -37,6 +37,7 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
     strViewFullMessageMenuLabel = CLDEL00012;
     strVisibleToCustomerLabel = CLDEL00013;
     strCurrentUserSmallPhotoUrl = "";
+    strDefaultImageUrl;
     idCurrentUserId;
     blnIsLoading = false;
     blnValid = true;
@@ -56,12 +57,12 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
         this.list_WiredComments = result;
         if (data) {
             if (data.blnIsSuccess) {
-                console.log(data.list_CaseComments);
                 let objCaseCollaborationConfiguration;
                 if (data.objCaseCollaborationConfiguration) {
                     objCaseCollaborationConfiguration = data.objCaseCollaborationConfiguration;
                     this.blnVisibleToCustomerSwitch =
                         objCaseCollaborationConfiguration.VisibleToCustomerSwitch__c;
+                    this.strDefaultImageUrl = objCaseCollaborationConfiguration.DefaultImageURL__c;
                 }
 
                 let objCurrentUser = JSON.parse(JSON.stringify(data.objCurrentUser));
@@ -114,12 +115,41 @@ export default class Del_caseCollaborationComponent extends NavigationMixin(Ligh
                     /** Adding one attribute to each of the Case Comment whether to show View Full
                     Message Menu Option*/
                     objComment["blnMenuOption"] = objComment.hasOwnProperty("EmailMessageId__c");
-
                     /** Adding an attribute to the Case Comment to navigate to the details of Agent/Customer*/
                     if (objComment.CommentCreatedBy__r && objComment.CommentCreatedBy__r.IsPortalEnabled) {
                         objComment["idNavigateId"] = objComment.CommentCreatedBy__r.ContactId;
                     } else {
                         objComment["idNavigateId"] = objComment.CommentCreatedBy__r.Id;
+                    }
+
+                    let strTempBody;
+                    if (objCurrentUser.IsPortalEnabled) {
+                        for (let strTag of objComment.Body__c.split("<")) {
+                            if (strTag.includes("img") && !strTag.includes("img>")) {
+                                let strUpdatedText = "";
+                                for (let i of strTag.split(" ")) {
+                                    if (i.includes("src")) {
+                                        i = "src=" + this.strDefaultImageUrl;
+                                    }
+
+                                    if (strUpdatedText === "") {
+                                        strUpdatedText = i;
+                                    } else {
+                                        strUpdatedText = strUpdatedText + " " + i;
+                                    }
+                                }
+
+                                strTag = strUpdatedText;
+                            }
+
+                            if (strTempBody) {
+                                strTempBody = strTempBody + "<" + strTag;
+                            } else if (strTag) {
+                                strTempBody = "<" + strTag;
+                            }
+                        }
+                        
+                        objComment.Body__c = strTempBody;
                     }
                 }
 
