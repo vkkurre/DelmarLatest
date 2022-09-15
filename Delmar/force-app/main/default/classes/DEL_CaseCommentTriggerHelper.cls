@@ -88,11 +88,11 @@ public class DEL_CaseCommentTriggerHelper {
 
             if (map_UserById.containsKey(objCaseComment.CommentCreatedBy__c) && map_UserById.get(objCaseComment.CommentCreatedBy__c).IsPortalEnabled) {
                 map_CasesById.get(objCaseComment.Case__c).Status = 'Awaiting Internal Response';
+                list_CasesToUpdate.add(map_CasesById.get(objCaseComment.Case__c));
             } else if (map_UserById.containsKey(objCaseComment.CommentCreatedBy__c) && !map_UserById.get(objCaseComment.CommentCreatedBy__c).IsPortalEnabled) {
                 map_CasesById.get(objCaseComment.Case__c).Status = 'Awaiting Customer Response';
+                list_CasesToUpdate.add(map_CasesById.get(objCaseComment.Case__c));
             }
-
-            list_CasesToUpdate.add(map_CasesById.get(objCaseComment.Case__c));
         }
 
         if (String.isBlank(objCaseComment.CommentCreatedName__c)) {
