@@ -16,8 +16,12 @@ public class DEL_CaseCommentTriggerHelper {
     public static Boolean blnIsIncomingEmailMessage = false;
     // Map of Users by Id
     public static Map<Id, User> map_UserById;
+    // Map of Cases by Id
+    public static Map<Id, Case> map_CasesById;
     // List of DEL_CaseComment__c records to update
     public static List<DEL_CaseComment__c> list_CaseCommentsToUpdate;
+    // List of Case records to update
+    public static List<Case> list_CasesToUpdate;
     // List of DEL_CaseComment__c records to which have attachments
     public static List<DEL_CaseComment__c> list_CaseCommentsWithoutAttachments;
     
@@ -28,6 +32,7 @@ public class DEL_CaseCommentTriggerHelper {
     **/
     public static void processAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
         list_CaseCommentsToUpdate = new List<DEL_CaseComment__c>();
+        list_CasesToUpdate = new List<Case>();
         list_CaseCommentsWithoutAttachments = new List<DEL_CaseComment__c>();
         createCollectionsAfterInsert(list_CaseComments);
         List<String> list_ConsolidatedDMLErrors = new List<String>();
@@ -43,6 +48,11 @@ public class DEL_CaseCommentTriggerHelper {
             List<Database.SaveResult> list_UpdateResults = Database.update(list_CaseCommentsToUpdate, false);
             list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_UpdateResults, 'Update'));
             blnSkipTrigger = false;
+
+            if (!list_CasesToUpdate.isEmpty()) {
+                List<Database.SaveResult> list_CaseUpdateResults = Database.update(list_CasesToUpdate, false);
+                list_ConsolidatedDMLErrors.addAll(DEL_Utils.processDMLErrors(list_CaseUpdateResults, 'Update'));
+            }
         }
         
         if (!list_ConsolidatedDMLErrors.isEmpty()) {
@@ -75,6 +85,14 @@ public class DEL_CaseCommentTriggerHelper {
     public static void populateFields(DEL_CaseComment__c objCaseComment) {
         if (String.isBlank(objCaseComment.CommentCreatedBy__c)) {
             objCaseComment.CommentCreatedBy__c = objCaseComment.CreatedById;
+
+            if (map_UserById.containsKey(objCaseComment.CommentCreatedBy__c) && map_UserById.get(objCaseComment.CommentCreatedBy__c).IsPortalEnabled) {
+                map_CasesById.get(objCaseComment.Case__c).Status = 'Awaiting Internal Response';
+            } else if (map_UserById.containsKey(objCaseComment.CommentCreatedBy__c) && !map_UserById.get(objCaseComment.CommentCreatedBy__c).IsPortalEnabled) {
+                map_CasesById.get(objCaseComment.Case__c).Status = 'Awaiting Customer Response';
+            }
+
+            list_CasesToUpdate.add(map_CasesById.get(objCaseComment.Case__c));
         }
 
         if (String.isBlank(objCaseComment.CommentCreatedName__c)) {
@@ -93,6 +111,7 @@ public class DEL_CaseCommentTriggerHelper {
     **/
     public static void createCollectionsAfterInsert(List<DEL_CaseComment__c> list_CaseComments) {
         Set<Id> set_UserIds = new Set<Id>();
+        Set<Id> set_CaseIds = new Set<Id>();
         map_UserById = new Map<Id, User>();
         // Query to get the list of case comments that will be updated
         list_CaseCommentsToUpdate = [SELECT
@@ -120,6 +139,7 @@ public class DEL_CaseCommentTriggerHelper {
 
         for (DEL_CaseComment__c objCaseComment : list_CaseCommentsToUpdate) {
             set_UserIds.add(objCaseComment.CreatedById);
+            set_CaseIds.add(objCaseComment.Case__c);
         }
         
         // Query Users
@@ -130,6 +150,13 @@ public class DEL_CaseCommentTriggerHelper {
                                           Email
                                           FROM User
                                           WHERE Id IN :set_UserIds
+                                         ]);
+        // Query Cases
+        map_CasesById = new Map<Id, Case>([SELECT  
+                                          Id,
+                                          Status
+                                          FROM Case
+                                          WHERE Id IN :set_CaseIds
                                          ]);
     }
     

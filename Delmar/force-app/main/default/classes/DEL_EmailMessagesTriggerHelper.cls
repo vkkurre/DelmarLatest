@@ -66,6 +66,7 @@ public class DEL_EmailMessagesTriggerHelper {
         
         try {
             for (EmailMessage objEmailMessage : list_EmailMessages) {
+                Case objCase = map_CasesById.get(objEmailMessage.ParentId);
                 if (
                     (map_CasesById.containsKey(objEmailMessage.ParentId) && 
                      map_CasesById.get(objEmailMessage.ParentId).Visible_in_Community__c) || 
@@ -78,6 +79,7 @@ public class DEL_EmailMessagesTriggerHelper {
                             objCaseComment.EmailMessageId__c = objEmailMessage.Id;
                             if (map_UserByEmail.containsKey(objEmailMessage.FromAddress)) {
                                 objCaseComment.CommentCreatedBy__c = map_UserByEmail.get(objEmailMessage.FromAddress).Id;
+                                objCase.Status = 'Awaiting Internal Response';
                             }
 
                             objCaseComment.CommentCreatedName__c = objEmailMessage.FromName;
@@ -94,7 +96,7 @@ public class DEL_EmailMessagesTriggerHelper {
                 if (objEMailMessage.Incoming && 
                     map_CasesById.containsKey(objEmailMessage.ParentId)
                    ) {
-                       Case objCase = map_CasesById.get(objEmailMessage.ParentId);
+                       
                        if (String.isBlank(objCase.DEL_ToAddress__c)) {
                            objCase.DEL_ToAddress__c = objEmailMessage.ToAddress;
                        }
@@ -124,9 +126,9 @@ public class DEL_EmailMessagesTriggerHelper {
                             
                             objCase.DEL_CcAddress__c = strCcAddresses;
                        }
-                       
-                       list_CasesToUpdate.add(objCase);
                    }
+
+                   list_CasesToUpdate.add(objCase);
             }
             
             if (!list_CasesToUpdate.isEmpty()) {
